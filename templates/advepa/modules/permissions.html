@@ -1,0 +1,152 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static widget_tweaks %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+
+{% block message %}
+{% include 'advepa/elements/alert.html' %}
+{% endblock %}
+
+{% block content %}
+
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Permissions</h4>
+
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive ">
+                        <table class="table table-responsive-md ck-table">
+                            <thead>
+                                <tr>
+                                    
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Code Name</th>
+                                    <th scope="col">Content Type</th>
+                                    {% if perms.auth.change_permission or perms.auth.delete_permission %}
+                                    <th scope="col"></th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for per in permissions_obj %}
+                                <tr >
+
+                                    <td>{{ per.name }}</td>
+                                    <td><span class="badge  badge-xs light badge-primary">{{ per.codename }}</div></td>
+                                    <td>{{ per.content_type }}</td>
+                                    </td>
+                                    {% if perms.auth.change_permission or perms.auth.delete_permission %}
+                                    <td>
+                                        <span class="sweetalert">
+                                            {% if perms.auth.change_permission %}
+                                            <a href="{% url 'advepa:edit-permissions' id=per.id %}" class="btn btn-primary shadow btn-xs sharp me-2" data-bs-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </a>
+                                            {% endif %}
+                                            {% if perms.auth.delete_permission %}
+                                            <a href="{% url 'advepa:delete-permissions' id=per.id %}" class="sweet-success-cancel btn btn-danger shadow btn-xs sharp me-2" data-bs-toggle="tooltip" data-placement="top" title="Close"><i class="fa fa-trash"></i></a>
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                        <nav mt-5>
+
+                            <p>
+                                <span class="current">
+                                Page {{ permissions_obj.number }} of {{ permissions_obj.paginator.num_pages }}.
+                               </span> 
+                               </p>
+                               
+
+                            <ul class="pagination pagination-gutter  justify-content-end">
+                                
+                                    <li class="page-item page-indicator ">
+                                        <a class="page-link" href="{% if permissions_obj.has_previous %}
+                                                                    ?page={{ permissions_obj.previous_page_number }}
+                                                                    {% else %}
+                                                                    javascript:void(0);
+                                                                    {% endif %}">
+                                            <i class="la la-angle-left"></i></a>
+                                    </li>
+    
+                                {% for i in permissions_obj.paginator.page_range|slice:":3" %}
+    
+                                    <li class="page-item {% if permissions_obj.number == i %}
+                                                        active{% endif %}"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                
+                                {% endfor %}
+    
+                                
+                                {% if permissions_obj.number > 3 %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ permissions_obj.number }}">{{ permissions_obj.number }}</a></li>
+                                {% endif %}
+                                
+                                <li class="page-item page-indicator ">
+                                    <a class="page-link"  href="{% if permissions_obj.has_next %}
+                                                                ?page={{ permissions_obj.next_page_number }}
+                                                                {% else %}
+                                                                javascript:void(0);
+                                                                {% endif %}">
+                                        <i class="la la-angle-right"></i></a>
+                                </li>
+                                <li>
+    
+                                  
+    
+                                </li>
+                            </ul>
+                           
+                    </nav>
+                    </div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}
+
+
+{% block additional_js %}
+<script>
+    $('.sweet-success-cancel').on('click', function (event) {
+           event.preventDefault();
+           const url = $(this).attr('href');
+   
+           Swal.fire({
+               title: 'Are you sure?',
+               text: "You won't be able to revert this!",
+               type: "warning",
+               icon: 'question',
+               showCancelButton: true,
+               confirmButtonText: "Yes, delete it !!",
+               confirmButtonText: 'Delete',
+               confirmButtonColor: "#DD6B55"
+               
+           }).then((result) => {
+               if (result.value) {
+                   window.location.href = url;
+               } else if (result.dismiss === Swal.DismissReason.cancel) {
+                   event.preventDefault();
+               }
+           })
+       });
+   </script>
+{% endblock %}
+
+

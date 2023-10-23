@@ -1,0 +1,53 @@
+{% load static %}
+<div class="dlabnav">
+    <div class="dlabnav-scroll">
+        <ul class="metismenu" id="menu">
+            {% if perms.users.view_customuser or perms.auth.view_group or perms.auth.view_permission or request.user.is_superuser %}
+                <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                    <i class="flaticon-381-networking"></i>
+                    <span class="nav-text">Tabelle dati</span>
+
+                </a>
+                    <ul aria-expanded="false">
+                        {% if perms.users.view_customuser or perms.users.change_customuser or perms.users.add_customuser or perms.users.delete_customuser %}
+                            <li><a href="{% url 'advepa:users' %}">Utenti</a></li>
+                        {% endif %}
+                        {% if perms.auth.view_group or perms.auth.change_group or perms.auth.add_group or perms.auth.delete_group %}
+                            <li><a href="{% url 'advepa:groups' %}">Gruppi</a></li>
+                        {% endif %}
+                        {% if perms.auth.view_permission or perms.auth.change_permission or perms.auth.add_permission or  perms.auth.delete_permission %}
+                            <li><a href="{% url 'advepa:permissions' %}">Permessi</a></li>
+                        {% endif %}
+                        {% if perms.auth.view_exhibition or perms.auth.change_exhibition or perms.auth.add_exhibition or  perms.auth.delete_exhibition %}
+                            <li><a href="{% url 'advepa:exhibitions' %}">Fiere</a></li>
+                        {% endif %}
+                        {% if perms.auth.view_pavilion or perms.auth.change_pavilion or perms.auth.add_pavilion or  perms.auth.delete_pavilion %}
+                            <li><a href="{% url 'advepa:pavilions' %}">Padiglioni</a></li>
+                        {% endif %}
+                        {% if perms.auth.view_stand or perms.auth.change_stand or perms.auth.add_stand or  perms.auth.delete_stand %}
+                            <li><a href="{% url 'advepa:stands' %}">Stands</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+
+
+            <li><a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+                <i class="flaticon-381-networking"></i>
+                <span class="nav-text">Pagine</span>
+            </a>
+                <ul aria-expanded="false">
+                    {% if request.user.role == "advepa" or request.user.is_superuser %}
+                        <li><a href="{% url 'advepa:dashboard' %}">Dashboard</a></li>
+                        <li><a href="{% url 'advepa:access' %}">Accessi</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'advepa:actions' %}">Azioni</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="copyright">
+            <p><strong>Advepa Educational</strong> © 2023 All Rights Reserved</p>
+            </p>
+        </div>
+    </div>
+</div>

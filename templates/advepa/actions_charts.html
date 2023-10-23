@@ -1,0 +1,515 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static %}
+
+<!-- Additional Css -->
+{% block additional_css %}
+
+{% endblock %}
+
+
+{% block content %}
+    {% include 'advepa/elements/alert.html' %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-24 col-sm-24">
+            <div class="widget-stat card">
+                <div class="card-body p-4">
+                    <h4 class="card-title">Azioni negli ultimi 7 giorni</h4>
+                    <h3>{{ actions_last_7_days }}</h3>
+                    <div class="progress mb-2">
+                        <div class="progress-bar progress-animated bg-primary"
+                             style="width: {{ percentage_last_24_hours }}%"></div>
+                    </div>
+                    <small>{{ percentage_last_24_hours }}% nelle ultime 24 ore</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-9 col-lg-18 col-sm-18">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Grafico dati</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-4 light">
+                        <li class="nav-item">
+                            <a href="#data-lines-graph" class="nav-link active" data-bs-toggle="tab"
+                               aria-expanded="false">
+                                Grafico a linee</a>
+                        </li>
+                        <li class=" nav-item">
+                            <a href="#data-bar-graph" class="nav-link" data-bs-toggle="tab"
+                               aria-expanded="false"
+                               {% if selected_date_radio == 'range' or selected_date_interval == 'all' %}disabled{% endif %}>
+                                Grafico a barre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#data-area-graph" class="nav-link" data-bs-toggle="tab" aria-expanded="true"
+                               disabled>
+                                Grafico ad area</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="data-bar-graph" class="tab-pane">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvas id="barChart_2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-lines-graph" class="tab-pane active">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvas id="lineChart_2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-area-graph" class="tab-pane">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvas id="areaChart_2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6">
+            <form id="filter-form" method="POST" action="{% url 'advepa:actions' %}">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Filtri di visualizzazione</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-width-icon">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#graph_filter_position">
+                                        <span>
+                                            <i class="ti-home"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_calendar">
+                                        <span>
+                                            <i class="ti-calendar"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_access">
+                                        <span>
+                                            <i class="ti-location-pin"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                        </div>
+                        <div class="tab-content tabcontent-border">
+                            <div class="tab-pane fade show active" id="graph_filter_position" role="tabpanel">
+                                <div class="pt-4">
+                                    <div id="exhibition">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona la fiera</h4>
+                                        </div>
+
+                                        <select id="exhibition-select" name="exhibition-select"
+                                                {% if disabled_exhibition %}disabled{% endif %}>
+                                            <option value="all">Tutti</option>
+                                            {% for exhibition in exhibition_list %}
+                                                <option value="{{ exhibition.id }}"
+                                                        {% if selected_exhibition == exhibition.id or disabled_exhibition_id == exhibition.id %}selected{% endif %}>{{ exhibition.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <div id="stand">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona lo stand</h4>
+                                        </div>
+                                        <select id="stand-select" name="stand-select"
+                                                {% if disabled_stand %}disabled{% endif %}>
+                                            <option value="all">Tutti</option>
+                                            {% for stand in stand_list %}
+                                                <option value="{{ stand.id }}"
+                                                        {% if selected_stand == stand.id or disabled_stand_id == stand.id %}selected{% endif %}>{{ stand.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="graph_filter_calendar" role="tabpanel">
+                                <div class="pt-4">
+                                    <div id="date-interval">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona l'intervallo di tempo</h4>
+                                        </div>
+                                        <select id="date-interval-select" name="date-interval-select">
+                                            <option value="all"
+                                                    {% if selected_date_interval == 'all' %}selected{% endif %}>Tutti
+                                            </option>
+                                            <option value="lastseven"
+                                                    {% if selected_date_interval == 'lastseven' %}selected{% endif %}>
+                                                Ultimi 7 giorni
+                                            </option>
+                                            <option value="lastfourteen"
+                                                    {% if selected_date_interval == 'lastfourteen' %}selected{% endif %}>
+                                                Ultimi 14 giorni
+                                            </option>
+                                            <option value="lastthirty"
+                                                    {% if selected_date_interval == 'lastthirty' %}selected{% endif %}>
+                                                Ultimi 30 giorni
+                                            </option>
+                                            <option value="lastninety"
+                                                    {% if selected_date_interval == 'lastninety' %}selected{% endif %}>
+                                                Ultimi 90 giorni
+                                            </option>
+                                            <option value="lastyear"
+                                                    {% if selected_date_interval == 'lastyear' %}selected{% endif %}>
+                                                Ultimo anno
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <br/>
+                                    <div id="date-start-end">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona la data di inizio e di fine</h4>
+                                            <input class="form-control input-daterange-datepicker" type="text"
+                                                   name="date-range" id="date-range" value="{{ selected_date_range }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"
+                                                                                class="form-check-input"
+                                                                                value="interval"
+                                                                                {% if selected_date_radio == 'interval' %}checked{% endif %}>
+                                            Intervalli
+                                            date
+                                        </label>
+                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"
+                                                                                class="form-check-input" value="range"
+                                                                                {% if selected_date_radio == 'range' %}checked{% endif %}>
+                                            Range date
+                                        </label>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="graph_filter_access" role="tabpanel">
+                                <div class="pt-4">
+
+                                    <div id="platform">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona il dispositivo</h4>
+                                        </div>
+                                        <select id="platform-select" name="platform-select">
+                                            <option value="all" {% if selected_platform == 'all' %}selected{% endif %}>
+                                                Tutti
+                                            </option>
+                                            <option value="iPhone"
+                                                    {% if selected_platform == 'iPhone' %}selected{% endif %}>iPhone
+                                            </option>
+                                            <option value="android"
+                                                    {% if selected_platform == 'android' %}selected{% endif %}>Android
+                                            </option>
+                                            <option value="windows"
+                                                    {% if selected_platform == 'windows' %}selected{% endif %}}>Windows
+                                            </option>
+                                            <option value="macOS"
+                                                    {% if selected_platform == 'macOS' %}selected{% endif %}>macOS
+                                            </option>
+                                            <option value="browser"
+                                                    {% if selected_platform == 'browser' %}selected{% endif %}>Browser
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <br/>
+                                    <hr>
+                                    <div id="geo-country">
+                                        <div class="mb-4">
+                                            <h4 class="geo-country-title">Seleziona la Nazione</h4>
+                                        </div>
+                                        <select id="geo-country-select" disabled>
+                                            <option value="all">Tutti</option>
+                                            <option value="Italia">Italia</option>
+                                            <option value="Francia">Francia</option>
+                                            <option value="Svizzera">Svizzera</option>
+                                            <option value="Germania">Germania</option>
+                                            <option value="Spagna">Spagna</option>
+                                        </select>
+                                    </div>
+                                    <br/>
+                                    <div id="geo-region">
+                                        <div class="mb-4">
+                                            <h4 class="card-title">Seleziona la regione</h4>
+                                        </div>
+                                        <select id="geo-region-select" disabled>
+                                            <option value="all">Tutti</option>
+                                            <option value="Toscana">Toscana</option>
+                                            <option value="Lombardia">Lombardia</option>
+                                            <option value="Piemonte">Piemonte</option>
+                                            <option value="Sicilia">Sicilia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                        <p class="d-inline">
+                            <button type="button" class="btn btn-rounded btn-outline-light">Reset</button>
+                        </p>
+                        <p class="float-end">
+                            <button type="submit" class="btn btn-rounded btn-secondary">Aggiorna</button>
+                        </p>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Azioni selezionate</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-4 light">
+                        <li class="nav-item">
+                            <a href="#group-actions" class="nav-link active" data-bs-toggle="tab" aria-expanded="false">
+                                Raggruppate</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#single-actions" class="nav-link disabled" data-bs-toggle="tab"
+                               aria-expanded="false">
+                                Singole</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="group-actions" class="tab-pane active">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table id="example" class="display min-w850">
+                                        <thead>
+                                        <tr>
+                                            <th>Luogo</th>
+                                            <th>Azione</th>
+                                            <th>Numero totale</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for action in group_actions %}
+                                            <tr>
+                                                <td>{{ action.exhibition }},{{ action.pavilion }},{{ action.stand }}</td>
+                                                <td>{{ action.main_action }}{% if action.action_detail != '' %},
+                                                    {{ action.action_detail }}{% endif %}</td>
+                                                <td>{{ action.quantity }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Luogo</th>
+                                            <th>Azione</th>
+                                            <th>Numero totale</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block additional_js %}
+    {#    PARAMETRI SULL'URL #}
+    {#    <script>#}
+    {#document.querySelector('#filter-form button[type="submit"]').addEventListener('click', function () {#}
+    {#    var form = document.getElementById('filter-form');#}
+    {#    var exhibition_id = form.querySelector('select[name="exhibition-select"]').value;#}
+    {#var pavilion_id = form.querySelector('select[name="pavilion-select"]').value;#}
+    {#    var stand_id = form.querySelector('select[name="stand-select"]').value;#}
+    {#    var platform_id = form.querySelector('select[name="platform-select"]').value;#}
+    {#    var date_interval_id = form.querySelector('select[name="date-interval-select"]').value;#}
+    {##}
+    {#    var date_range_id = document.querySelector('#date-range').value;#}
+    {#    var char = '?'#}
+    {#    const radioButtons = document.querySelectorAll('input[name="date-radio"]');#}
+    {#    let date_radio_id = '';#}
+    {##}
+    {#    radioButtons.forEach((radioButton) => {#}
+    {#        if (radioButton.checked) {#}
+    {#            date_radio_id = radioButton.value;#}
+    {#        }#}
+    {#    });#}
+    {#if (exhibition_id !== 'all') {#}
+    {#    form.action = form.action + char + 'exhibition=' + exhibition_id#}
+    {#    if (char === '?') {#}
+    {#        char = '&'#}
+    {#    }#}
+    {# }#}
+    {#if (stand_id !== 'all') {#}
+    {#    form.action = form.action + char + 'stand=' + stand_id#}
+    {#    if (char === '?') {#}
+    {#        char = '&'#}
+    {#    }#}
+    {# }#}
+    {#if (platform_id !== 'all') {#}
+    {#    form.action = form.action + char + 'platform=' + platform_id#}
+    {#    if (char === '?') {#}
+    {#        char = '&'#}
+    {#    }#}
+    {# }#}
+    {#if (date_interval_id && date_radio_id === "interval") {#}
+    {#    form.action = form.action + char + 'date_interval=' + date_interval_id#}
+    {#    if (char === '?') {#}
+    {#        char = '&'#}
+    {#    }#}
+    {# }#}
+    {#if (date_range_id && date_radio_id === "range") {#}
+    {#    form.action = form.action + char + 'date_range=' + date_range_id#}
+    {#    if (char === '?') {#}
+    {#        char = '&'#}
+    {#    }#}
+    {# }#}
+    {# });#}
+    {#    </script>#}
+    <script id="picker">$(function () {
+        $('input[name="date-range"]').daterangepicker({});
+    });
+    </script>
+    <script id="charts">
+        var barChart2 = function () {
+            if (jQuery('#barChart_2').length > 0) {
+
+                //gradient bar chart
+                const barChart_2 = document.getElementById("barChart_2").getContext('2d');
+                //generate gradient
+                const barChart_2gradientStroke = barChart_2.createLinearGradient(0, 0, 0, 250);
+                barChart_2gradientStroke.addColorStop(0, "rgba(41,83,232,1)");
+                barChart_2gradientStroke.addColorStop(1, "rgba(41,83,232,0.5)");
+
+                barChart_2.height = 100;
+
+                new Chart(barChart_2, {
+                    type: 'bar',
+                    data: {
+                        defaultFontFamily: 'Poppins',
+                        labels: {{ chart_labels|safe }},
+                        datasets: [
+                            {
+                                label: "Numero di azioni",
+                                data: {{ chart_data|safe }},
+                                borderColor: barChart_2gradientStroke,
+                                borderWidth: "0",
+                                backgroundColor: barChart_2gradientStroke,
+                                hoverBackgroundColor: barChart_2gradientStroke,
+                                barThickness: 50,
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            legend: false
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            },
+                            x: {
+                                barPercentage: 0.5
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        var lineChart2 = function () {
+            //gradient line chart
+            if (jQuery('#lineChart_2').length > 0) {
+
+                const lineChart_2 = document.getElementById("lineChart_2").getContext('2d');
+                //generate gradient
+                const lineChart_2gradientStroke = lineChart_2.createLinearGradient(500, 0, 100, 0);
+                lineChart_2gradientStroke.addColorStop(0, "rgba(41,83,232,1)");
+                lineChart_2gradientStroke.addColorStop(1, "rgba(41,83,232,1)");
+
+                /* Chart.controllers.line = Chart.controllers.line.extend({
+                    draw: function () {
+                        draw.apply(this, arguments);
+                        let nk = this.chart.chart.ctx;
+                        let _stroke = nk.stroke;
+                        nk.stroke = function () {
+                            nk.save();
+                            nk.shadowColor = 'rgba(0, 0, 128, .2)';
+                            nk.shadowBlur = 10;
+                            nk.shadowOffsetX = 0;
+                            nk.shadowOffsetY = 10;
+                            _stroke.apply(this, arguments)
+                            nk.restore();
+                        }
+                    }
+                }); */
+
+                lineChart_2.height = 100;
+
+                new Chart(lineChart_2, {
+                    type: 'line',
+                    data: {
+                        defaultFontFamily: 'Poppins',
+                        labels: {{ chart_labels|safe }},
+                        datasets: [
+                            {
+                                label: "Numero di azioni",
+                                data: {{ chart_data|safe }},
+                                borderColor: lineChart_2gradientStroke,
+                                borderWidth: "2",
+                                backgroundColor: 'transparent',
+                                pointBackgroundColor: 'rgba(235, 129, 83, 0.5)',
+                                tension: 0.5,
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            legend: false
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    min: 0,
+                                    stepSize: 20,
+                                    padding: 10
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    padding: 5
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

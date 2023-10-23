@@ -1,0 +1,175 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static widget_tweaks %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+{% block message %}
+    {% include 'advepa/elements/alert.html' %}
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" novalidate autocomplete="off">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card  card-bx m-b30">
+                    <div class="card-header">
+                        <h6 class="title">Impostazioni Account</h6>
+                    </div>
+
+                    <div class="profile-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Username {% if form.username.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.username|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Username" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.username.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Email {% if form.email.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {% if status == "Modifica" %}
+                                        {{ form.email|attr:"readonly:readonly"|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}
+                                    {% else %}
+                                        {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}
+                                    {% endif %}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.email.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Gruppo {% if form.groups.field.required %}
+                                        <span class="text-danger">*</span>{% endif %}</label>
+                                    {{ form.groups|attr:"class:multi-select-groups form-control"|attr:"name:groups[]" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.groups.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Ruolo {% if form.role.field.required %}
+                                        <span class="text-danger">*</span>{% endif %}</label>
+                                    {{ form.role|add_class:"form-control default-select form-control-lg"|attr:"id:id_role" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.role.errors }}
+                                    </div>
+                                    <div id="administrator-role-div"
+                                         class="d-none">
+                                         <label class="form-label">Fiera
+                                        <span class="text-danger">*</span></label>{{ form.exhibitions|attr:"class:form-control"|attr:"id:id_exhibitions"}}<div class="text-danger w-100 d-block mt-1">
+                                        {{ form.exhibitions.errors }}
+                                    </div></div>
+                                    <div id="standist-role-div"
+                                         class="d-none"> <label class="form-label">Stand
+                                        <span class="text-danger">*</span></label>{{ form.stands|attr:"class:form-control"|attr:"id:id_stands" }}<div class="text-danger w-100 d-block mt-1">
+                                        {{ form.stands.errors }}
+                                    </div></div>
+                                </div>
+                                <div class="col-sm-6  d-flex align-items-center mb-0">
+                                    <div class="form-check custom-checkbox mb-0 checkbox-primary">
+                                        {{ form.is_active|attr:"class:form-check-input"|attr:"type:checkbox"|attr:"checked" }}
+                                        <label class="form-check-label" for="is_active">Utente Attivo</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 m-b30">
+                                    <label class="form-label">Informazioni aggiuntive {% if form.about.field.required %}
+                                        <span class="text-danger">*</span>{% endif %}</label>
+                                    {{ form.about|attr:"class:form-control"|attr:"style:height: 144px;"|attr:"placeholder:Informazioni su questo utente" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.about.errors }}
+                                    </div>
+                                </div>
+
+                                {% if form.password1 %}
+                                    <div class="col-sm-6 m-b30">
+                                        <label class="form-label">Password {% if form.password1.field.required %}
+                                            <span class="text-danger">*</span>{% endif %}</label>
+                                        <div class="input-group transparent-append">
+                                            {{ form.password1|attr:"class:form-control"|attr:"placeholder:Password"|attr:"id:dz-password"|attr:"type:password" }}
+                                            <span class="input-group-text show-pass">
+                                                <i class="fa fa-eye-slash"></i>
+                                                <i class="fa fa-eye"></i>
+                                            </span>
+                                            <div class="text-danger w-100 d-block mt-1">
+                                                {{ form.password1.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 m-b30">
+                                        <label class="form-label">Conferma Password
+                                            {% if form.password2.field.required %}
+                                                <span class="text-danger">*</span>{% endif %}</label>
+                                        <div class="input-group transparent-append">
+                                            {{ form.password2|attr:"class:form-control"|attr:"placeholder:Password"|attr:"id:dz-con-password"|attr:"type:password" }}
+                                            <span class="input-group-text show-con-pass">
+                                                <i class="fa fa-eye-slash"></i>
+                                                <i class="fa fa-eye"></i>
+                                            </span>
+                                            <div class="text-danger w-100 d-block mt-1">
+                                                {{ form.password2.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Salva</button>
+                            {% if status == "Modifica" %}
+                                <a href="{% url 'change_password' %}" class="text-primary btn-link">Cambia la
+                                    password</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+{% endblock %}
+
+
+{% block additional_js %}
+    <script>
+        $(document).ready(function () {
+            function toggleRoleDiv() {
+                if ($('#id_role').val() === 'administrator') {
+                    $('#administrator-role-div').removeClass('d-none');
+                    $('#standist-role-div').addClass('d-none');
+                    $('#id_exhibitions').prop('required', true);
+                    $('#id_stands').prop('required', false);
+                } else if ($('#id_role').val() === 'standist') {
+                    $('#administrator-role-div').addClass('d-none');
+                    $('#standist-role-div').removeClass('d-none');
+                    $('#id_exhibitions').prop('required', false);
+                    $('#id_stands').prop('required', true);
+                } else {
+                    $('#administrator-role-div').addClass('d-none');
+                    $('#standist-role-div').addClass('d-none');
+                    $('#id_exhibitions').prop('required', false);
+                    $('#id_stands').prop('required', false);
+                }
+            }
+
+            toggleRoleDiv();
+
+            $('#id_role').change(function () {
+                toggleRoleDiv();
+            });
+        });
+    </script>
+    <script>
+        $(".multi-select-groups").select2({
+            placeholder: "Seleziona il gruppo"
+        });
+    </script>
+{% endblock %}
+
+

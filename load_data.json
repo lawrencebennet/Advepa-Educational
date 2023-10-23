@@ -1,0 +1,63 @@
+[
+  {
+    "model": "users.mediatype",
+    "pk": 1,
+    "fields": {
+      "extension": "pdf",
+      "macro_type": "doc",
+      "megabyte_limit": 10
+    }
+  },
+  {
+    "model": "users.mediatype",
+    "pk": 2,
+    "fields": {
+      "extension": "mp3",
+      "macro_type": "aud",
+      "megabyte_limit": 10
+    }
+  },
+  {
+    "model": "users.mediatype",
+    "pk": 3,
+    "fields": {
+      "extension": "wma",
+      "macro_type": "aud",
+      "megabyte_limit": 10
+    }
+  },
+  {
+    "model": "users.mediatype",
+    "pk": 4,
+    "fields": {
+      "extension": "mp4",
+      "macro_type": "vid",
+      "megabyte_limit": 50
+    }
+  },
+  {
+    "model": "users.mediatype",
+    "pk": 5,
+    "fields": {
+      "extension": "jpg",
+      "macro_type": "img",
+      "megabyte_limit": 10
+    }
+  },
+  {
+    "model": "users.mediatype",
+    "pk": 6,
+    "fields": {
+      "extension": "png",
+      "macro_type": "img",
+      "megabyte_limit": 10
+    }
+  },
+  {
+    "model": "users.classroomskin",
+    "pk": 1,
+    "fields": {
+      "name": "Standard"
+    }
+  }
+]

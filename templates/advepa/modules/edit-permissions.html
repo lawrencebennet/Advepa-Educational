@@ -1,0 +1,72 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static widget_tweaks %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+
+{% block message %}
+{% include 'advepa/elements/alert.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+<div class="row justify-content-center h-100 align-items-center">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Edit Permissions</h4>
+            </div>
+
+
+            <div class="card-body">
+                <div class="basic-form">
+                    <form  method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="row">
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Name</label>
+                                    {{ form.name|attr:"type:text"|attr:"class:form-control"}}
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Code Name</label>
+                                    {{ form.codename|attr:"type:text"|attr:"class:form-control"}}
+                                </div>
+
+                                <div class="mb-3 col-md-12">
+                                    <label class="form-label">Content Type</label>
+                                    {{ form.content_type|attr:"type:text"|attr:"class:default-select form-control wide"}}
+                                </div>
+
+                        </div>
+
+
+
+                    
+                        <button type="submit" class="btn btn-secondary mt-4 mb-3">Save</button>
+                        <a href="{% url 'advepa:index' %}" class="btn btn-primary mt-4 mb-3">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block additional_js %}
+{% endblock %}
+
+

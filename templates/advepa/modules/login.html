@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    {% load static widget_tweaks custom_tags %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ dz_array.public.description }}"/>
+    <meta property="og:title" content="{{ dz_array.public.og_title }}"/>
+    <meta property="og:description" content="{{ dz_array.public.og_description }}"/>
+    <meta property="og:image" content="{{ dz_array.public.og_image }}"/>
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- PAGE TITLE HERE -->
+    <title>{{ dz_array.public.title }}</title>
+
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="{% static dz_array.public.favicon %}"/>
+    {% for cssurl in dz_array.pagelevel.advepa.advepa_views.css|getdata:request.path %}
+        <link rel="stylesheet" href="{% static cssurl %}">
+    {% endfor %}
+    {% for cssurl in dz_array.global.css %}
+        <link rel="stylesheet" href="{% static cssurl %}">
+    {% endfor %}
+
+    {% block additional_css %}
+    {% endblock %}
+
+</head>
+<body class="body  h-100"
+      style="background-image: url('{% static 'advepa/images/login-bg-1.jpg' %}'); background-size:cover;">
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-contain-center">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="row m-0">
+                        <div class="col-xl-6 col-md-6 sign text-center">
+                            <div>
+                                <div class="text-center my-5">
+                                    <a href="{% url 'advepa:index' %}"><img src="{% static 'advepa/images/advepa/logo-advepa.png' %}"
+                                                                          alt=""></a>
+                                </div>
+                                <img src="{% static 'advepa/images/log.png' %}"
+                                     class="img-fix bitcoin-img sd-shape7">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <div class="sign-in-your py-4 px-2">
+                                <h4 class="fs-20">Bentornato su Advepa Educational!</h4>
+                                <span>Effettua il login con i tuoi dati personali</span>
+                                <br/>
+                                <br/>
+                                <br/>
+                                {#									<div class="login-social">#}
+                                {#										<a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-google me-2"></i>Login with Google</a>#}
+                                {#										<a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-facebook-f me-2"></i>Login with Facebook</a> #}
+                                {#									</div>#}
+                                {% include 'advepa/elements/alert.html' %}
+
+                                <form method="post">{% csrf_token %}
+                                    <div class="mb-3">
+                                        <label class="mb-1"><strong>Email</strong></label>
+                                        {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}
+                                        <div class="text-danger w-100 d-block mt-1">
+                                            {{ form.email.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="mb-1"><strong>Password</strong></label>
+                                        {{ form.password|attr:"class:form-control"|attr:"placeholder:Password"|attr:"id:dz-password"|attr:"type:password" }}
+                                        <div class="text-danger w-100 d-block mt-1">
+                                            {{ form.password.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="mb-2">
+                                            <div class="form-check custom-checkbox">
+                                                <input type="checkbox" class="form-check-input" id="basic_checkbox_1">
+                                                <label class="form-check-label" for="basic_checkbox_1">Ricorda la mia
+                                                    preferenza</label>
+                                            </div>
+                                        </div>
+                                        {#											<div class="mb-3">#}
+                                        {#												<a href="{% url 'reset_password' %}">Password dimenticata?</a>#}
+                                        {#											</div>#}
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <button type="submit" class="btn btn-primary btn-block w-100">Effettua il login
+                                    </button>
+
+
+                                </form>
+
+                                <div class=" mt-2">
+                                    <span>Problemi con l'accesso? <a href="mailto: advepa@gmail.com" style="color:blue;font-weight: bold;">Contatta Advepa</a></span>
+{#                                    <span>Problemi con l'accesso?<a href="{% url 'advepa:signup' %}" class="text-primary"> Contatta Advepa</a></span>#}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+{% for jsurl in dz_array.global.js.top %}
+    <script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% for jsurl in dz_array.pagelevel.advepa.advepa_views.js|getdata:request.path %}
+    <script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% for jsurl in dz_array.global.js.bottom %}
+    <script src="{% static jsurl %}"></script>
+{% endfor %}
+
+{% block additional_js %}
+
+{#    <script>#}
+{#        $("#Admin").click(function () {#}
+{#            let email = document.getElementById("id_email");#}
+{#            email.value = "admin@example.com";#}
+{#            let password = document.getElementById("dz-password")#}
+{#            password.value = "asdf@1234";#}
+{#        });#}
+{#        $("#Manager").click(function () {#}
+{#            let email = document.getElementById("id_email").value = "manager@example.com";#}
+{#            let password = document.getElementById("dz-password").value = "asdf@1234";#}
+{#        });#}
+{#        $("#Customer").click(function () {#}
+{#            let email = document.getElementById("id_email").value = "customer@example.com";#}
+{#            let password = document.getElementById("dz-password").value = "asdf@1234";#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
