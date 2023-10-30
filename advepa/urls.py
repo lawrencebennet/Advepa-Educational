@@ -7,8 +7,7 @@ app_name = 'advepa'
 handler404 = 'advepa.advepa_views.page_error_404'
 handler500 = 'advepa.advepa_views.page_error_500'
 urlpatterns = [
-    path('', users_views.advepa_dashboard, name="dashboard"),
-    path('index/', advepa_views.index, name="index"),
+
     path('access/', users_views.access_charts, name="access"),
     path('actions/', users_views.actions_charts, name="actions"),
     path('import-actions/', users_views.import_actions, name="import-actions"),
@@ -61,11 +60,23 @@ urlpatterns = [
     path('page-error-500/', advepa_views.page_error_500, name="page-error-500"),
     path('page-error-503/', advepa_views.page_error_503, name="page-error-503"),
 
+    # SCHOOOL DASHBOARD
+    path('school-dashboard/', users_views.school_dashboard, name="school-dashboard"),
+    path('', users_views.school_dashboard, name="dashboard"),
+    # path('', users_views.advepa_dashboard, name="dashboard"),
+    path('index/', advepa_views.index, name="index"),
+    # MEDIAFILES
+    path('file-manager/', users_views.file_manager, name="file-manager"),
+    path('delete-file/<int:id>/', users_views.delete_file, name="delete-file"),
+    path('delete-multiple-files/', users_views.delete_multiple_files, name="delete-multiple-files"),
+
     # API
     # path('api/school-details/', GetSchoolDetails.as_view(), name='school-details'),
     path('api/login/', UserLoginView.as_view(), name='user-login'),
     path('api/user-change-avatar/', UserChangeAvatarView.as_view(), name='user-change-avatar'),
     path('api/media-files-classroom/', MediaFilesClassroom.as_view(), name='media-files-classroom'),
+    path('api/faqs-school/', FaqsView.as_view(), name='faqs-school'),
+    path('api/notices-school/', NoticesView.as_view(), name='notices-school'),
 
     re_path(r'^.*\.*', advepa_views.page_error_404, name='not-found'),
 ]

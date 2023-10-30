@@ -1,0 +1,798 @@
+{
+  "key": "init",
+  "idSito": 167,
+  "stato": 0,
+  "codiceUnivocoPunto": 500,
+  "codiceRete": 1,
+  "codiceStazione": 334,
+  "descrizioneRidotta": "Prato Est",
+  "descrizioneEstesa": "Prato Est",
+  "Tronco": 4,
+  "codiceStrada": "A11",
+  "strada": "FIRENZE-PISA NORD ",
+  "codiceRamo": "A11",
+  "ramo": "FIRENZE-PISA",
+  "chilometrica": 9.000,
+  "societa": "ASPI",
+  "longitude": 11.1184834,
+  "latitude": 43.85400371,
+  "regione": "Toscana",
+  "siglaProvincia": "PO",
+  "provincia": "Prato",
+  "comune": "Prato",
+  "data_inizio_val": "01/01/1901",
+  "id_tm2": null,
+  "id_rtm3": null,
+  "troncoInt": 4,
+  "idRtm2": null,
+  "lastUpdate": "2023-08-03 16:34:10.211",
+  "idArcgis": 78,
+  "impianti": [
+    {
+      "nome": "G0133448",
+      "tipologia_impianto": "G",
+      "id_univoco": "imp_301",
+      "descrizione": "descrizione impianto 1",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_712"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_708"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_709"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_713"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_711"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_710"
+        }
+      ]
+    },
+    {
+      "nome": "G0133463",
+      "tipologia_impianto": "G",
+      "id_univoco": "imp_302",
+      "descrizione": "descrizione impianto 2",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_718"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_714"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_715"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_719"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_717"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_716"
+        }
+      ]
+    },
+    {
+      "nome": "Q0133441",
+      "tipologia_impianto": "Q",
+      "id_univoco": "imp_303",
+      "descrizione": "descrizione impianto 3",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 2,
+          "tipo_periferica": 18,
+          "id_univoco": "per_793"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_724"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_720"
+        },
+
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_721"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_725"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_723"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_722"
+        }
+      ]
+    },
+    {
+      "nome": "E0133454",
+      "tipologia_impianto": "E",
+      "id_univoco": "imp_304",
+      "descrizione": "descrizione impianto 4",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 18,
+          "id_univoco": "per_794"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_730"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_726"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_727"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_731"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_729"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_728"
+        }
+      ]
+    },
+    {
+      "nome": "E0133455",
+      "tipologia_impianto": "E",
+      "id_univoco": "imp_305",
+      "descrizione": "descrizione impianto 4",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 18,
+          "id_univoco": "per_795"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_732"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_733"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_734"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_735"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_736"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_737"
+        }
+      ]
+    },
+    {
+      "nome": "E0133456",
+      "tipologia_impianto": "E",
+      "id_univoco": "imp_306",
+      "descrizione": "descrizione impianto 6",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 18,
+          "id_univoco": "per_796"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_738"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_739"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_740"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_741"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_742"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_743"
+        }
+      ]
+    },
+    {
+      "nome": "U0133458",
+      "tipologia_impianto": "U",
+      "id_univoco": "imp_307",
+      "descrizione": "descrizione impianto 7",
+      "stato_tecnico_pista": 9,
+      "stato_meta_pista": 2,
+
+      "periferiche": [
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 9,
+          "tipo_periferica": 12,
+          "id_univoco": "per_744"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 9,
+          "tipo_periferica": 11,
+          "id_univoco": "per_745"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 9,
+          "tipo_periferica": 15,
+          "id_univoco": "per_746"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 9,
+          "tipo_periferica": 16,
+          "id_univoco": "per_747"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 9,
+          "tipo_periferica": 14,
+          "id_univoco": "per_748"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 9,
+          "tipo_periferica": 17,
+          "id_univoco": "per_749"
+        }
+      ]
+    },
+    {
+      "nome": "X0133467",
+      "tipologia_impianto": "X",
+      "id_univoco": "imp_308",
+      "descrizione": "descrizione impianto 8",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Cassa Automatica",
+          "stato": 0,
+          "tipo_periferica": 20,
+          "id_univoco": "per_798"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_750"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_751"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_752"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_753"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_754"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_755"
+        }
+      ]
+    },
+    {
+      "nome": "X0133466",
+      "tipologia_impianto": "X",
+      "id_univoco": "imp_309",
+      "descrizione": "descrizione impianto 9",
+      "stato_tecnico_pista": 0,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Cassa Automatica",
+          "stato": 0,
+          "tipo_periferica": 20,
+          "id_univoco": "per_799"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_756"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_757"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_758"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_759"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_760"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_761"
+        }
+      ]
+    },
+    {
+      "nome": "X0133465",
+      "tipologia_impianto": "X",
+      "id_univoco": "imp_310",
+      "descrizione": "descrizione impianto 10",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Cassa Automatica",
+          "stato": 0,
+          "tipo_periferica": 20,
+          "id_univoco": "per_800"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_762"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_763"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_764"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_765"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_766"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_767"
+        }
+      ]
+    },
+    {
+      "nome": "B0133447",
+      "tipologia_impianto": "B",
+      "id_univoco": "imp_311",
+      "descrizione": "descrizione impianto 11",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_768"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_769"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_770"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_771"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_772"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_773"
+        }
+      ]
+    },
+    {
+      "nome": "B0133462",
+      "tipologia_impianto": "B",
+      "id_univoco": "imp_312",
+      "descrizione": "descrizione impianto 12",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_774"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_775"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_776"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_777"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_778"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_779"
+        }
+      ]
+    },
+    {
+      "nome": "K0133464",
+      "tipologia_impianto": "K",
+      "id_univoco": "imp_313",
+      "descrizione": "descrizione impianto 13",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 19,
+          "id_univoco": "per_801"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_780"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_781"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_782"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 1,
+          "tipo_periferica": 16,
+          "id_univoco": "per_783"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_784"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_785"
+        }
+      ]
+    },
+    {
+      "nome": "J0133449",
+      "tipologia_impianto": "J",
+      "id_univoco": "imp_314",
+      "descrizione": "descrizione impianto 14",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 19,
+          "id_univoco": "per_802"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_786"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_787"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_788"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_789"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_790"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_791"
+        }
+      ]
+    },
+    {
+      "nome": "J0133450",
+      "tipologia_impianto": "J",
+      "id_univoco": "imp_315",
+      "descrizione": "descrizione impianto 14",
+      "stato_tecnico_pista": 1,
+      "stato_meta_pista": 0,
+
+      "periferiche": [
+        {
+          "nome": "Armadio Utente",
+          "stato": 0,
+          "tipo_periferica": 19,
+          "id_univoco": "per_803"
+        },
+        {
+          "nome": "Sbarra di ingresso",
+          "stato": 0,
+          "tipo_periferica": 12,
+          "id_univoco": "per_787"
+        },
+        {
+          "nome": "Classificatore di ingresso",
+          "stato": 0,
+          "tipo_periferica": 11,
+          "id_univoco": "per_788"
+        },
+        {
+          "nome": "Classificatore di uscita",
+          "stato": 0,
+          "tipo_periferica": 15,
+          "id_univoco": "per_789"
+        },
+        {
+          "nome": "Sbarra di uscita",
+          "stato": 0,
+          "tipo_periferica": 16,
+          "id_univoco": "per_790"
+        },
+        {
+          "nome": "Telecamera di pre-classifica",
+          "stato": 0,
+          "tipo_periferica": 14,
+          "id_univoco": "per_791"
+        },
+        {
+          "nome": "Telecamera di post-classifica",
+          "stato": 0,
+          "tipo_periferica": 17,
+          "id_univoco": "per_792"
+        }
+      ]
+    }
+  ]
+}

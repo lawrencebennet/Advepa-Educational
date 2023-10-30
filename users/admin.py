@@ -7,10 +7,8 @@ from advepa.models import Action
 
 from django.contrib import admin
 from django.http import HttpResponseBadRequest
-
-from .forms import MediaFileFormView, MediaFileFormCreate
-from .models import School, CustomUser, MediaType, MediaFile, Classroom, ClassroomSkin
-
+from .models import *
+from .forms import *
 # class UserAdminConfig(UserAdmin):
 #     model = CustomUser
 #     search_fields = ('email', 'username')
@@ -67,3 +65,5 @@ class MediaFileAdmin(admin.ModelAdmin):
 
 admin.site.register(MediaType)
 admin.site.register(MediaFile, MediaFileAdmin)
+admin.site.register(Notice)
+admin.site.register(Faq)

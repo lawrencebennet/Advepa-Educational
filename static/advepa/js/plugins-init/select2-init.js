@@ -4,6 +4,11 @@
     // single select box
     $("#single-select").select2();
 
+    // SCUOLA
+    $("#file-select").select2();
+    $("#classroom-select").select2();
+
+
     // FIERA
     $("#exhibition-select").select2();
     $("#pavilion-select").select2();

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'advepa',
     'users',
+
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'custom_context_processor.dz_static',
+                'django.template.context_processors.media',
             ],
         },
     },

@@ -5,7 +5,7 @@ import requests
 from django.db.models import Max, Min
 from django.urls import reverse
 from django.utils import timezone
-from users.models import Exhibition, Pavilion, Stand, SiteLogins
+from users.models import *
 from advepa.forms import (ExhibitionForm, EditExhibitionForm, EditPavilionForm, PavilionForm, StandForm,
                           EditStandForm, )
 from django.shortcuts import get_object_or_404, redirect, render
@@ -30,6 +30,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from advepa.models import Action, Import, GraphInteraction
+from django.shortcuts import render
+from users.forms import UploadMediaFileForm
 
 
 @login_required(login_url='advepa:login')
@@ -506,7 +508,7 @@ def actions_charts(request):
 
             chart_labels, chart_action_count = calcolachart(interval, today, filters,
                                                             chart_labels, chart_action_count,
-                                                            days,"Actions")
+                                                            days, "Actions")
             filters = filters & Q(date__gte=interval, date__lte=today)
         if date_range_filter_id and date_radio_filter_id == 'range':
             selected_date_radio = 'range'
@@ -521,22 +523,22 @@ def actions_charts(request):
             filters = filters & Q(date__gte=formatted_start, date__lte=formatted_finish)
             chart_labels, chart_action_count = calcolachart(date_start, date_finish, filters,
                                                             chart_labels, chart_action_count,
-                                                            1,"Actions")
+                                                            1, "Actions")
 
         group_list = (
             Action.objects.filter(filters)
-            .values('exhibition__name', 'pavilion__name', 'stand__name', 'main_action', 'action_detail')
-            .annotate(quantity=Count('id'))
+                .values('exhibition__name', 'pavilion__name', 'stand__name', 'main_action', 'action_detail')
+                .annotate(quantity=Count('id'))
         )
     else:
         interval = today - timedelta(days=7)
         chart_labels, chart_action_count = calcolachart(interval, today, filters,
                                                         chart_labels, chart_action_count,
-                                                        1,"Actions")
+                                                        1, "Actions")
         group_list = (
             Action.objects.filter(date__gte=interval, date__lte=today)
-            .values('exhibition__name', 'pavilion__name', 'stand__name', 'main_action', 'action_detail')
-            .annotate(quantity=Count('id'))
+                .values('exhibition__name', 'pavilion__name', 'stand__name', 'main_action', 'action_detail')
+                .annotate(quantity=Count('id'))
         )
 
     group_actions_list = []
@@ -672,12 +674,12 @@ def access_charts(request):
             filters = filters & Q(date__gte=formatted_start, date__lte=formatted_finish)
             chart_labels, chart_action_count = calcolachart(date_start, date_finish, filters,
                                                             chart_labels, chart_action_count,
-                                                            1,"Access")
+                                                            1, "Access")
     else:
         interval = today - timedelta(days=7)
         chart_labels, chart_action_count = calcolachart(interval, today, filters,
                                                         chart_labels, chart_action_count,
-                                                        1,"Access")
+                                                        1, "Access")
 
     context = {
         "page_title": "Visualizzazione Dati",
@@ -969,3 +971,90 @@ def import_actions(request):
                'finish_time': finish_time})
         messages.warning(request, "Attenzione! L'ultima importazione è fallita")
     return redirect(reverse('advepa:dashboard'))
+
+
+# SCHOOL DASHBOARD
+@login_required(login_url='advepa:login')
+def school_dashboard(request):
+    classrooms = None
+    uploaded_file_list = None
+    all_file_list = None
+    paginator = None
+    if request.method == 'POST':
+        classroom_id = request.POST.get('classroom-select')
+        file_id = request.POST.get('file-select')
+        classroom = Classroom.objects.get(pk=classroom_id)
+        media_file = MediaFile.objects.get(pk=file_id)
+        # Aggiungi il file alla classe utilizzando la relazione many-to-many
+        classroom.media_files.add(media_file)
+        # Salva l'istanza della classe
+        classroom.save()
+    if request.user.school:
+        school = request.user.school
+        # Trova le classi collegate alla stessa scuola dell'utente
+        classrooms = Classroom.objects.filter(school=school)
+        # Trova i file collegati a queste classi
+        uploaded_file_list = MediaFile.objects.filter(classroom__in=classrooms, teacher=request.user).order_by(
+            '-create_date')
+        all_file_list = MediaFile.objects.filter(teacher=request.user).order_by('-create_date')
+        paginator = Paginator(uploaded_file_list, 7)  # Mostra 7 file per pagina
+    context = {
+        # "room_numbers": room_numbers,
+        "classroom_list": classrooms,
+        "uploaded_file_list": paginator.get_page(request.GET.get('page')) if paginator else None,
+        "all_file_list": all_file_list,
+        "page_title": "Dashboard Scuola",
+    }
+    return render(request, 'advepa/modules/school-dashboard.html', context)
+
+
+# FILE MANAGER
+@login_required(login_url='advepa:login')
+def file_manager(request):
+    if request.method == 'POST':
+        form = UploadMediaFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.user = request.user
+            media_file = form.save()
+            # Verifica se ci sono errori associati al campo 'file' nel form
+            if form.errors:
+                if 'file' in form.errors:
+                    messages.warning(request, form.errors['file'])
+                else:
+                    messages.warning(request, "Errore inaspettato nel caricamento del file!")
+            else:
+                messages.success(request, "File caricato con successo")
+    else:
+        form = UploadMediaFileForm()
+
+    file_list = MediaFile.objects.filter(teacher=request.user).order_by('-create_date')
+    paginator = Paginator(file_list, 7)  # Mostra 7 file per pagina
+
+    context = {
+        "form": form,
+        "file_list": paginator.get_page(request.GET.get('page')),
+        "page_title": "File Manager"
+    }
+
+    return render(request, 'advepa/modules/file-manager.html', context)
+
+
+@login_required(login_url='advepa:login')
+def delete_file(request, id):
+    f = MediaFile.objects.get(id=id)
+    f.delete()
+    messages.success(request, "File eliminato con successo")
+    return redirect('advepa:file-manager')
+
+
+@login_required(login_url='advepa:login')
+def delete_multiple_files(request):
+    id_list = request.POST.getlist('id[]')
+    id_list = [i for i in id_list if i != '']
+    for id in id_list:
+        user_obj = MediaFile.objects.get(pk=id)
+        user_obj.delete()
+
+    response = JsonResponse({"success": 'Files eliminati con successo!'})
+    response.status_code = 200
+    return response

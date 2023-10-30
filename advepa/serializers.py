@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework import serializers
 from users.models import *
 from django.contrib.auth.models import User
+from itertools import groupby
 
 
 class UserLoginView(APIView):
@@ -69,23 +70,97 @@ class UserChangeAvatarView(APIView):
 
 class MediaFilesClassroom(APIView):
     def post(self, request):
-        if request.query_params.get('school_id') and request.query_params.get('class_id'):
-            school_id = request.query_params.get('school_id')
-            class_id = request.query_params.get('class_id')
+        try:
+            if request.query_params.get('school_id') and request.query_params.get('class_id'):
+                school_id = request.query_params.get('school_id')
+                class_id = request.query_params.get('class_id')
 
-            # TODO chiedere alla giulia dell'id classe se vuole il numero della classe
-            classroom = Classroom.objects.get(school__custom_id=school_id, room_number=class_id)
-            if classroom:
-                mediafiles_dict = {}
-                for mediafile in classroom.media_files.all():
-                    mediafiles_dict[mediafile.id] = {
-                        'type': mediafile.type.macro_type,
-                        'url': mediafile.path,
-                    }
-                return Response(mediafiles_dict)
-        return Response({"Something went wrong!"})
+                # TODO chiedere alla giulia dell'id classe se vuole il numero della classe
+                classroom = Classroom.objects.get(school__custom_id=school_id, room_number=class_id)
+                if classroom:
+                    mediafiles_dict = {}
+                    for mediafile in classroom.media_files.all():
+                        mediafiles_dict[mediafile.id] = {
+                            'type': mediafile.type.macro_type,
+                            'url': mediafile.path,
+                        }
+                    return Response(mediafiles_dict)
+            return Response({"No parameters!"})
+        except:
+            return Response({"Something went wrong!"})
 
 
+class FaqsView(APIView):
+    def post(self, request):
+        try:
+            if request.query_params.get('school_id'):
+                school_id = request.query_params.get('school_id')
+                faqs = Faq.objects.filter(school__custom_id=school_id).order_by('area_id')
+                if faqs:
+                    faqs_list = []  # Inizializza la lista principale fuori dal ciclo
+                    for area_id, faq_group in groupby(faqs, key=lambda faq: faq.area_id):
+                        faq_list = list(faq_group)  # Lista di FAQ per l'area corrente
+                        if faq_list:
+                            url_avatar = None
+                            faqs_final_list = []  # Inizializza la lista delle FAQ per l'area corrente
+                            for faq in faq_list:
+                                url_avatar = faq.url_avatar
+                                faqs_final_list.append({
+                                    'question': faq.question,
+                                    'answer': faq.answer,
+                                    'link': faq.link,
+                                })
+                            faqs_list.append({
+                                'area_id': area_id,
+                                'url_avatar': url_avatar,
+                                'faq': faqs_final_list
+                            })
+                    return Response({'faqs': faqs_list})
+            return Response({"No parameters!"})
+
+        except:
+            return Response({"Something went wrong!"})
+
+
+class NoticesView(APIView):
+    def post(self, request):
+        TYPE_CHOICES = {
+            'news': 'news',
+            'doc': 'documents',
+            'meet': 'calendar'
+        }
+        try:
+            if request.query_params.get('school_id'):
+                school_id = request.query_params.get('school_id')
+                notices = Notice.objects.filter(school__custom_id=school_id).order_by('type')
+                if notices:
+                    notices_list = []  # Inizializza la lista principale fuori dal ciclo
+                    for type, notice_group in groupby(notices, key=lambda notice: notice.type):
+                        notice_list = list(notice_group)  # Lista di FAQ per l'area corrente
+                        if notice_list:
+                            notices_final_list = []  # Inizializza la lista delle FAQ per l'area corrente
+                            for notice in notice_list:
+                                if type == 'news':
+                                    notices_final_list.append({
+                                        'title': notice.title,
+                                        'data': notice.date.date(),
+                                        'text': notice.text,
+                                        'link': notice.link,
+                                    })
+                                elif type == 'document':
+                                    notices_final_list.append({
+                                        'title': notice.title,
+                                        'link': notice.media_file.path,
+                                    })
+                                elif type == 'meet':
+                                    notices_final_list.append(notice.meet_link)
+                            notices_list.append({
+                                TYPE_CHOICES[type]: notices_final_list
+                            })
+                    return Response({'bacheca': notices_list})
+            return Response({"No notices!"})
+        except:
+            return Response({"Something went wrong!"})
 
 # class SchoolSerializer(serializers.Serializer):
 #     class Meta:

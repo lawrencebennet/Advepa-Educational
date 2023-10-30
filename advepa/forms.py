@@ -1,6 +1,5 @@
 from django import forms
-from users.models import Pavilion, Exhibition, Stand
-
+from users.models import *
 
 # EXHIBITION FORMS
 class ExhibitionForm(forms.ModelForm):

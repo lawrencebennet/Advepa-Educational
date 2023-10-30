@@ -12,37 +12,13 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
 
-class CustomAccountManager(BaseUserManager):
-
-    def create_superuser(self, email, username, password, **other_fields):
-        other_fields.setdefault('is_staff', True)
-        other_fields.setdefault('is_superuser', True)
-        other_fields.setdefault('is_active', True)
-
-        if other_fields.get('is_staff') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_staff=True.')
-        if other_fields.get('is_superuser') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_superuser=True.')
-            # email validation
-        if not email:
-            raise ValueError(_('You must provide an email address'))
-
-        super_user = self.create_user(email, username, password, **other_fields)
-        return super_user
-
-    def create_user(self, email, username, password, **other_fields):
-        email = self.normalize_email(email)
-        user = self.model(email=email, username=username, **other_fields)
-        user.set_password(password)
-        user.save()
-        return user
+def user_directory_path(instance, filename):
+    return f'{instance.teacher.username}/{filename}'
 
 
 def generate_unique_code():
     while True:
-        random_code = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(5))
+        random_code = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(6))
         if not School.objects.filter(custom_id=random_code).exists():
             return random_code.upper()
 
@@ -64,7 +40,7 @@ class School(models.Model):
     modulo_segreteria = models.BooleanField(default=False)
     modulo_spazio_docenti = models.BooleanField(default=False)
     modulo_classi_innovative = models.BooleanField(default=False)
-    planimetry_image = models.FileField(upload_to=school_directory_path)
+    planimetry_image = models.FileField(null=True, blank=True, upload_to=school_directory_path)
 
     class Meta:
         verbose_name = _("School")
@@ -74,15 +50,39 @@ class School(models.Model):
         return f"{self.name}, ID: {self.custom_id}"
 
 
-def user_directory_path(instance, filename):
-    return f'{instance.teacher.username}/{filename}'
+class CustomAccountManager(BaseUserManager):
+
+    def create_superuser(self, username, password, **other_fields):
+        other_fields.setdefault('is_staff', True)
+        other_fields.setdefault('is_superuser', True)
+        other_fields.setdefault('is_active', True)
+
+        if other_fields.get('is_staff') is not True:
+            raise ValueError(
+                'Superuser must be assigned to is_staff=True.')
+        if other_fields.get('is_superuser') is not True:
+            raise ValueError(
+                'Superuser must be assigned to is_superuser=True.')
+            # email validation
+        # if not email:
+        #     raise ValueError(_('You must provide an email address'))
+
+        super_user = self.create_user(username, password, **other_fields)
+        return super_user
+
+    def create_user(self, username, password, **other_fields):
+        # email = self.normalize_email(email)
+        user = self.model(username=username, **other_fields)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     # stands = models.ForeignKey(Stand, on_delete=models.CASCADE, blank=True, null=True)
     # exhibitions = models.ForeignKey(Exhibition, on_delete=models.CASCADE, blank=True, null=True)
 
-    email = models.EmailField(_('email address'), unique=True)
+    # email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=150, blank=False, unique=True)
     avatar = models.TextField(max_length=500, blank=True)
     groups = models.ManyToManyField(Group, blank=True)
@@ -139,9 +139,46 @@ class MediaFile(models.Model):
     byte_space = models.FloatField(default=0)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(blank=False, max_length=100)
+    create_date = models.DateTimeField(auto_now_add=True)
+
+    def get_name_for_select(self):
+        return f'{self.name}.{self.type.extension}, {(self.byte_space / 1000000):.3f}MB'
+
+    def get_room_numbers(self):
+        return ",".join(str(classroom.room_number) for classroom in self.classroom_set.all())
 
     def __str__(self):
         return f'{self.name}.{self.type.extension}, {(self.byte_space / 1000):.3f} Kilobytes, caricato da: {self.teacher.username}'
+
+
+class Notice(models.Model):
+    TYPE_CHOICES = (
+        ('news', 'News'),
+        ('doc', 'Documento'),
+        ('meet', 'Appuntamento')
+    )
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES)
+    text = models.TextField(blank=True)
+    link = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    media_file = models.ForeignKey(MediaFile, null=True, blank=True, on_delete=models.CASCADE)
+    meet_link = models.CharField(max_length=100, blank=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+
+class Faq(models.Model):
+    AREA_CHOICES = (
+        ('1', 'Section 1'),
+        ('2', 'Section 2'),
+        ('3', 'Section 3')
+    )
+    area_id = models.CharField(max_length=100, choices=AREA_CHOICES)
+    url_avatar = models.CharField(max_length=100, default="https://models.readyplayer.me/63403f333dd6383c5cb59254.glb")
+    question = models.TextField(blank=True)
+    answer = models.TextField(blank=True)
+    link = models.CharField(max_length=100, blank=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
 
 
 class SiteLogins(models.Model):
@@ -149,7 +186,7 @@ class SiteLogins(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str("Accesso da parte di" + self.user.username + ", email:" + self.user.email + ", " + str(self.date))
+        return str("Accesso da parte di" + self.user.username + ", " + str(self.date))
 
     class Meta:
         ordering = ['-date']
@@ -203,6 +240,8 @@ class Classroom(models.Model):
     #         self.room_number = max_room_number + 1
     #
     #     super().save(*args, **kwargs)
+    def get_name_for_list(self):
+        return f'{self.get_type_display()} {self.room_number}, {self.name}'
 
     def __str__(self):
         return f'{self.get_type_display()}: {self.name}, Skin: {self.skin}, {self.media_files.count()} Files Caricati'

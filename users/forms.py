@@ -3,7 +3,8 @@ from users.models import CustomUser, Pavilion, Exhibition, Stand
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordResetForm
-from .models import MediaFile
+from .models import CustomUser, MediaFile, MediaType
+from django.core.exceptions import ValidationError
 
 
 class SignupForm(forms.ModelForm):
@@ -13,11 +14,11 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email',
-                  'username',
-                  'password1',
-                  'password2',
-                  )
+        fields = (
+            'username',
+            'password1',
+            'password2',
+        )
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -54,18 +55,18 @@ class CustomUserForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email',
-                  'username',
-                  'role',
-                  'groups',
-                  # 'exhibitions',
-                  # 'stands',
-                  'school',
-                  'about',
-                  'is_active',
-                  'password1',
-                  'password2',
-                  )
+        fields = (
+            'username',
+            'role',
+            'groups',
+            # 'exhibitions',
+            # 'stands',
+            'school',
+            'about',
+            'is_active',
+            'password1',
+            'password2',
+        )
         # widgets = {
         #     'avatar': forms.FileInput(),
         # }
@@ -98,16 +99,16 @@ class EditUserForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email',
-                  'username',
-                  'role',
-                  # 'exhibitions',
-                  # 'stands',
-                  'school',
-                  'groups',
-                  'about',
-                  'is_active',
-                  )
+        fields = (
+            'username',
+            'role',
+            # 'exhibitions',
+            # 'stands',
+            'school',
+            'groups',
+            'about',
+            'is_active',
+        )
 
         # widgets = {
         #     'avatar': forms.FileInput(),
@@ -120,30 +121,30 @@ class EditUserForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
+    username = forms.CharField(label='Username')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
     def clean(self):
-        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=username, password=password)
         if not user or not user.is_active:
             raise forms.ValidationError("Sorry, that login was invalid. Please try again.")
         return self.cleaned_data
 
     def login(self, request):
-        email = self.cleaned_data.get('email')
+        username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=username, password=password)
         return user
 
 
-class EmailValidationOnForgotPassword(PasswordResetForm):
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if not CustomUser.objects.filter(email__iexact=email, is_active=True).exists():
-            raise forms.ValidationError("There is no user registered with the specified email address!")
-        return email
+# class EmailValidationOnForgotPassword(PasswordResetForm):
+#     def clean_email(self):
+#         email = self.cleaned_data['email']
+#         if not CustomUser.objects.filter(email__iexact=email, is_active=True).exists():
+#             raise forms.ValidationError("There is no user registered with the specified email address!")
+#         return email
 
 
 class GroupForm(forms.ModelForm):
@@ -167,7 +168,34 @@ class UserPermissionsForm(forms.ModelForm):
         fields = ('user_permissions',)
 
 
+# UPLOAD FILE FORM
+class UploadMediaFileForm(forms.ModelForm):
+    class Meta:
+        model = MediaFile
+        fields = ('file',)  # Includi solo il campo del file nel modulo
 
+    def save(self, commit=True):
+        media_file = super().save(commit=False)
+        media_file.teacher = self.user
+        file_extension = media_file.file.name.split('.')[-1]
+        try:
+            media_type = MediaType.objects.get(extension=file_extension)
+            if media_file.file.size / 1000000 > media_type.megabyte_limit:
+                self.add_error('file', f"Dimensioni del file '{file_extension}' troppo grandi! Massima dimensione {media_type.megabyte_limit}mb")
+                # raise forms.ValidationError(f"Dimensioni del file '{media_file.file.size / 1000}' MB troppo grandi!")
+            media_file.type = media_type
+        except MediaType.DoesNotExist:
+            # raise forms.ValidationError(f"Tipo di file '{file_extension}' non supportato")
+            self.add_error('file', f"Tipo di file '{file_extension}' non supportato")
+            self.has_error(True)
+            return
+        media_file.name = media_file.file.name.split('.')[0]
+        media_file.byte_space = media_file.file.size
+        if commit:
+            media_file.save()
+        return media_file
+
+#FORMS PER IL DASHBOARD ADMIN DI DJANGO
 class MediaFileFormCreate(forms.ModelForm):
     class Meta:
         model = MediaFile

@@ -44,8 +44,10 @@
                                     <a href="{% url 'advepa:index' %}"><img src="{% static 'advepa/images/advepa/logo-advepa.png' %}"
                                                                           alt=""></a>
                                 </div>
-                                <img src="{% static 'advepa/images/log.png' %}"
+                                <img src="{% static 'advepa/images/school_illustration.jpg' %}"
                                      class="img-fix bitcoin-img sd-shape7">
+{#                                <img src="{% static 'advepa/images/log.png' %}"#}
+{#                                     class="img-fix bitcoin-img sd-shape7">#}
                             </div>
                         </div>
                         <div class="col-xl-6 col-md-6">
@@ -63,10 +65,10 @@
 
                                 <form method="post">{% csrf_token %}
                                     <div class="mb-3">
-                                        <label class="mb-1"><strong>Email</strong></label>
-                                        {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}
+                                        <label class="mb-1"><strong>Username</strong></label>
+                                        {{ form.username|attr:"class:form-control"|attr:"placeholder:Username" }}
                                         <div class="text-danger w-100 d-block mt-1">
-                                            {{ form.email.errors }}
+                                            {{ form.username.errors }}
                                         </div>
                                     </div>
                                     <div class="mb-3">
