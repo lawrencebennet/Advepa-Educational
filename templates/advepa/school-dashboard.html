@@ -347,69 +347,72 @@
                         <tbody>
                         {% csrf_token %}
                         {% for file in uploaded_file_list %}
-                            <tr id="{{ file.id }}">
-                                <td>
-                                    <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                        <input name="file_id[]" type="checkbox"
-                                               class="form-check-input"
-                                               value="{{ file.id }}">
-                                        <label class="form-check-label"
-                                               for="checkbox-{{ file.id }}"></label>
-                                    </div>
-                                </td>
-                                <td>{{ file.name }}</td>
-                                <td>{{ file.type.get_macro_type_display }}</td>
-                                <td>{{ file.type.extension }}</td>
-                                <td>{{ file.byte_space }}</td>
-                                <td>{{ file.create_date }}</td>
-                                <td>{{ file.get_room_numbers }}</td>
-                                {#                                        <td>#}
-                                {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-                                {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
-                                {#                                                       value="{{ user.id }}">#}
-                                {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
-                                {#                                            </div>#}
-                                {#                                        </td>#}
-
-
-                                {#                                        <td>#}
-                                {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
-                                {#                                                <div class="d-flex align-items-center">#}
-                                {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
-                                {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
-                                {#                                                </div>#}
-                                {#                                            </a>#}
-                                {#                                        </td>#}
-                                {#                                        <td><strong>{{ user.email }}</strong></td>#}
-                                {#                                        <td>{{ user.get_role_display }}</td>#}
-
-
-                                {#                                        <td>#}
-                                {#                                            {% for g in user.groups.all %}#}
-                                {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
-                                {#                                            {% endfor %}#}
-                                {#                                        </td>#}
-                                {#                                    <td>{{ user.phone_number }}</td>#}
-                                {#                                    <td>{{ user.dob }}</td>#}
-                                {#                                        <td>#}
-                                {#                                            <div class="d-flex align-items-center">#}
-                                {#                                                {% if user.is_active %}#}
-                                {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
-                                {#                                                {% else %}#}
-                                {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
-                                {#                                                {% endif %}#}
-                                {#                                            </div>#}
-                                {#                                        </td>#}
-                                <td>
-                                    <div class="sweetalert">
-                                        <div class="d-flex">
-                                            <a href="{% url 'advepa:delete-file' id=file.id %}"
-                                               class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                    class="fa fa-trash"></i></a>
+                            {% for class in file.classroom_set.all %}
+                                <tr id="{{ file.id }}" data-classroom-id="{{ class.id }}" class="file-row">
+                                    <td>
+                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                            <input name="file_id[]" type="checkbox"
+                                                   class="form-check-input"
+                                                   value="{{ file.id }}">
+                                            <label class="form-check-label"
+                                                   for="checkbox-{{ file.id }}"></label>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>{{ file.name }}</td>
+                                    <td>{{ file.type.get_macro_type_display }}</td>
+                                    <td>{{ file.type.extension }}</td>
+                                    <td>{{ file.byte_space }}</td>
+                                    <td>{{ file.create_date }}</td>
+                                    <td>{{ class.room_number }}</td>
+                                    {#                                        <td>#}
+                                    {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
+                                    {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
+                                    {#                                                       value="{{ user.id }}">#}
+                                    {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
+                                    {#                                            </div>#}
+                                    {#                                        </td>#}
+
+
+                                    {#                                        <td>#}
+                                    {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
+                                    {#                                                <div class="d-flex align-items-center">#}
+                                    {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
+                                    {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
+                                    {#                                                </div>#}
+                                    {#                                            </a>#}
+                                    {#                                        </td>#}
+                                    {#                                        <td><strong>{{ user.email }}</strong></td>#}
+                                    {#                                        <td>{{ user.get_role_display }}</td>#}
+
+
+                                    {#                                        <td>#}
+                                    {#                                            {% for g in user.groups.all %}#}
+                                    {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
+                                    {#                                            {% endfor %}#}
+                                    {#                                        </td>#}
+                                    {#                                    <td>{{ user.phone_number }}</td>#}
+                                    {#                                    <td>{{ user.dob }}</td>#}
+                                    {#                                        <td>#}
+                                    {#                                            <div class="d-flex align-items-center">#}
+                                    {#                                                {% if user.is_active %}#}
+                                    {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
+                                    {#                                                {% else %}#}
+                                    {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
+                                    {#                                                {% endif %}#}
+                                    {#                                            </div>#}
+                                    {#                                        </td>#}
+                                    <td>
+                                        <div class="sweetalert">
+                                            <div class="d-flex">
+                                                <a href="{% url 'advepa:unlink-file-classroom' classroom_id=class.id file_id=file.id %}"
+                                                   class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -420,7 +423,7 @@
 
                     <p>
                             <span class="current">
-                            Pagina {{ file_list.number }} di {{ file_list.paginator.num_pages }}.
+                            Pagina {{ uploaded_file_list.number }} di {{ uploaded_file_list.paginator.num_pages }}.
                            </span>
                     </p>
 
@@ -428,32 +431,32 @@
                     <ul class="pagination pagination-gutter  justify-content-end">
 
                         <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if file_list.has_previous %}
-                                                                ?page={{ file_list.previous_page_number }}
+                            <a class="page-link" href="{% if uploaded_file_list.has_previous %}
+                                                                ?page={{ uploaded_file_list.previous_page_number }}
                                                                 {% else %}
                                                                 javascript:void(0);
                                                                 {% endif %}">
                                 <i class="la la-angle-left"></i></a>
                         </li>
 
-                        {% for i in file_list.paginator.page_range|slice:":3" %}
+                        {% for i in uploaded_file_list.paginator.page_range|slice:":3" %}
 
-                            <li class="page-item {% if file_list.number == i %}
+                            <li class="page-item {% if uploaded_file_list.number == i %}
                                                     active{% endif %}"><a class="page-link"
                                                                           href="?page={{ i }}">{{ i }}</a></li>
 
                         {% endfor %}
 
 
-                        {% if file_list.number > 3 %}
+                        {% if uploaded_file_list.number > 3 %}
                             <li class="page-item active"><a class="page-link"
-                                                            href="?page={{ file_list.number }}">{{ file_list.number }}</a>
+                                                            href="?page={{ uploaded_file_list.number }}">{{ uploaded_file_list.number }}</a>
                             </li>
                         {% endif %}
 
                         <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if file_list.has_next %}
-                                                            ?page={{ file_list.next_page_number }}
+                            <a class="page-link" href="{% if uploaded_file_list.has_next %}
+                                                            ?page={{ uploaded_file_list.next_page_number }}
                                                             {% else %}
                                                             javascript:void(0);
                                                             {% endif %}">
@@ -905,6 +908,24 @@
         $('.test-popup-link').magnificPopup({
             type: 'image'
             // other options
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#classroom-select').on('change', function () {
+                var selectedClassroomId = parseInt($(this).val());
+
+                $('.file-row').each(function () {
+                    var classroomId = parseInt($(this).data('classroom-id'));
+                    // Ottieni l'ID della classroom associata al file
+                    // Controlla se il valore selezionato è vuoto o corrisponde all'ID della classroom associata al file
+                    if (isNaN(selectedClassroomId) || selectedClassroomId === classroomId) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}l>

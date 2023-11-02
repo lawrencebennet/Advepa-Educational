@@ -41,7 +41,9 @@ class SignupForm(forms.ModelForm):
 class CustomUserForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-    username = forms.CharField(required=True)
+    name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    username = forms.CharField(required=False)
     ROLE_CHOICES = (
         ('superadmin', 'Super Admin'),
         ('admin', 'Amministratore Scuola'),
@@ -50,26 +52,20 @@ class CustomUserForm(forms.ModelForm):
     )
     role = forms.ChoiceField(choices=ROLE_CHOICES, required=True)
 
-    # exhibitions = forms.ModelChoiceField(queryset=Exhibition.objects.all(), required=False)
-    # stands = forms.ModelChoiceField(queryset=Stand.objects.all(), required=False)
-
     class Meta:
         model = CustomUser
         fields = (
             'username',
+            'name',
+            'last_name',
             'role',
             'groups',
-            # 'exhibitions',
-            # 'stands',
             'school',
             'about',
             'is_active',
             'password1',
             'password2',
         )
-        # widgets = {
-        #     'avatar': forms.FileInput(),
-        # }
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -87,7 +83,9 @@ class CustomUserForm(forms.ModelForm):
 
 
 class EditUserForm(forms.ModelForm):
-    username = forms.CharField(required=True)
+    username = forms.CharField(required=False)
+    name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
     ROLE_CHOICES = (
         ('superadmin', 'Super Admin'),
@@ -102,17 +100,13 @@ class EditUserForm(forms.ModelForm):
         fields = (
             'username',
             'role',
-            # 'exhibitions',
-            # 'stands',
+            'name',
+            'last_name',
             'school',
             'groups',
             'about',
             'is_active',
         )
-
-        # widgets = {
-        #     'avatar': forms.FileInput(),
-        # }
 
     def save(self, commit=True):
         # Save the provided password in hashed format
@@ -181,7 +175,8 @@ class UploadMediaFileForm(forms.ModelForm):
         try:
             media_type = MediaType.objects.get(extension=file_extension)
             if media_file.file.size / 1000000 > media_type.megabyte_limit:
-                self.add_error('file', f"Dimensioni del file '{file_extension}' troppo grandi! Massima dimensione {media_type.megabyte_limit}mb")
+                self.add_error('file',
+                               f"Dimensioni del file '{file_extension}' troppo grandi! Massima dimensione {media_type.megabyte_limit}mb")
                 # raise forms.ValidationError(f"Dimensioni del file '{media_file.file.size / 1000}' MB troppo grandi!")
             media_file.type = media_type
         except MediaType.DoesNotExist:
@@ -195,7 +190,8 @@ class UploadMediaFileForm(forms.ModelForm):
             media_file.save()
         return media_file
 
-#FORMS PER IL DASHBOARD ADMIN DI DJANGO
+
+# FORMS PER IL DASHBOARD ADMIN DI DJANGO
 class MediaFileFormCreate(forms.ModelForm):
     class Meta:
         model = MediaFile

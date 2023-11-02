@@ -68,6 +68,7 @@ urlpatterns = [
     # MEDIAFILES
     path('file-manager/', users_views.file_manager, name="file-manager"),
     path('delete-file/<int:id>/', users_views.delete_file, name="delete-file"),
+    path('unlink-file-classroom/<int:classroom_id>/<int:file_id>/', users_views.unlink_file_classroom, name="unlink-file-classroom"),
     path('delete-multiple-files/', users_views.delete_multiple_files, name="delete-multiple-files"),
 
     # API

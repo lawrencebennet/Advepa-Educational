@@ -24,6 +24,22 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Nome {% if form.name.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.name|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Nome" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Cognome {% if form.last_name.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.last_name|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Cognome" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.last_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
                                     <label class="form-label">Username {% if form.username.field.required %}
                                         <span class="text-danger">*</span> {% endif %}</label>
                                     {{ form.username|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Username" }}
@@ -31,26 +47,26 @@
                                         {{ form.username.errors }}
                                     </div>
                                 </div>
-{#                                <div class="col-sm-6 m-b30">#}
-{#                                    <label class="form-label">Email {% if form.email.field.required %}#}
-{#                                        <span class="text-danger">*</span> {% endif %}</label>#}
-{#                                    {% if status == "Modifica" %}#}
-{#                                        {{ form.email|attr:"readonly:readonly"|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}#}
-{#                                    {% else %}#}
-{#                                        {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}#}
-{#                                    {% endif %}#}
-{#                                    <div class="text-danger w-100 d-block mt-1">#}
-{#                                        {{ form.email.errors }}#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="col-sm-6 m-b30">#}
-{#                                    <label class="form-label">Gruppo {% if form.groups.field.required %}#}
-{#                                        <span class="text-danger">*</span>{% endif %}</label>#}
-{#                                    {{ form.groups|attr:"class:multi-select-groups form-control"|attr:"name:groups[]" }}#}
-{#                                    <div class="text-danger w-100 d-block mt-1">#}
-{#                                        {{ form.groups.errors }}#}
-{#                                    </div>#}
-{#                                </div>#}
+                                {#                                <div class="col-sm-6 m-b30">#}
+                                {#                                    <label class="form-label">Email {% if form.email.field.required %}#}
+                                {#                                        <span class="text-danger">*</span> {% endif %}</label>#}
+                                {#                                    {% if status == "Modifica" %}#}
+                                {#                                        {{ form.email|attr:"readonly:readonly"|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}#}
+                                {#                                    {% else %}#}
+                                {#                                        {{ form.email|attr:"type:email"|attr:"class:form-control"|attr:"placeholder:Email" }}#}
+                                {#                                    {% endif %}#}
+                                {#                                    <div class="text-danger w-100 d-block mt-1">#}
+                                {#                                        {{ form.email.errors }}#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                                <div class="col-sm-6 m-b30">#}
+                                {#                                    <label class="form-label">Gruppo {% if form.groups.field.required %}#}
+                                {#                                        <span class="text-danger">*</span>{% endif %}</label>#}
+                                {#                                    {{ form.groups|attr:"class:multi-select-groups form-control"|attr:"name:groups[]" }}#}
+                                {#                                    <div class="text-danger w-100 d-block mt-1">#}
+                                {#                                        {{ form.groups.errors }}#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
                                 <div class="col-sm-6 m-b30">
                                     <label class="form-label">Ruolo {% if form.role.field.required %}
                                         <span class="text-danger">*</span>{% endif %}</label>
@@ -58,17 +74,16 @@
                                     <div class="text-danger w-100 d-block mt-1">
                                         {{ form.role.errors }}
                                     </div>
-                                    <div id="administrator-role-div"
-                                         class="d-none">
-                                         <label class="form-label">Fiera
-                                        <span class="text-danger">*</span></label>{{ form.exhibitions|attr:"class:form-control"|attr:"id:id_exhibitions"}}<div class="text-danger w-100 d-block mt-1">
-                                        {{ form.exhibitions.errors }}
-                                    </div></div>
-                                    <div id="standist-role-div"
-                                         class="d-none"> <label class="form-label">Stand
-                                        <span class="text-danger">*</span></label>{{ form.stands|attr:"class:form-control"|attr:"id:id_stands" }}<div class="text-danger w-100 d-block mt-1">
-                                        {{ form.stands.errors }}
-                                    </div></div>
+                                    {% if request.user.role == 'superadmin' %}
+
+                                        <label class="form-label">Scuola
+                                            <span class="text-danger">*</span></label>
+                                        {{ form.school|attr:"class:form-control"|attr:"id:id_school" }}
+                                        <div class="text-danger w-100 d-block mt-1">
+                                            {{ form.school.errors }}
+                                        </div>
+
+                                    {% endif %}
                                 </div>
                                 <div class="col-sm-6  d-flex align-items-center mb-0">
                                     <div class="form-check custom-checkbox mb-0 checkbox-primary">

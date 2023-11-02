@@ -63,12 +63,34 @@ def users(request):
     return render(request, "advepa/modules/users.html", context)
 
 
+def create_unique_username(name, last_name):
+    # Crea un 'username' unico basato su 'name' e 'last_name'
+    base_username = f"{name.lower()}{last_name.lower()}"
+    username = base_username
+    count = 1
+
+    while CustomUser.objects.filter(username=username).exists():
+        # Se il 'username' esiste già, aggiungi un numero all'username
+        username = f"{base_username}{count}"
+        count += 1
+
+    return username
+
+
 @login_required(login_url='advepa:login')
 @permission_required({'users.view_customuser', 'users.add_customuser'}, raise_exception=True)
 def add_user(request):
     if request.method == 'POST':
         form = CustomUserForm(request.POST, request.FILES)
         if form.is_valid():
+            if not form.cleaned_data.get('school'):
+                form.instance.school = request.user.school
+            if not form.cleaned_data.get('username'):
+                name = form.cleaned_data.get('name')
+                last_name = form.cleaned_data.get('last_name')
+                unique_username = create_unique_username(name, last_name)
+                form.instance.username = unique_username
+
             user_obj = form.save()
             user_obj.groups.clear()
             for i in form.cleaned_data.get('groups'):
@@ -77,7 +99,10 @@ def add_user(request):
             return redirect('advepa:users')
     else:
         form = CustomUserForm()
-    return render(request, 'advepa/modules/add-user.html', {'form': form, "page_title": "Add User"})
+        if request.user.role == 'admin':
+            form.fields['role'].choices = [(value, label) for value, label in form.fields['role'].choices if
+                                           value not in ['admin', 'superadmin']]
+    return render(request, 'advepa/modules/add-user.html', {'form': form, "page_title": "Crea Utente"})
 
 
 @login_required(login_url='advepa:login')
@@ -107,7 +132,7 @@ def user_details(request, id):
         "user_obj": user_obj,
         "user_group_perms": user_obj.get_group_permissions(),
         "user_perms": user_obj.get_user_permissions(),
-        "page_title": "User Details"
+        "page_title": "Dettagli account"
     }
 
     return render(request, "advepa/modules/user-details.html", context)
@@ -118,7 +143,7 @@ def user_details(request, id):
 def delete_user(request, id):
     u = CustomUser.objects.get(id=id)
     u.delete()
-    messages.success(request, "User deleted successfully")
+    messages.success(request, "Utente eliminato correttamente!")
     return redirect('advepa:users')
 
 
@@ -144,13 +169,14 @@ def login_user(request):
             if user is not None and user.is_active:
                 login(request, user)
                 SiteLogins.objects.create(**{'user': user})
-                if check_stand_or_exhibition_setted(request):
+                if not check_school_setted(request):
                     return redirect('advepa:page-error-403')
                 role = request.user.get_role_display()
                 if request.user.is_superuser or request.user.role == 'advepa':
                     mex = "Benvenuto nella dashboard di amministrazione"
-                elif role == "Nessun ruolo":
-                    mex = "Benvenuto nella dashboard per i visitatori"
+                elif role == "student":
+                    messages.warning(request, "Non sei autorizzato ad entrare!")
+                    return redirect('advepa:page-error-403')
                 else:
                     mex = f'Benvenuto alla Dashboard per gli {role}'
                 next_url = request.GET.get('next')
@@ -178,11 +204,8 @@ def login_user(request):
     return render(request, 'advepa/modules/login.html', context={'form': form})
 
 
-def check_stand_or_exhibition_setted(request):
-    if (request.user.role == 'administrator' and not request.user.exhibitions) or (
-            request.user.role == 'standist' and not request.user.stands):
-        return True if (request.user.role == 'administrator' and not request.user.exhibitions) or (
-                request.user.role == 'standist' and not request.user.stands) else False
+def check_school_setted(request):
+    return True if ((request.user.role == 'admin' or request.user.role == 'teacher') and request.user.school) else False
 
 
 def logout_user(request):
@@ -995,7 +1018,7 @@ def school_dashboard(request):
         classrooms = Classroom.objects.filter(school=school)
         # Trova i file collegati a queste classi
         uploaded_file_list = MediaFile.objects.filter(classroom__in=classrooms, teacher=request.user).order_by(
-            '-create_date')
+            '-create_date').distinct()
         all_file_list = MediaFile.objects.filter(teacher=request.user).order_by('-create_date')
         paginator = Paginator(uploaded_file_list, 7)  # Mostra 7 file per pagina
     context = {
@@ -1005,7 +1028,7 @@ def school_dashboard(request):
         "all_file_list": all_file_list,
         "page_title": "Dashboard Scuola",
     }
-    return render(request, 'advepa/modules/school-dashboard.html', context)
+    return render(request, 'advepa/school-dashboard.html', context)
 
 
 # FILE MANAGER
@@ -1044,7 +1067,21 @@ def delete_file(request, id):
     f = MediaFile.objects.get(id=id)
     f.delete()
     messages.success(request, "File eliminato con successo")
-    return redirect('advepa:file-manager')
+    return redirect('advepa:file-manager') \
+           @ login_required(login_url='advepa:login')
+
+
+@login_required(login_url='advepa:login')
+def unlink_file_classroom(request, classroom_id, file_id):
+    # Ottieni la classroom e il file
+    classroom = get_object_or_404(Classroom, id=classroom_id)
+    file = get_object_or_404(MediaFile, id=file_id)
+
+    # Rimuovi il file dalla classroom
+    classroom.media_files.remove(file)
+
+    messages.success(request, "File rimosso con successo")
+    return redirect('advepa:school-dashboard')
 
 
 @login_required(login_url='advepa:login')

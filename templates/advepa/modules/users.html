@@ -55,91 +55,78 @@
                             </th>
 
                             <th>Username</th>
-{#                            <th>Email</th>#}
                             <th>Ruolo</th>
+                            <th>Scuola</th>
                             <th>Gruppo</th>
-                            {#                                    <th>Mobile</th>#}
-                            {#                                    <th>Date of Birth</th>#}
                             <th>Status</th>
-
-
                             {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}
                                 <th></th>
                             {% endif %}
-
 
                         </tr>
                         </thead>
                         <tbody>
                         {% csrf_token %}
                         {% for user in user_list %}
-                            <tr id="{{ user.id }}">
-                                <td>
-                                    <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                        <input name="user_id[]" type="checkbox" class="form-check-input"
-                                               value="{{ user.id }}">
-                                        <label class="form-check-label" for="checkbox-{{ user.id }}"></label>
-                                    </div>
-                                </td>
-
-
-                                <td>
-                                    <a href="{% url 'advepa:user-details' id=user.id %}">
+                            {% if request.user.role != 'admin' or user.school == request.user.school %}
+                                <tr id="{{ user.id }}">
+                                    <td>
+                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                            <input name="user_id[]" type="checkbox" class="form-check-input"
+                                                   value="{{ user.id }}">
+                                            <label class="form-check-label" for="checkbox-{{ user.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'advepa:user-details' id=user.id %}">
+                                            <div class="d-flex align-items-center">
+                                                <span class="w-space-no">{{ user.username }}</span>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>{{ user.get_role_display }}</td>
+                                    <td>{{ user.school }}</td>
+                                    <td>
+                                        {% for g in user.groups.all %}
+                                            <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
                                         <div class="d-flex align-items-center">
-                                            {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
-                                            <span class="w-space-no">{{ user.username }}</span>
-                                        </div>
-                                    </a>
-                                </td>
-{#                                <td><strong>{{ user.email }}</strong></td>#}
-                                <td>{{ user.get_role_display }}</td>
-
-
-                                <td>
-                                    {% for g in user.groups.all %}
-                                        <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>
-                                    {% endfor %}
-                                </td>
-                                {#                                    <td>{{ user.phone_number }}</td>#}
-                                {#                                    <td>{{ user.dob }}</td>#}
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        {% if user.is_active %}
-                                            <i class="fa fa-circle text-success me-1"></i>
-                                        {% else %}
-                                            <i class="fa fa-circle text-dark me-1"></i>
-                                        {% endif %}
-                                    </div>
-
-                                </td>
-                                <td>
-                                    <div class="sweetalert">
-                                        <div class="d-flex">
-                                            {% if perms.users.change_customuser %}
-                                                <a href="{% url 'advepa:edit-user' id=user.id %}"
-                                                   class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil"></i></a>
-                                            {% endif %}
-                                            {% if perms.auth.change_permission %}
-                                                <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"
-                                                   class="btn btn-success shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-shield"></i></a>
-                                            {% endif %}
-                                            {% if perms.users.delete_customuser and not user.is_superuser %}
-                                                <a href="{% url 'advepa:delete-user' id=user.id %}"
-                                                   class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                        class="fa fa-trash"></i></a>
+                                            {% if user.is_active %}
+                                                <i class="fa fa-circle text-success me-1"></i>
+                                            {% else %}
+                                                <i class="fa fa-circle text-dark me-1"></i>
                                             {% endif %}
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <div class="sweetalert">
+                                            <div class="d-flex">
+                                                {% if perms.users.change_customuser %}
+                                                    <a href="{% url 'advepa:edit-user' id=user.id %}"
+                                                       class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                {% endif %}
+                                                {% if perms.auth.change_permission %}
+                                                    <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"
+                                                       class="btn btn-success shadow btn-xs sharp me-1"><i
+                                                            class="fa fa-shield"></i></a>
+                                                {% endif %}
+                                                {% if perms.users.delete_customuser and not user.is_superuser %}
+                                                    <a href="{% url 'advepa:delete-user' id=user.id %}"
+                                                       class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash"></i></a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-
                 <nav mt-5>
 
                     <p>
