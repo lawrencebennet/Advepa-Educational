@@ -75,7 +75,6 @@
                                         {{ form.role.errors }}
                                     </div>
                                     {% if request.user.role == 'superadmin' %}
-
                                         <label class="form-label">Scuola
                                             <span class="text-danger">*</span></label>
                                         {{ form.school|attr:"class:form-control"|attr:"id:id_school" }}
@@ -147,44 +146,10 @@
     </form>
 
 
-
 {% endblock %}
 
 
 {% block additional_js %}
-    <script>
-        $(document).ready(function () {
-            function toggleRoleDiv() {
-                if ($('#id_role').val() === 'administrator') {
-                    $('#administrator-role-div').removeClass('d-none');
-                    $('#standist-role-div').addClass('d-none');
-                    $('#id_exhibitions').prop('required', true);
-                    $('#id_stands').prop('required', false);
-                } else if ($('#id_role').val() === 'standist') {
-                    $('#administrator-role-div').addClass('d-none');
-                    $('#standist-role-div').removeClass('d-none');
-                    $('#id_exhibitions').prop('required', false);
-                    $('#id_stands').prop('required', true);
-                } else {
-                    $('#administrator-role-div').addClass('d-none');
-                    $('#standist-role-div').addClass('d-none');
-                    $('#id_exhibitions').prop('required', false);
-                    $('#id_stands').prop('required', false);
-                }
-            }
-
-            toggleRoleDiv();
-
-            $('#id_role').change(function () {
-                toggleRoleDiv();
-            });
-        });
-    </script>
-    <script>
-        $(".multi-select-groups").select2({
-            placeholder: "Seleziona il gruppo"
-        });
-    </script>
 {% endblock %}
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from users.models import CustomUser, Pavilion, Exhibition, Stand
+from users.models import CustomUser, Pavilion, Exhibition, Stand, School
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordResetForm
@@ -112,6 +112,58 @@ class EditUserForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super().save()
         return user
+
+
+class SchoolForm(forms.ModelForm):
+    name = forms.CharField(required=True)
+    custom_id = forms.CharField(required=True)
+    info = forms.CharField(required=False)
+    theme = forms.CharField(required=False)
+
+    class Meta:
+        model = School
+        fields = (
+            'name', 'custom_id', 'info', 'is_active', 'theme', 'modulo_ingresso', 'modulo_comunicazione_multipla',
+            'modulo_personalizzato_apprendimento', 'modulo_eventi', 'modulo_segreteria', 'modulo_spazio_docenti',
+            'modulo_classi_innovative',
+        )
+
+
+class EditSchoolForm(forms.ModelForm):
+    name = forms.CharField(required=True)
+    custom_id = forms.CharField(required=True)
+    info = forms.CharField(required=False)
+    theme = forms.CharField(required=False)
+
+    class Meta:
+        model = School
+        fields = (
+            'name', 'custom_id', 'info', 'is_active', 'theme', 'modulo_ingresso', 'modulo_comunicazione_multipla',
+            'modulo_personalizzato_apprendimento', 'modulo_eventi', 'modulo_segreteria', 'modulo_spazio_docenti',
+            'modulo_classi_innovative',
+        )
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        school = super().save()
+        return school
+
+
+class EditSchoolAdminForm(forms.ModelForm):
+    name = forms.CharField(required=True)
+    custom_id = forms.CharField(required=False)
+    info = forms.CharField(required=False)
+    theme = forms.CharField(required=False)
+
+    class Meta:
+        model = School
+        fields = (
+            'name', 'custom_id', 'info', 'theme'
+        )
+
+    def save(self, commit=True):
+        school = super().save()
+        return school
 
 
 class LoginForm(forms.Form):

@@ -57,7 +57,7 @@
                             <th>Username</th>
                             <th>Ruolo</th>
                             <th>Scuola</th>
-                            <th>Gruppo</th>
+{#                            <th>Gruppo</th>#}
                             <th>Status</th>
                             {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}
                                 <th></th>
@@ -86,11 +86,11 @@
                                     </td>
                                     <td>{{ user.get_role_display }}</td>
                                     <td>{{ user.school }}</td>
-                                    <td>
-                                        {% for g in user.groups.all %}
-                                            <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>
-                                        {% endfor %}
-                                    </td>
+{#                                    <td>#}
+{#                                        {% for g in user.groups.all %}#}
+{#                                            <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
+{#                                        {% endfor %}#}
+{#                                    </td>#}
                                     <td>
                                         <div class="d-flex align-items-center">
                                             {% if user.is_active %}
@@ -108,11 +108,11 @@
                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
                                                             class="fa fa-pencil"></i></a>
                                                 {% endif %}
-                                                {% if perms.auth.change_permission %}
-                                                    <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"
-                                                       class="btn btn-success shadow btn-xs sharp me-1"><i
-                                                            class="fa fa-shield"></i></a>
-                                                {% endif %}
+{#                                                {% if perms.auth.change_permission %}#}
+{#                                                    <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"#}
+{#                                                       class="btn btn-success shadow btn-xs sharp me-1"><i#}
+{#                                                            class="fa fa-shield"></i></a>#}
+{#                                                {% endif %}#}
                                                 {% if perms.users.delete_customuser and not user.is_superuser %}
                                                     <a href="{% url 'advepa:delete-user' id=user.id %}"
                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
@@ -252,15 +252,14 @@
         $('.sweet-success-cancel').on('click', function (event) {
             event.preventDefault();
             const url = $(this).attr('href');
-
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Sei sicuro?',
+                text: "Non potrai tornare indietro!",
                 type: "warning",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: "Yes, delete it !!",
-                confirmButtonText: 'Delete',
+                confirmButtonText: "Si, elimina l'utente!",
+                confirmButtonText: 'Elimina',
                 confirmButtonColor: "#DD6B55"
 
             }).then((result) => {

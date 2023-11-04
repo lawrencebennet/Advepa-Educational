@@ -194,6 +194,23 @@ dz_array = {
                         f"{folder_name}/vendor/pickadate/themes/default.css",
                         f"{folder_name}/vendor/pickadate/themes/default.date.css",
                     ],
+                    "schools": [
+                        f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.css",
+                    ],
+                    "add_school": [
+                        f"{folder_name}/vendor/bootstrap-daterangepicker/daterangepicker.css",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/select2/css/select2.min.css",
+                    ],
+                    "edit_school": [
+                        f"{folder_name}/vendor/bootstrap-daterangepicker/daterangepicker.css",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/select2/css/select2.min.css",
+                    ],
                     "school_dashboard": [
                         f"{folder_name}/vendor/datatables/css/jquery.dataTables.min.css",
                         f"{folder_name}/vendor/select2/css/select2.min.css",
@@ -388,7 +405,30 @@ dz_array = {
                         f"{folder_name}/js/plugins-init/jquery-asColorPicker.init.js",
                         f"{folder_name}/js/plugins-init/material-date-picker-init.js",
                         f"{folder_name}/js/plugins-init/pickadate-init.js",
-                    ], "school_dashboard": [
+                    ],
+                    "schools": [
+                        f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.js",
+
+                    ],
+                    "add_school": [
+                        f"{folder_name}/vendor/jquery-nice-select/js/jquery.nice-select.min.js",
+                        f"{folder_name}/vendor/moment/moment.min.js",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js",
+                        f"{folder_name}/js/plugins-init/material-date-picker-init.js",
+
+                        f"{folder_name}/vendor/select2/js/select2.full.min.js",
+                        f"{folder_name}/js/plugins-init/select2-init.js"
+                    ],
+                    "edit_school": [
+                        f"{folder_name}/vendor/jquery-nice-select/js/jquery.nice-select.min.js",
+                        f"{folder_name}/vendor/moment/moment.min.js",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js",
+                        f"{folder_name}/js/plugins-init/material-date-picker-init.js",
+
+                        f"{folder_name}/vendor/select2/js/select2.full.min.js",
+                        f"{folder_name}/js/plugins-init/select2-init.js"
+                    ],
+                    "school_dashboard": [
                         f"{folder_name}/vendor/chart.js/Chart.bundle.min.js",
                         f"{folder_name}/js/plugins-init/chartjs-init.js",
                         f"{folder_name}/vendor/apexchart/apexchart.js",

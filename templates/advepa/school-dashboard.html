@@ -11,889 +11,585 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="profile card card-body px-3 pt-3 pb-0">
-                <div class="profile-head">
-                    <div class="photo-content">
-                        <div class="cover-photo"></div>
-                    </div>
-                    <div class="profile-info">
-                        <div class="profile-photo">
-                            <a class="test-popup-link"
-                               href="{% static 'advepa/images/educational/school-background.jpg' %}">
-                                <img src="{% static 'advepa/images/educational/school-background.jpg' %}"
-                                     class="img-fluid rounded-circle test-popup-link" alt="">
-                            </a>
+    {% if request.user.role == 'admin' or request.user.role == 'superadmin' and school != None %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="profile card card-body px-3 pt-3 pb-0">
+                    <div class="profile-head">
+                        <div class="photo-content">
+                            <div class="cover-photo"></div>
                         </div>
-                        <div class="profile-details">
-                            <div class="profile-name px-3 pt-2">
-                                <h4 class="text-primary mb-0">Mitchell C. Shay</h4>
-                                <p>UX / UI Designer</p>
-                            </div>
-                            <div class="profile-email px-2 pt-2">
-                                <h4 class="text-muted mb-0">info@example.com</h4>
-                                <p>Email</p>
-                            </div>
-                            <div class="dropdown ms-auto">
-                                <a href="#" class="btn btn-primary light sharp" data-bs-toggle="dropdown"
-                                   aria-expanded="true">
-                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                         width="18px" height="18px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <rect x="0" y="0" width="24" height="24"></rect>
-                                            <circle fill="#000000" cx="5" cy="12" r="2"></circle>
-                                            <circle fill="#000000" cx="12" cy="12" r="2"></circle>
-                                            <circle fill="#000000" cx="19" cy="12" r="2"></circle>
-                                        </g>
-                                    </svg>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li class="dropdown-item"><i class="fa fa-user-circle text-primary me-2"></i> View
-                                        profile
-                                    </li>
-                                    <li class="dropdown-item"><i class="fa fa-users text-primary me-2"></i> Add to close
-                                        friends
-                                    </li>
-                                    <li class="dropdown-item"><i class="fa fa-plus text-primary me-2"></i> Add to group
-                                    </li>
-                                    <li class="dropdown-item"><i class="fa fa-ban text-primary me-2"></i> Block</li>
-                                </ul>
+                        <div class="profile-info">
+                            <div class="profile-details">
+                                <div class="profile-name px-3 pt-2">
+                                    <h4 class="text-primary mb-0">{{ school.name }}</h4>
+                                    <p>Nome</p>
+                                </div>
+                                <div class="profile-email px-2 pt-2">
+                                    <h4 class="text-muted mb-0">{{ school.custom_id }}</h4>
+                                    <p>Codice Univoco</p>
+                                </div>
+                                <div class="dropdown ms-auto">
+                                    <a href="#" class="btn btn-primary light sharp" data-bs-toggle="dropdown"
+                                       aria-expanded="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                                             width="18px" height="18px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24"></rect>
+                                                <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                                                <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                                                <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-item">
+                                            <a href="{% url 'advepa:edit-school' id=school.id %}"><i
+                                                    class="fa fa-pencil text-primary me-2"></i>
+                                                Modifica Nome Scuola
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="{% url 'advepa:add-school' %}">
+                                                <i class="fa fa-users text-primary me-2"></i> Crea
+                                                credenziali utenti
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item"><i class="fa fa-clipboard text-primary me-2"></i>
+                                            Aggiungi news, bandi o appuntamenti
+                                        </li>
+                                        <li class="dropdown-item"><i class="fa fa-plus text-primary me-2"></i> FAQS
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
+                        <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a href="#files-classrooms" class="nav-link active" data-bs-toggle="tab"
+                                   aria-expanded="false">Files e
+                                    Aule</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#notices" class="nav-link" data-bs-toggle="tab"
+                                   aria-expanded="false">Bacheca</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#faqs" class="nav-link" data-bs-toggle="tab"
+                                   aria-expanded="true">Faqs</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <br/>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-9 col-lg-18 col-sm-18">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Planimetria Aule</h4>
-                </div>
-                <div class="card-body">
-                    <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width="100%" height="100%"
-                         alt="">
-                    {#                    <ul class="nav nav-pills mb-4 light">#}
-                    {#                        <li class="nav-item">#}
-                    {#                            <a href="#data-lines-graph" class="nav-link active" data-bs-toggle="tab"#}
-                    {#                               aria-expanded="false">#}
-                    {#                                Grafico a linee</a>#}
-                    {#                        </li>#}
-                    {#                        <li class=" nav-item">#}
-                    {#                            <a href="#data-bar-graph" class="nav-link" data-bs-toggle="tab"#}
-                    {#                               aria-expanded="false"#}
-                    {#                               {% if selected_date_radio == 'range' or selected_date_interval == 'all' %}disabled{% endif %}>#}
-                    {#                                Grafico a barre</a>#}
-                    {#                        </li>#}
-                    {#                        <li class="nav-item">#}
-                    {#                            <a href="#data-area-graph" class="nav-link" data-bs-toggle="tab" aria-expanded="true"#}
-                    {#                               disabled>#}
-                    {#                                Grafico ad area</a>#}
-                    {#                        </li>#}
-                    {#                    </ul>#}
-                    {#                    <div class="tab-content">#}
-                    {#                        <div id="data-bar-graph" class="tab-pane">#}
-                    {#                            <div class="row">#}
-                    {#                                <div class="col-md-12">#}
-                    {#                                    <canvas id="barChart_2"></canvas>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                        <div id="data-lines-graph" class="tab-pane active">#}
-                    {#                            <div class="row">#}
-                    {#                                <div class="col-md-12">#}
-                    {#                                    <canvas id="lineChart_2"></canvas>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                        <div id="data-area-graph" class="tab-pane">#}
-                    {#                            <div class="row">#}
-                    {#                                <div class="col-md-12">#}
-                    {#                                    <canvas id="areaChart_2"></canvas>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-                </div>
-            </div>
+    {% endif %}
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="files-classrooms" role="tabpanel">
+            <div class="row">
+                <div class="col-xl-9 col-lg-18 col-sm-18">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Planimetria Aule</h4>
+                        </div>
+                        <div class="card-body">
+                            <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width="100%" height="100%"
+                                 alt="">
+                            {#                    <ul class="nav nav-pills mb-4 light">#}
+                            {#                        <li class="nav-item">#}
+                            {#                            <a href="#data-lines-graph" class="nav-link active" data-bs-toggle="tab"#}
+                            {#                               aria-expanded="false">#}
+                            {#                                Grafico a linee</a>#}
+                            {#                        </li>#}
+                            {#                        <li class=" nav-item">#}
+                            {#                            <a href="#data-bar-graph" class="nav-link" data-bs-toggle="tab"#}
+                            {#                               aria-expanded="false"#}
+                            {#                               {% if selected_date_radio == 'range' or selected_date_interval == 'all' %}disabled{% endif %}>#}
+                            {#                                Grafico a barre</a>#}
+                            {#                        </li>#}
+                            {#                        <li class="nav-item">#}
+                            {#                            <a href="#data-area-graph" class="nav-link" data-bs-toggle="tab" aria-expanded="true"#}
+                            {#                               disabled>#}
+                            {#                                Grafico ad area</a>#}
+                            {#                        </li>#}
+                            {#                    </ul>#}
+                            {#                    <div class="tab-content">#}
+                            {#                        <div id="data-bar-graph" class="tab-pane">#}
+                            {#                            <div class="row">#}
+                            {#                                <div class="col-md-12">#}
+                            {#                                    <canvas id="barChart_2"></canvas>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                        </div>#}
+                            {#                        <div id="data-lines-graph" class="tab-pane active">#}
+                            {#                            <div class="row">#}
+                            {#                                <div class="col-md-12">#}
+                            {#                                    <canvas id="lineChart_2"></canvas>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                        </div>#}
+                            {#                        <div id="data-area-graph" class="tab-pane">#}
+                            {#                            <div class="row">#}
+                            {#                                <div class="col-md-12">#}
+                            {#                                    <canvas id="areaChart_2"></canvas>#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                            {#                        </div>#}
+                            {#                    </div>#}
+                        </div>
+                    </div>
 
-        </div>
-        <div class="col-xl-3 col-lg-6 col-sm-6">
-            <form id="filter-form" method="POST" action="{% url 'advepa:school-dashboard' %}">
-                {% csrf_token %}
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Carica File</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-width-icon">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#graph_filter_position">
+                </div>
+                <div class="col-xl-3 col-lg-6 col-sm-6">
+                    <form id="filter-form" method="POST" action="{% url 'advepa:school-dashboard' %}">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Carica File</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-width-icon">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab"
+                                               href="#graph_filter_position">
                                         <span>
                                             <i class="ti-home"></i>
                                         </span>
-                                    </a>
-                                </li>
-                                {#                                <li class="nav-item">#}
-                                {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_calendar">#}
-                                {#                                        <span>#}
-                                {#                                            <i class="ti-calendar"></i>#}
-                                {#                                        </span>#}
-                                {#                                    </a>#}
-                                {#                                </li>#}
-                                {#                                <li class="nav-item">#}
-                                {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_access">#}
-                                {#                                        <span>#}
-                                {#                                            <i class="ti-location-pin"></i>#}
-                                {#                                        </span>#}
-                                {#                                    </a>#}
-                                {#                                </li>#}
-                            </ul>
-                            <!-- Tab panes -->
-                        </div>
-                        <div class="tab-content tabcontent-border">
-                            <div class="tab-pane fade show active" id="graph_filter_position" role="tabpanel">
-                                <div class="pt-4">
-                                    <div id="stand">
-                                        <div class="mb-4">
-                                            <h4 class="card-title">Seleziona la classe</h4>
-                                        </div>
-                                        <select id="classroom-select" name="classroom-select">
-                                            {% for class in classroom_list %}
-                                                <option value="{{ class.id }}">{{ class.get_name_for_list }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <br/>
-                                    <br/>
-                                    <div id="exhibition">
-                                        <div class="mb-4">
-                                            <h4 class="card-title">Seleziona il file</h4>
-                                        </div>
-
-                                        <select id="file-select" name="file-select">
-                                            {% for file in all_file_list %}
-                                                <option value="{{ file.id }}">{{ file.get_name_for_select }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                            </a>
+                                        </li>
+                                        {#                                <li class="nav-item">#}
+                                        {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_calendar">#}
+                                        {#                                        <span>#}
+                                        {#                                            <i class="ti-calendar"></i>#}
+                                        {#                                        </span>#}
+                                        {#                                    </a>#}
+                                        {#                                </li>#}
+                                        {#                                <li class="nav-item">#}
+                                        {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_access">#}
+                                        {#                                        <span>#}
+                                        {#                                            <i class="ti-location-pin"></i>#}
+                                        {#                                        </span>#}
+                                        {#                                    </a>#}
+                                        {#                                </li>#}
+                                    </ul>
+                                    <!-- Tab panes -->
                                 </div>
-                            </div>
-                            {#                            <div class="tab-pane fade disabled" id="graph_filter_calendar" role="tabpanel">#}
-                            {#                                <div class="pt-4">#}
-                            {#                                    <div id="date-interval">#}
-                            {#                                        <div class="mb-4">#}
-                            {#                                            <h4 class="card-title">Seleziona l'intervallo di tempo</h4>#}
-                            {#                                        </div>#}
-                            {#                                        <select id="date-interval-select" name="date-interval-select">#}
-                            {#                                            <option value="all"#}
-                            {#                                                    {% if selected_date_interval == 'all' %}selected{% endif %}>Tutti#}
-                            {#                                            </option>#}
-                            {#                                            <option value="lastseven"#}
-                            {#                                                    {% if selected_date_interval == 'lastseven' %}selected{% endif %}>#}
-                            {#                                                Ultimi 7 giorni#}
-                            {#                                            </option>#}
-                            {#                                            <option value="lastfourteen"#}
-                            {#                                                    {% if selected_date_interval == 'lastfourteen' %}selected{% endif %}>#}
-                            {#                                                Ultimi 14 giorni#}
-                            {#                                            </option>#}
-                            {#                                            <option value="lastthirty"#}
-                            {#                                                    {% if selected_date_interval == 'lastthirty' %}selected{% endif %}>#}
-                            {#                                                Ultimi 30 giorni#}
-                            {#                                            </option>#}
-                            {#                                            <option value="lastninety"#}
-                            {#                                                    {% if selected_date_interval == 'lastninety' %}selected{% endif %}>#}
-                            {#                                                Ultimi 90 giorni#}
-                            {#                                            </option>#}
-                            {#                                            <option value="lastyear"#}
-                            {#                                                    {% if selected_date_interval == 'lastyear' %}selected{% endif %}>#}
-                            {#                                                Ultimo anno#}
-                            {#                                            </option>#}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                    <br/>#}
-                            {#                                    <div id="date-start-end">#}
-                            {#                                        <div class="mb-4">#}
-                            {#                                            <h4 class="card-title">Seleziona la data di inizio e di fine</h4>#}
-                            {#                                            <input class="form-control input-daterange-datepicker" type="text"#}
-                            {#                                                   name="date-range" id="date-range" value="{{ selected_date_range }}">#}
-                            {#                                        </div>#}
-                            {#                                    </div>#}
-                            {##}
-                            {#                                    <div class="form-group mb-0">#}
-                            {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
-                            {#                                                                                class="form-check-input"#}
-                            {#                                                                                value="interval"#}
-                            {#                                                                                {% if selected_date_radio == 'interval' %}checked{% endif %}>#}
-                            {#                                            Intervalli#}
-                            {#                                            date#}
-                            {#                                        </label>#}
-                            {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
-                            {#                                                                                class="form-check-input" value="range"#}
-                            {#                                                                                {% if selected_date_radio == 'range' %}checked{% endif %}>#}
-                            {#                                            Range date#}
-                            {#                                        </label>#}
-                            {##}
-                            {#                                    </div>#}
-                            {##}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                            {#                            <div class="tab-pane fade disabled" id="graph_filter_access" role="tabpanel">#}
-                            {#                                <div class="pt-4">#}
-                            {##}
-                            {#                                    <div id="platform">#}
-                            {#                                        <div class="mb-4">#}
-                            {#                                            <h4 class="card-title">Seleziona il dispositivo</h4>#}
-                            {#                                        </div>#}
-                            {#                                        <select id="platform-select" name="platform-select">#}
-                            {#                                            <option value="all" {% if selected_platform == 'all' %}selected{% endif %}>#}
-                            {#                                                Tutti#}
-                            {#                                            </option>#}
-                            {#                                            <option value="iPhone"#}
-                            {#                                                    {% if selected_platform == 'iPhone' %}selected{% endif %}>iPhone#}
-                            {#                                            </option>#}
-                            {#                                            <option value="android"#}
-                            {#                                                    {% if selected_platform == 'android' %}selected{% endif %}>Android#}
-                            {#                                            </option>#}
-                            {#                                            <option value="windows"#}
-                            {#                                                    {% if selected_platform == 'windows' %}selected{% endif %}}>Windows#}
-                            {#                                            </option>#}
-                            {#                                            <option value="macOS"#}
-                            {#                                                    {% if selected_platform == 'macOS' %}selected{% endif %}>macOS#}
-                            {#                                            </option>#}
-                            {#                                            <option value="browser"#}
-                            {#                                                    {% if selected_platform == 'browser' %}selected{% endif %}>Browser#}
-                            {#                                            </option>#}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                    <br/>#}
-                            {#                                    <hr>#}
-                            {#                                    <div id="geo-country">#}
-                            {#                                        <div class="mb-4">#}
-                            {#                                            <h4 class="geo-country-title">Seleziona la Nazione</h4>#}
-                            {#                                        </div>#}
-                            {#                                        <select id="geo-country-select" disabled>#}
-                            {#                                            <option value="all">Tutti</option>#}
-                            {#                                            <option value="Italia">Italia</option>#}
-                            {#                                            <option value="Francia">Francia</option>#}
-                            {#                                            <option value="Svizzera">Svizzera</option>#}
-                            {#                                            <option value="Germania">Germania</option>#}
-                            {#                                            <option value="Spagna">Spagna</option>#}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                    <br/>#}
-                            {#                                    <div id="geo-region">#}
-                            {#                                        <div class="mb-4">#}
-                            {#                                            <h4 class="card-title">Seleziona la regione</h4>#}
-                            {#                                        </div>#}
-                            {#                                        <select id="geo-region-select" disabled>#}
-                            {#                                            <option value="all">Tutti</option>#}
-                            {#                                            <option value="Toscana">Toscana</option>#}
-                            {#                                            <option value="Lombardia">Lombardia</option>#}
-                            {#                                            <option value="Piemonte">Piemonte</option>#}
-                            {#                                            <option value="Sicilia">Sicilia</option>#}
-                            {#                                        </select>#}
-                            {#                                    </div>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        {#                        <p class="d-inline">#}
-                        {#                            <button type="button" class="btn btn-rounded btn-outline-light">Reset</button>#}
-                        {#                        </p>#}
-                        <p class="float-end">
-                            <button type="submit" class="btn btn-rounded btn-secondary">Inserisci</button>
-                        </p>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Files Caricati</h4>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-responsive-md">
-                        <thead>
-                        <tr>
-                            <th style="width:50px;">
-                                <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                    <input type="checkbox" class="form-check-input"
-                                           id="checkAll" value="">
-                                    <label class="form-check-label" for="checkAll"></label>
-                                </div>
-                            </th>
-                            <th>Nome</th>
-                            <th>Tipo</th>
-                            <th>Estensione</th>
-                            <th>Dimensione</th>
-                            <th>Aggiunto il</th>
-                            <th>Aula</th>
-                            {#                                    {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}#}
-                            <th></th>
-                            {#                                    {% endif %}#}
+                                <div class="tab-content tabcontent-border">
+                                    <div class="tab-pane fade show active" id="graph_filter_position" role="tabpanel">
+                                        <div class="pt-4">
+                                            <div id="stand">
+                                                <div class="mb-4">
+                                                    <h4 class="card-title">Seleziona la classe</h4>
+                                                </div>
+                                                <select id="classroom-select" name="classroom-select">
+                                                    {% for class in classroom_list %}
+                                                        <option value="{{ class.id }}">{{ class.get_name_for_list }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <div id="exhibition">
+                                                <div class="mb-4">
+                                                    <h4 class="card-title">Seleziona il file</h4>
+                                                </div>
 
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% csrf_token %}
-                        {% for file in uploaded_file_list %}
-                            {% for class in file.classroom_set.all %}
-                                <tr id="{{ file.id }}" data-classroom-id="{{ class.id }}" class="file-row">
-                                    <td>
-                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                            <input name="file_id[]" type="checkbox"
-                                                   class="form-check-input"
-                                                   value="{{ file.id }}">
-                                            <label class="form-check-label"
-                                                   for="checkbox-{{ file.id }}"></label>
-                                        </div>
-                                    </td>
-                                    <td>{{ file.name }}</td>
-                                    <td>{{ file.type.get_macro_type_display }}</td>
-                                    <td>{{ file.type.extension }}</td>
-                                    <td>{{ file.byte_space }}</td>
-                                    <td>{{ file.create_date }}</td>
-                                    <td>{{ class.room_number }}</td>
-                                    {#                                        <td>#}
-                                    {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-                                    {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
-                                    {#                                                       value="{{ user.id }}">#}
-                                    {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
-                                    {#                                            </div>#}
-                                    {#                                        </td>#}
-
-
-                                    {#                                        <td>#}
-                                    {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
-                                    {#                                                <div class="d-flex align-items-center">#}
-                                    {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
-                                    {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
-                                    {#                                                </div>#}
-                                    {#                                            </a>#}
-                                    {#                                        </td>#}
-                                    {#                                        <td><strong>{{ user.email }}</strong></td>#}
-                                    {#                                        <td>{{ user.get_role_display }}</td>#}
-
-
-                                    {#                                        <td>#}
-                                    {#                                            {% for g in user.groups.all %}#}
-                                    {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
-                                    {#                                            {% endfor %}#}
-                                    {#                                        </td>#}
-                                    {#                                    <td>{{ user.phone_number }}</td>#}
-                                    {#                                    <td>{{ user.dob }}</td>#}
-                                    {#                                        <td>#}
-                                    {#                                            <div class="d-flex align-items-center">#}
-                                    {#                                                {% if user.is_active %}#}
-                                    {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
-                                    {#                                                {% else %}#}
-                                    {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
-                                    {#                                                {% endif %}#}
-                                    {#                                            </div>#}
-                                    {#                                        </td>#}
-                                    <td>
-                                        <div class="sweetalert">
-                                            <div class="d-flex">
-                                                <a href="{% url 'advepa:unlink-file-classroom' classroom_id=class.id file_id=file.id %}"
-                                                   class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
+                                                <select id="file-select" name="file-select">
+                                                    {% for file in all_file_list %}
+                                                        <option value="{{ file.id }}">{{ file.get_name_for_select }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                                    </div>
+                                    {#                            <div class="tab-pane fade disabled" id="graph_filter_calendar" role="tabpanel">#}
+                                    {#                                <div class="pt-4">#}
+                                    {#                                    <div id="date-interval">#}
+                                    {#                                        <div class="mb-4">#}
+                                    {#                                            <h4 class="card-title">Seleziona l'intervallo di tempo</h4>#}
+                                    {#                                        </div>#}
+                                    {#                                        <select id="date-interval-select" name="date-interval-select">#}
+                                    {#                                            <option value="all"#}
+                                    {#                                                    {% if selected_date_interval == 'all' %}selected{% endif %}>Tutti#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="lastseven"#}
+                                    {#                                                    {% if selected_date_interval == 'lastseven' %}selected{% endif %}>#}
+                                    {#                                                Ultimi 7 giorni#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="lastfourteen"#}
+                                    {#                                                    {% if selected_date_interval == 'lastfourteen' %}selected{% endif %}>#}
+                                    {#                                                Ultimi 14 giorni#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="lastthirty"#}
+                                    {#                                                    {% if selected_date_interval == 'lastthirty' %}selected{% endif %}>#}
+                                    {#                                                Ultimi 30 giorni#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="lastninety"#}
+                                    {#                                                    {% if selected_date_interval == 'lastninety' %}selected{% endif %}>#}
+                                    {#                                                Ultimi 90 giorni#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="lastyear"#}
+                                    {#                                                    {% if selected_date_interval == 'lastyear' %}selected{% endif %}>#}
+                                    {#                                                Ultimo anno#}
+                                    {#                                            </option>#}
+                                    {#                                        </select>#}
+                                    {#                                    </div>#}
+                                    {#                                    <br/>#}
+                                    {#                                    <div id="date-start-end">#}
+                                    {#                                        <div class="mb-4">#}
+                                    {#                                            <h4 class="card-title">Seleziona la data di inizio e di fine</h4>#}
+                                    {#                                            <input class="form-control input-daterange-datepicker" type="text"#}
+                                    {#                                                   name="date-range" id="date-range" value="{{ selected_date_range }}">#}
+                                    {#                                        </div>#}
+                                    {#                                    </div>#}
+                                    {##}
+                                    {#                                    <div class="form-group mb-0">#}
+                                    {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
+                                    {#                                                                                class="form-check-input"#}
+                                    {#                                                                                value="interval"#}
+                                    {#                                                                                {% if selected_date_radio == 'interval' %}checked{% endif %}>#}
+                                    {#                                            Intervalli#}
+                                    {#                                            date#}
+                                    {#                                        </label>#}
+                                    {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
+                                    {#                                                                                class="form-check-input" value="range"#}
+                                    {#                                                                                {% if selected_date_radio == 'range' %}checked{% endif %}>#}
+                                    {#                                            Range date#}
+                                    {#                                        </label>#}
+                                    {##}
+                                    {#                                    </div>#}
+                                    {##}
+                                    {#                                </div>#}
+                                    {#                            </div>#}
+                                    {#                            <div class="tab-pane fade disabled" id="graph_filter_access" role="tabpanel">#}
+                                    {#                                <div class="pt-4">#}
+                                    {##}
+                                    {#                                    <div id="platform">#}
+                                    {#                                        <div class="mb-4">#}
+                                    {#                                            <h4 class="card-title">Seleziona il dispositivo</h4>#}
+                                    {#                                        </div>#}
+                                    {#                                        <select id="platform-select" name="platform-select">#}
+                                    {#                                            <option value="all" {% if selected_platform == 'all' %}selected{% endif %}>#}
+                                    {#                                                Tutti#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="iPhone"#}
+                                    {#                                                    {% if selected_platform == 'iPhone' %}selected{% endif %}>iPhone#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="android"#}
+                                    {#                                                    {% if selected_platform == 'android' %}selected{% endif %}>Android#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="windows"#}
+                                    {#                                                    {% if selected_platform == 'windows' %}selected{% endif %}}>Windows#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="macOS"#}
+                                    {#                                                    {% if selected_platform == 'macOS' %}selected{% endif %}>macOS#}
+                                    {#                                            </option>#}
+                                    {#                                            <option value="browser"#}
+                                    {#                                                    {% if selected_platform == 'browser' %}selected{% endif %}>Browser#}
+                                    {#                                            </option>#}
+                                    {#                                        </select>#}
+                                    {#                                    </div>#}
+                                    {#                                    <br/>#}
+                                    {#                                    <hr>#}
+                                    {#                                    <div id="geo-country">#}
+                                    {#                                        <div class="mb-4">#}
+                                    {#                                            <h4 class="geo-country-title">Seleziona la Nazione</h4>#}
+                                    {#                                        </div>#}
+                                    {#                                        <select id="geo-country-select" disabled>#}
+                                    {#                                            <option value="all">Tutti</option>#}
+                                    {#                                            <option value="Italia">Italia</option>#}
+                                    {#                                            <option value="Francia">Francia</option>#}
+                                    {#                                            <option value="Svizzera">Svizzera</option>#}
+                                    {#                                            <option value="Germania">Germania</option>#}
+                                    {#                                            <option value="Spagna">Spagna</option>#}
+                                    {#                                        </select>#}
+                                    {#                                    </div>#}
+                                    {#                                    <br/>#}
+                                    {#                                    <div id="geo-region">#}
+                                    {#                                        <div class="mb-4">#}
+                                    {#                                            <h4 class="card-title">Seleziona la regione</h4>#}
+                                    {#                                        </div>#}
+                                    {#                                        <select id="geo-region-select" disabled>#}
+                                    {#                                            <option value="all">Tutti</option>#}
+                                    {#                                            <option value="Toscana">Toscana</option>#}
+                                    {#                                            <option value="Lombardia">Lombardia</option>#}
+                                    {#                                            <option value="Piemonte">Piemonte</option>#}
+                                    {#                                            <option value="Sicilia">Sicilia</option>#}
+                                    {#                                        </select>#}
+                                    {#                                    </div>#}
+                                    {#                                </div>#}
+                                    {#                            </div>#}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                {#                        <p class="d-inline">#}
+                                {#                            <button type="button" class="btn btn-rounded btn-outline-light">Reset</button>#}
+                                {#                        </p>#}
+                                <p class="float-end">
+                                    <button type="submit" class="btn btn-rounded btn-secondary">Inserisci</button>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Files Caricati</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <th style="width:50px;">
+                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                            <input type="checkbox" class="form-check-input"
+                                                   id="checkAll" value="">
+                                            <label class="form-check-label" for="checkAll"></label>
+                                        </div>
+                                    </th>
+                                    <th>Nome</th>
+                                    <th>Tipo</th>
+                                    <th>Estensione</th>
+                                    <th>Dimensione</th>
+                                    <th>Aggiunto il</th>
+                                    <th>Aula</th>
+                                    {#                                    {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}#}
+                                    <th></th>
+                                    {#                                    {% endif %}#}
 
 
-                <nav mt-5>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% csrf_token %}
+                                {% for file in uploaded_file_list %}
+                                    {% for class in file.classroom_set.all %}
+                                        <tr id="{{ file.id }}" data-classroom-id="{{ class.id }}" class="file-row">
+                                            <td>
+                                                <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                                    <input name="file_id[]" type="checkbox"
+                                                           class="form-check-input"
+                                                           value="{{ file.id }}">
+                                                    <label class="form-check-label"
+                                                           for="checkbox-{{ file.id }}"></label>
+                                                </div>
+                                            </td>
+                                            <td>{{ file.name }}</td>
+                                            <td>{{ file.type.get_macro_type_display }}</td>
+                                            <td>{{ file.type.extension }}</td>
+                                            <td>{{ file.byte_space }}</td>
+                                            <td>{{ file.create_date }}</td>
+                                            <td>{{ class.room_number }}</td>
+                                            {#                                        <td>#}
+                                            {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
+                                            {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
+                                            {#                                                       value="{{ user.id }}">#}
+                                            {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
+                                            {#                                            </div>#}
+                                            {#                                        </td>#}
 
-                    <p>
+
+                                            {#                                        <td>#}
+                                            {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
+                                            {#                                                <div class="d-flex align-items-center">#}
+                                            {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
+                                            {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
+                                            {#                                                </div>#}
+                                            {#                                            </a>#}
+                                            {#                                        </td>#}
+                                            {#                                        <td><strong>{{ user.email }}</strong></td>#}
+                                            {#                                        <td>{{ user.get_role_display }}</td>#}
+
+
+                                            {#                                        <td>#}
+                                            {#                                            {% for g in user.groups.all %}#}
+                                            {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
+                                            {#                                            {% endfor %}#}
+                                            {#                                        </td>#}
+                                            {#                                    <td>{{ user.phone_number }}</td>#}
+                                            {#                                    <td>{{ user.dob }}</td>#}
+                                            {#                                        <td>#}
+                                            {#                                            <div class="d-flex align-items-center">#}
+                                            {#                                                {% if user.is_active %}#}
+                                            {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
+                                            {#                                                {% else %}#}
+                                            {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
+                                            {#                                                {% endif %}#}
+                                            {#                                            </div>#}
+                                            {#                                        </td>#}
+                                            <td>
+                                                <div class="sweetalert">
+                                                    <div class="d-flex">
+                                                        <a href="{% url 'advepa:unlink-file-classroom' classroom_id=class.id file_id=file.id %}"
+                                                           class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <nav mt-5>
+
+                            <p>
                             <span class="current">
                             Pagina {{ uploaded_file_list.number }} di {{ uploaded_file_list.paginator.num_pages }}.
                            </span>
-                    </p>
+                            </p>
 
 
-                    <ul class="pagination pagination-gutter  justify-content-end">
+                            <ul class="pagination pagination-gutter  justify-content-end">
 
-                        <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if uploaded_file_list.has_previous %}
+                                <li class="page-item page-indicator ">
+                                    <a class="page-link" href="{% if uploaded_file_list.has_previous %}
                                                                 ?page={{ uploaded_file_list.previous_page_number }}
                                                                 {% else %}
                                                                 javascript:void(0);
                                                                 {% endif %}">
-                                <i class="la la-angle-left"></i></a>
-                        </li>
+                                        <i class="la la-angle-left"></i></a>
+                                </li>
 
-                        {% for i in uploaded_file_list.paginator.page_range|slice:":3" %}
+                                {% for i in uploaded_file_list.paginator.page_range|slice:":3" %}
 
-                            <li class="page-item {% if uploaded_file_list.number == i %}
+                                    <li class="page-item {% if uploaded_file_list.number == i %}
                                                     active{% endif %}"><a class="page-link"
                                                                           href="?page={{ i }}">{{ i }}</a></li>
 
-                        {% endfor %}
+                                {% endfor %}
 
 
-                        {% if uploaded_file_list.number > 3 %}
-                            <li class="page-item active"><a class="page-link"
-                                                            href="?page={{ uploaded_file_list.number }}">{{ uploaded_file_list.number }}</a>
-                            </li>
-                        {% endif %}
+                                {% if uploaded_file_list.number > 3 %}
+                                    <li class="page-item active"><a class="page-link"
+                                                                    href="?page={{ uploaded_file_list.number }}">{{ uploaded_file_list.number }}</a>
+                                    </li>
+                                {% endif %}
 
-                        <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if uploaded_file_list.has_next %}
+                                <li class="page-item page-indicator ">
+                                    <a class="page-link" href="{% if uploaded_file_list.has_next %}
                                                             ?page={{ uploaded_file_list.next_page_number }}
                                                             {% else %}
                                                             javascript:void(0);
                                                             {% endif %}">
-                                <i class="la la-angle-right"></i></a>
-                        </li>
-                        <li>
-                        </li>
-                    </ul>
-                </nav>
+                                        <i class="la la-angle-right"></i></a>
+                                </li>
+                                <li>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="faqs" role="tabpanel">
+            <div class="col-xl-12">
+                <div class="card message-bx">
+                    <div class="card-header d-sm-flex d-block shadow-sm">
+                        <div>
+                            <h4 class="fs-20 mb-0 font-w600 text-black mb-sm-0 mb-2">Lista FAQS</h4>
+                            <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
+                                <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#section1" class="nav-link active" data-bs-toggle="tab"
+                                           aria-expanded="false"><span
+                                                class="badge light badge-primary">{{ faq_section_1.faqs|length }}</span>Sezione
+                                            1
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#section2" class="nav-link" data-bs-toggle="tab"
+                                           aria-expanded="false"><span
+                                                class="badge light badge-primary">{{ faq_section_2.faqs|length }}</span>Sezione
+                                            2</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#section3" class="nav-link" data-bs-toggle="tab"
+                                           aria-expanded="true"><span
+                                                class="badge light badge-primary">{{ faq_section_3.faqs|length }}</span>Sezione
+                                            3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary rounded" href="{% url 'advepa:edit-school' id=school.id %}"><i
+                                class="fa fa-pencil text-white me-2"></i>
+                            Modifica FAQS
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="section1" role="tabpanel">
+                                {% for faq in faq_section_1.faqs %}
+                                    <div class="media mb-4">
+                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+                                            <div class="me-sm-3 me-0">
+                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                        class="text-black">{{ faq.question }}</a>
+                                                </h6>
+                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
+                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                {% endfor %}
+                            </div>
+                            <div class="tab-pane fade" id="section2" role="tabpanel">
+                                {% for faq in faq_section_2.faqs %}
+                                    <div class="media mb-4">
+                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+                                            <div class="me-sm-3 me-0">
+                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                        class="text-black">{{ faq.question }}</a>
+                                                </h6>
+                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
+                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
+                                {% endfor %}
+                            </div>
+                            <div class="tab-pane fade" id="section3" role="tabpanel">
+                                {% for faq in faq_section_3.faqs %}
+                                    <div class="media mb-4">
+                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+
+                                            <div class="me-sm-3 me-0">
+                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                        class="text-black">{{ faq.question }}</a>
+                                                </h6>
+                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
+                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    {#    <div class="row">#}
-    {#        <div class="col-xl-12">#}
-    {#            <div class="card">#}
-    {#                <div class="card-body">#}
-    {#                    <div class="profile-tab">#}
-    {#                        <div class="custom-tab-1">#}
-    {#                            <ul class="nav nav-tabs">#}
-    {#                                <li class="nav-item"><a href="#my-posts" data-bs-toggle="tab"#}
-    {#                                                        class="nav-link active show">Posts</a>#}
-    {#                                </li>#}
-    {#                                <li class="nav-item"><a href="#classrooms" data-bs-toggle="tab"#}
-    {#                                                        class="nav-link">Aule</a>#}
-    {#                                </li>#}
-    {#                                <li class="nav-item"><a href="#profile-settings" data-bs-toggle="tab" class="nav-link">Setting</a>#}
-    {#                                </li>#}
-    {#                            </ul>#}
-    {#                            <div class="tab-content">#}
-    {#                                <div id="my-posts" class="tab-pane fade active show">#}
-    {#                                    <div class="my-post-content pt-3">#}
-    {#                                        <div class="post-input">#}
-    {#                                            <textarea name="textarea" id="textarea" cols="30" rows="7"#}
-    {#                                                      class="form-control bg-transparent"#}
-    {#                                                      placeholder="Please type what you want...."></textarea>#}
-    {#                                            <a href="javascript:void(0);" class="btn btn-primary light px-3"#}
-    {#                                               data-bs-toggle="modal" data-bs-target="#linkModal"><i#}
-    {#                                                    class="fa fa-link"></i> </a>#}
-    {#                                            <a href="javascript:void(0);" class="btn btn-primary light me-1 px-3"#}
-    {#                                               data-bs-toggle="modal" data-bs-target="#cameraModal"><i#}
-    {#                                                    class="fa fa-camera"></i> </a>#}
-    {#                                            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal"#}
-    {#                                               data-bs-target="#postModal">Post</a>#}
-    {#                                        </div>#}
-    {#                                        <div class="profile-uoloaded-post border-bottom-1 pb-5">#}
-    {#                                            <img src="{% static 'advepa/images/profile/8.jpg' %}" alt=""#}
-    {#                                                 class="img-fluid">#}
-    {#                                            <a class="post-title" href="{% url 'vora:post-details' %}">#}
-    {#                                            <a class="post-title">#}
-    {#                                                <h3 class="text-black">Collection of textile samples lay spread</h3>#}
-    {#                                            </a>#}
-    {#                                            <p>A wonderful serenity has take possession of my entire soul like these#}
-    {#                                                sweet morning of spare which enjoy whole heart.A wonderful serenity has#}
-    {#                                                take possession of my entire soul like these sweet morning#}
-    {#                                                of spare which enjoy whole heart.</p>#}
-    {#                                            <button class="btn btn-primary me-2"><span class="me-2"><i#}
-    {#                                                    class="fa fa-heart"></i></span>Like#}
-    {#                                            </button>#}
-    {#                                            <button class="btn btn-secondary" data-bs-toggle="modal"#}
-    {#                                                    data-bs-target="#replyModal"><span class="me-2"><i#}
-    {#                                                    class="fa fa-reply"></i></span>Reply#}
-    {#                                            </button>#}
-    {#                                        </div>#}
-    {#                                        <div class="profile-uoloaded-post border-bottom-1 pb-5">#}
-    {#                                            <img src="{% static 'advepa/images/profile/9.jpg' %}" alt=""#}
-    {#                                                 class="img-fluid">#}
-    {#                                            <a class="post-title" href="{% url 'advepa:file-manager' %}">#}
-    {#                                                <h3 class="text-black">Collection of textile samples lay spread</h3>#}
-    {#                                            </a>#}
-    {#                                            <p>A wonderful serenity has take possession of my entire soul like these#}
-    {#                                                sweet morning of spare which enjoy whole heart.A wonderful serenity has#}
-    {#                                                take possession of my entire soul like these sweet morning#}
-    {#                                                of spare which enjoy whole heart.</p>#}
-    {#                                            <button class="btn btn-primary me-2"><span class="me-2"><i#}
-    {#                                                    class="fa fa-heart"></i></span>Like#}
-    {#                                            </button>#}
-    {#                                            <button class="btn btn-secondary" data-bs-toggle="modal"#}
-    {#                                                    data-bs-target="#replyModal"><span class="me-2"><i#}
-    {#                                                    class="fa fa-reply"></i></span>Reply#}
-    {#                                            </button>#}
-    {#                                        </div>#}
-    {#                                        <div class="profile-uoloaded-post pb-3">#}
-    {#                                            <img src="{% static 'advepa/images/profile/8.jpg' %}" alt=""#}
-    {#                                                 class="img-fluid">#}
-    {#                                            <a class="post-title" href="{% url 'vora:post-details' %}">#}
-    {#                                            <a class="post-title">#}
-    {#                                                <h3 class="text-black">Collection of textile samples lay spread</h3>#}
-    {#                                            </a>#}
-    {#                                            <p>A wonderful serenity has take possession of my entire soul like these#}
-    {#                                                sweet morning of spare which enjoy whole heart.A wonderful serenity has#}
-    {#                                                take possession of my entire soul like these sweet morning#}
-    {#                                                of spare which enjoy whole heart.</p>#}
-    {#                                            <button class="btn btn-primary me-2"><span class="me-2"><i#}
-    {#                                                    class="fa fa-heart"></i></span>Like#}
-    {#                                            </button>#}
-    {#                                            <button class="btn btn-secondary" data-bs-toggle="modal"#}
-    {#                                                    data-bs-target="#replyModal"><span class="me-2"><i#}
-    {#                                                    class="fa fa-reply"></i></span>Reply#}
-    {#                                            </button>#}
-    {#                                        </div>#}
-    {#                                    </div>#}
-    {#                                </div>#}
-    {##}
-    {#                                <div id="classrooms" class="tab-pane fade">#}
-    {#                                <div class="card">#}
-    {#                                    <label class="form-label">Numero aula {% if form.role.field.required %}#}
-    {#                                        <span class="text-danger">*</span>{% endif %}</label>#}
-    {#                                    {{ form.role|add_class:"form-control default-select form-control-lg"|attr:"id:id_role" }}#}
-    {#                                    <div class="text-danger w-100 d-block mt-1">#}
-    {#                                        {{ form.role.errors }}#}
-    {#                                </div>#}
-    {##}
-    {##}
-    {#                                    <div class="card">#}
-    {#                                        <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width=60%#}
-    {#                                             alt="">#}
-    {#                                        <div class="card-header">#}
-    {#                                        </div>#}
-    {#                                        <h4 class="card-title">Files caricabili</h4>#}
-    {#                                        <div class="d-flex">#}
-    {##}
-    {#                            {% if perms.users.delete_customuser %}#}
-    {##}
-    {#                                            <button type="submit" id="delete_multiple_btn"#}
-    {#                                                    class="btn light btn-outline-primary btn-sm me-2 ">Elimina#}
-    {#                                            </button>#}
-    {##}
-    {##}
-    {#                                            <a href="{% url 'advepa:file-manager' %}" class="btn btn-primary btn-sm ">Carica#}
-    {#                                                nell'aula<span#}
-    {#                                                        class="btn-icon-end">#}
-    {#                                                                        <i class="fa fa-plus"></i></span>#}
-    {#                                            </a>#}
-    {#                                        </div>#}
-    {##}
-    {#                                    </div>#}
-    {#                                    <div class="card-body">#}
-    {#                                        <div class="table-responsive">#}
-    {#                                            <table class="table table-responsive-md">#}
-    {#                                                <thead>#}
-    {#                                                <tr>#}
-    {#                                                    <th style="width:50px;">#}
-    {#                                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-    {#                                                            <input type="checkbox" class="form-check-input"#}
-    {#                                                                   id="checkAll" value="">#}
-    {#                                                            <label class="form-check-label" for="checkAll"></label>#}
-    {#                                                        </div>#}
-    {#                                                    </th>#}
-    {#                                                    <th>Nome</th>#}
-    {#                                                    <th>Tipo</th>#}
-    {#                                                    <th>Estensione</th>#}
-    {#                                                    <th>Dimensione</th>#}
-    {#                                                    <th>Aggiunto il</th>#}
-    {#                                    {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}#}
-    {#                                                    <th></th>#}
-    {#                                    {% endif %}#}
-    {##}
-    {##}
-    {#                                                </tr>#}
-    {#                                                </thead>#}
-    {#                                                <tbody>#}
-    {#                                                {% csrf_token %}#}
-    {#                                                {% for file in file_list %}#}
-    {#                                                    <tr id="{{ file.id }}">#}
-    {#                                                        <td>#}
-    {#                                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-    {#                                                                <input name="file_id[]" type="checkbox"#}
-    {#                                                                       class="form-check-input"#}
-    {#                                                                       value="{{ file.id }}">#}
-    {#                                                                <label class="form-check-label"#}
-    {#                                                                       for="checkbox-{{ file.id }}"></label>#}
-    {#                                                            </div>#}
-    {#                                                        </td>#}
-    {#                                                        <td>{{ file.name }}</td>#}
-    {#                                                        <td>{{ file.type.get_macro_type_display }}</td>#}
-    {#                                                        <td>{{ file.type.extension }}</td>#}
-    {#                                                        <td>{{ file.byte_space }}</td>#}
-    {#                                                        <td>{{ file.create_date }}</td>#}
-    {#                                        <td>#}
-    {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-    {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
-    {#                                                       value="{{ user.id }}">#}
-    {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
-    {#                                            </div>#}
-    {#                                        </td>#}
-    {##}
-    {##}
-    {#                                        <td>#}
-    {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
-    {#                                                <div class="d-flex align-items-center">#}
-    {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
-    {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
-    {#                                                </div>#}
-    {#                                            </a>#}
-    {#                                        </td>#}
-    {#                                        <td><strong>{{ user.email }}</strong></td>#}
-    {#                                        <td>{{ user.get_role_display }}</td>#}
-    {##}
-    {##}
-    {#                                        <td>#}
-    {#                                            {% for g in user.groups.all %}#}
-    {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
-    {#                                            {% endfor %}#}
-    {#                                        </td>#}
-    {#                                    <td>{{ user.phone_number }}</td>#}
-    {#                                    <td>{{ user.dob }}</td>#}
-    {#                                        <td>#}
-    {#                                            <div class="d-flex align-items-center">#}
-    {#                                                {% if user.is_active %}#}
-    {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
-    {#                                                {% else %}#}
-    {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
-    {#                                                {% endif %}#}
-    {#                                            </div>#}
-    {#                                        </td>#}
-    {#                                                        <td>#}
-    {#                                                            <div class="sweetalert">#}
-    {#                                                                <div class="d-flex">#}
-    {#                                                                    <a href="{% url 'advepa:delete-file' id=file.id %}"#}
-    {#                                                                       class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i#}
-    {#                                                                            class="fa fa-trash"></i></a>#}
-    {#                                                                </div>#}
-    {#                                                            </div>#}
-    {#                                                        </td>#}
-    {#                                                    </tr>#}
-    {#                                                {% endfor %}#}
-    {#                                                </tbody>#}
-    {#                                            </table>#}
-    {#                                        </div>#}
-    {##}
-    {##}
-    {#                                        <nav mt-5>#}
-    {##}
-    {#                                            <p>#}
-    {#                            <span class="current">#}
-    {#                            Pagina {{ file_list.number }} di {{ file_list.paginator.num_pages }}.#}
-    {#                           </span>#}
-    {#                                            </p>#}
-    {##}
-    {##}
-    {#                                            <ul class="pagination pagination-gutter  justify-content-end">#}
-    {##}
-    {#                                                <li class="page-item page-indicator ">#}
-    {#                                                    <a class="page-link" href="{% if file_list.has_previous %}#}
-    {#                                                                ?page={{ file_list.previous_page_number }}#}
-    {#                                                                {% else %}#}
-    {#                                                                javascript:void(0);#}
-    {#                                                                {% endif %}">#}
-    {#                                                        <i class="la la-angle-left"></i></a>#}
-    {#                                                </li>#}
-    {##}
-    {#                                                {% for i in file_list.paginator.page_range|slice:":3" %}#}
-    {##}
-    {#                                                    <li class="page-item {% if file_list.number == i %}#}
-    {#                                                    active{% endif %}"><a class="page-link"#}
-    {#                                                                          href="?page={{ i }}">{{ i }}</a></li>#}
-    {##}
-    {#                                                {% endfor %}#}
-    {##}
-    {##}
-    {#                                                {% if file_list.number > 3 %}#}
-    {#                                                    <li class="page-item active"><a class="page-link"#}
-    {#                                                                                    href="?page={{ file_list.number }}">{{ file_list.number }}</a>#}
-    {#                                                    </li>#}
-    {#                                                {% endif %}#}
-    {##}
-    {#                                                <li class="page-item page-indicator ">#}
-    {#                                                    <a class="page-link" href="{% if file_list.has_next %}#}
-    {#                                                            ?page={{ file_list.next_page_number }}#}
-    {#                                                            {% else %}#}
-    {#                                                            javascript:void(0);#}
-    {#                                                            {% endif %}">#}
-    {#                                                        <i class="la la-angle-right"></i></a>#}
-    {#                                                </li>#}
-    {#                                                <li>#}
-    {#                                                </li>#}
-    {#                                            </ul>#}
-    {#                                        </nav>#}
-    {#                                    </div>#}
-    {#                                </div>#}
-    {#                                    <div class="profile-about-me">#}
-    {#                                        <div class="pt-4 border-bottom-1 pb-3">#}
-    {#                                            <h4 class="text-primary">Aule</h4>#}
-    {#                                            <p class="mb-2">A wonderful serenity has taken possession of my entire soul,#}
-    {#                                                like these sweet mornings of spring which I enjoy with my whole heart. I#}
-    {#                                                am alone, and feel the charm of existence was created for the bliss of#}
-    {#                                                souls like mine.I am so happy, my dear friend, so absorbed in the#}
-    {#                                                exquisite sense of mere tranquil existence, that I neglect my#}
-    {#                                                talents.</p>#}
-    {#                                            <p>A collection of textile samples lay spread out on the table - Samsa was a#}
-    {#                                                travelling salesman - and above it there hung a picture that he had#}
-    {#                                                recently cut out of an illustrated magazine and housed in a nice, gilded#}
-    {#                                                frame.</p>#}
-    {#                                        </div>#}
-    {#                                    </div>#}
-    {#                                    <div class="profile-skills mb-5">#}
-    {#                                        <h4 class="text-primary mb-2">Skills</h4>#}
-    {#                                        <a href="javascript:void(0);"#}
-    {#                                           class="btn btn-primary light btn-xs mb-1">Admin</a>#}
-    {#                                        <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Dashboard</a>#}
-    {#                                        <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Photoshop</a>#}
-    {#                                        <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Bootstrap</a>#}
-    {#                                        <a href="javascript:void(0);" class="btn btn-primary light btn-xs mb-1">Responsive</a>#}
-    {#                                        <a href="javascript:void(0);"#}
-    {#                                           class="btn btn-primary light btn-xs mb-1">Crypto</a>#}
-    {#                                    </div>#}
-    {#                                    <div class="profile-lang  mb-5">#}
-    {#                                        <h4 class="text-primary mb-2">Language</h4>#}
-    {#                                        <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i#}
-    {#                                                class="flag-icon flag-icon-us"></i> English</a>#}
-    {#                                        <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i#}
-    {#                                                class="flag-icon flag-icon-fr"></i> French</a>#}
-    {#                                        <a href="javascript:void(0);" class="text-muted pe-3 f-s-16"><i#}
-    {#                                                class="flag-icon flag-icon-bd"></i> Bangla</a>#}
-    {#                                    </div>#}
-    {#                                    <div class="profile-personal-info">#}
-    {#                                        <h4 class="text-primary mb-4">Personal Information</h4>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Name <span#}
-    {#                                                        class="pull-right d-none d-sm-block">:</span>#}
-    {#                                                </h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>Mitchell C.Shay</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Email <span#}
-    {#                                                        class="pull-right d-none d-sm-block">:</span>#}
-    {#                                                </h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>example@examplel.com</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Availability <span#}
-    {#                                                        class="pull-right d-none d-sm-block">:</span></h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>Full Time (Free Lancer)</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Age <span#}
-    {#                                                        class="pull-right d-none d-sm-block">:</span>#}
-    {#                                                </h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>27</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Location <span class="pull-right d-none d-sm-block">:</span>#}
-    {#                                                </h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>Rosemont Avenue Melbourne,#}
-    {#                                                        Florida</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                        <div class="row mb-4 mb-sm-2">#}
-    {#                                            <div class="col-sm-3">#}
-    {#                                                <h5 class="f-w-500">Year Experience <span#}
-    {#                                                        class="pull-right d-none d-sm-block">:</span></h5>#}
-    {#                                            </div>#}
-    {#                                            <div class="col-sm-9"><span>07 Year Experiences</span>#}
-    {#                                            </div>#}
-    {#                                        </div>#}
-    {#                                    </div>#}
-    {#                            </div>#}
-    {#                            <div id="profile-settings" class="tab-pane fade">#}
-    {#                                <div class="pt-3">#}
-    {#                                    <div class="settings-form">#}
-    {#                                        <h4 class="text-primary">Account Setting</h4>#}
-    {#                                        <form method="post">{% csrf_token %}#}
-    {#                                            <div class="form-row row">#}
-    {#                                                <div class="form-group col-md-6">#}
-    {#                                                    <label>Email</label>#}
-    {#                                                    <input type="email" placeholder="Email" class="form-control">#}
-    {#                                                </div>#}
-    {#                                                <div class="form-group col-md-6">#}
-    {#                                                    <label>Password</label>#}
-    {#                                                    <input type="password" placeholder="Password"#}
-    {#                                                           class="form-control">#}
-    {#                                                </div>#}
-    {#                                            </div>#}
-    {#                                            <div class="form-group">#}
-    {#                                                <label>Address</label>#}
-    {#                                                <input type="text" placeholder="1234 Main St" class="form-control">#}
-    {#                                            </div>#}
-    {#                                            <div class="form-group">#}
-    {#                                                <label>Address 2</label>#}
-    {#                                                <input type="text" placeholder="Apartment, studio, or floor"#}
-    {#                                                       class="form-control">#}
-    {#                                            </div>#}
-    {#                                            <div class="form-row">#}
-    {#                                                <div class="form-group col-md-6">#}
-    {#                                                    <label>City</label>#}
-    {#                                                    <input type="text" class="form-control">#}
-    {#                                                </div>#}
-    {#                                                <div class="form-group col-md-4">#}
-    {#                                                    <label>State</label>#}
-    {#                                                    <select class="form-control form-control-lg default-select"#}
-    {#                                                            id="inputState">#}
-    {#                                                        <option selected="">Choose...</option>#}
-    {#                                                        <option>Option 1</option>#}
-    {#                                                        <option>Option 2</option>#}
-    {#                                                        <option>Option 3</option>#}
-    {#                                                    </select>#}
-    {#                                                </div>#}
-    {#                                                <div class="form-group col-md-2">#}
-    {#                                                    <label>Zip</label>#}
-    {#                                                    <input type="text" class="form-control">#}
-    {#                                                </div>#}
-    {#                                            </div>#}
-    {#                                            <div class="form-group">#}
-    {#                                                <div class="custom-control custom-checkbox">#}
-    {#                                                    <input type="checkbox" class="form-check-input" id="gridCheck">#}
-    {#                                                    <label class="custom-control-label" for="gridCheck"> Check me#}
-    {#                                                        out</label>#}
-    {#                                                </div>#}
-    {#                                            </div>#}
-    {#                                            <button class="btn btn-primary" type="submit">Sign#}
-    {#                                                in#}
-    {#                                            </button>#}
-    {#                                        </form>#}
-    {#                                    </div>#}
-    {#                                </div>#}
-    {#                            </div>#}
-    {#                        </div>#}
-    {#                    </div>#}
-    {##}
-    {#                </div>#}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
+
 
 
 {% endblock %}

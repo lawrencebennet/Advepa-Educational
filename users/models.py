@@ -42,6 +42,12 @@ class School(models.Model):
     modulo_classi_innovative = models.BooleanField(default=False)
     planimetry_image = models.FileField(null=True, blank=True, upload_to=school_directory_path)
 
+    def get_teachers_number(self):
+        return CustomUser.objects.filter(school=self, role='teacher').count()
+
+    def get_students_number(self):
+        return CustomUser.objects.filter(school=self, role='student').count()
+
     class Meta:
         verbose_name = _("School")
         verbose_name_plural = _("Schools")
@@ -79,10 +85,6 @@ class CustomAccountManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    # stands = models.ForeignKey(Stand, on_delete=models.CASCADE, blank=True, null=True)
-    # exhibitions = models.ForeignKey(Exhibition, on_delete=models.CASCADE, blank=True, null=True)
-
-    # email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=150, blank=False, unique=True)
     avatar = models.TextField(max_length=500, blank=True)
     groups = models.ManyToManyField(Group, blank=True)
@@ -102,8 +104,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'username'
-
-    # REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return f"{self.username}"
@@ -167,18 +167,30 @@ class Notice(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class Faq(models.Model):
+class FaqSection(models.Model):
     AREA_CHOICES = (
-        ('1', 'Section 1'),
-        ('2', 'Section 2'),
-        ('3', 'Section 3')
+        ('1', 'Sezione 1'),
+        ('2', 'Sezione 2'),
+        ('3', 'Sezione 3')
     )
     area_id = models.CharField(max_length=100, choices=AREA_CHOICES)
     url_avatar = models.CharField(max_length=100, default="https://models.readyplayer.me/63403f333dd6383c5cb59254.glb")
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.get_area_id_display() + ", " + str(self.school))
+
+    @property
+    def faqs(self):
+        return self.faq_set.all()
+
+
+class Faq(models.Model):
+    section = models.ForeignKey(FaqSection, blank=False, on_delete=models.CASCADE)
     question = models.TextField(blank=True)
     answer = models.TextField(blank=True)
     link = models.CharField(max_length=100, blank=True)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    last_modify = models.DateTimeField(auto_now=True)
 
 
 class SiteLogins(models.Model):

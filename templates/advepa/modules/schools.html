@@ -20,16 +20,15 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Tabella degli stand</h4>
+                <h4 class="card-title">Tabella delle scuole</h4>
                 <div class="d-flex">
-                    {% if perms.users.delete_stand %}
+                    {% if perms.users.delete_school %}
                         <button type="submit" id="delete_multiple_btn"
                                 class="btn light btn-outline-primary btn-sm me-2 ">Elimina
                         </button>
-
                     {% endif %}
-                    {% if perms.users.add_stand %}
-                        <a href="{% url 'advepa:add-stand' %}" class="btn btn-primary btn-sm ">Crea Stand <span
+                    {% if perms.users.add_school %}
+                        <a href="{% url 'advepa:add-school' %}" class="btn btn-primary btn-sm">Crea Scuola<span
                                 class="btn-icon-end">
                             <i class="fa fa-plus"></i></span>
                         </a>
@@ -48,83 +47,118 @@
                                 </div>
                             </th>
                             <th>Nome</th>
-                            {% if perms.users.delete_stand or perms.users.change_stand or perms.auth.change_stand %}
+                            <th>Codice Identificativo</th>
+                            <th>Numero Classi</th>
+                            <th>Numero Insegnanti</th>
+                            <th>Numero Studenti</th>
+                            <th>Status</th>
+                            {% if perms.users.delete_school or perms.users.change_school %}
                                 <th></th>
                             {% endif %}
                         </tr>
                         </thead>
                         <tbody>
                         {% csrf_token %}
-                        {% for stand in stand_list %}
-                            <tr id="{{ stand.id }}">
-                                <td>
-                                    <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                        <input name="user_id[]" type="checkbox" class="form-check-input"
-                                               value="{{ stand.id }}">
-                                        <label class="form-check-label" for="checkbox-{{ stand.id }}"></label>
-                                    </div>
-                                </td>
-                                <td><strong>{{ stand.name }}</strong></td>
-                                <td style="text-align: right;">
-                                    <div class="sweetalert">
-                                        <div class="d-flex">
-                                            {% if perms.users.change_stand %}
-                                                <a href="{% url 'advepa:edit-stand' id=stand.id %}"
-                                                   class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil"></i></a>
-                                            {% endif %}
-                                            {% if perms.users.delete_stand %}
-                                                <a href="{% url 'advepa:delete-stand' id=stand.id %}"
-                                                   class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                        class="fa fa-trash"></i></a>
+                        {% for school in school_list %}
+                            {% if request.user.role == 'superadmin' or request.user.is_staff %}
+                                <tr id="{{ school.id }}">
+                                    <td>
+                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                            <input name="school_id[]" type="checkbox" class="form-check-input"
+                                                   value="{{ school.id }}">
+                                            <label class="form-check-label" for="checkbox-{{ school.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'advepa:school-details' id=school.id %}">
+                                            <div class="d-flex align-items-center">
+                                                <span class="w-space-no">{{ school.name }}</span>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>{{ school.custom_id }}</td>
+                                    <td>{{ school.classrooms.all|length }}</td>
+                                    <td>{{ school.get_teachers_number }}</td>
+                                    <td>{{ school.get_students_number }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if school.is_active %}
+                                                <i class="fa fa-circle text-success me-1"></i>
+                                            {% else %}
+                                                <i class="fa fa-circle text-dark me-1"></i>
                                             {% endif %}
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <div class="sweetalert">
+                                            <div class="d-flex">
+                                                {% if perms.users.change_school %}
+                                                    <a href="{% url 'advepa:edit-school' id=school.id %}"
+                                                       class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                {% endif %}
+                                                {% if perms.users.delete_school %}
+                                                    <a href="{% url 'advepa:delete-school' id=school.id %}"
+                                                       class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash"></i></a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-                {#                FOOTER DELLA TABELLA#}
                 <nav mt-5>
                     <p>
                             <span class="current">
-                            Pagina {{ stand_list.number }} di {{ stand_list.paginator.num_pages }}.
+                            Pagina {{ school_list.number }} di {{ school_list.paginator.num_pages }}.
                            </span>
                     </p>
+
+
                     <ul class="pagination pagination-gutter  justify-content-end">
+
                         <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if stand_list.has_previous %}
-                                                                ?page={{ stand_list.previous_page_number }}
+                            <a class="page-link" href="{% if school_list.has_previous %}
+                                                                ?page={{ school_list.previous_page_number }}
                                                                 {% else %}
                                                                 javascript:void(0);
                                                                 {% endif %}">
                                 <i class="la la-angle-left"></i></a>
                         </li>
-                        {% for i in stand_list.paginator.page_range|slice:":3" %}
 
-                            <li class="page-item {% if stand_list.number == i %}
+                        {% for i in school_list.paginator.page_range|slice:":3" %}
+
+                            <li class="page-item {% if school_list.number == i %}
                                                     active{% endif %}"><a class="page-link"
                                                                           href="?page={{ i }}">{{ i }}</a></li>
+
                         {% endfor %}
-                        {% if stand_list.number > 3 %}
+
+
+                        {% if school_list.number > 3 %}
                             <li class="page-item active"><a class="page-link"
-                                                            href="?page={{ stand_list.number }}">{{ stand_list.number }}</a>
+                                                            href="?page={{ school_list.number }}">{{ school_list.number }}</a>
                             </li>
                         {% endif %}
+
                         <li class="page-item page-indicator ">
-                            <a class="page-link" href="{% if stand_list.has_next %}
-                                                            ?page={{ stand_list.next_page_number }}
+                            <a class="page-link" href="{% if school_list.has_next %}
+                                                            ?page={{ school_list.next_page_number }}
                                                             {% else %}
                                                             javascript:void(0);
                                                             {% endif %}">
                                 <i class="la la-angle-right"></i></a>
                         </li>
                         <li>
+
+
                         </li>
                     </ul>
+
                 </nav>
             </div>
         </div>
@@ -144,7 +178,7 @@
 
             $('#delete_multiple_btn').on('click', function () {
 
-                if (confirm("Sei sicuro di voler eliminare gli stands selezionati?")) {
+                if (confirm("Sei sicuro di voler eliminare le scuole selezionati?")) {
                     var id = [];
 
                     $(':checkbox:checked').each(function (i) {
@@ -152,11 +186,11 @@
                     });
 
                     if (id.length === 0) {
-                        alert("Perfavore seleziona gli stands da eliminare")
+                        alert("Perfavore seleziona le scuole da eliminare")
                     } else {
                         console.log(id);
                         $.ajax({
-                            url: "/delete-multiple-stand/",
+                            url: "/delete-multiple-school/",
                             method: "POST",
                             dataType: 'json',
                             data: {
@@ -203,13 +237,13 @@
             const url = $(this).attr('href');
 
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Sei Sicuro?',
+                text: "Non potrai tornare indietro!",
                 type: "warning",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: "Yes, delete it !!",
-                confirmButtonText: 'Delete',
+                confirmButtonText: "Si, elimina la scuola!",
+                confirmButtonText: 'Elimina',
                 confirmButtonColor: "#DD6B55"
 
             }).then((result) => {

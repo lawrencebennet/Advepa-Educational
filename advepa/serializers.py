@@ -9,49 +9,54 @@ from itertools import groupby
 
 class UserLoginView(APIView):
     def post(self, request):
-        if request.query_params.get('username') and request.query_params.get('password'):
-            username = request.query_params.get('username')
-            password = request.query_params.get('password')
-
-            user = CustomUser.objects.get(username=username)
-            if user and user.check_password(password):
-                # Le credenziali di autenticazione sono corrette prosegue
-                user_dict = {
-                    "username": user.username,
-                    "name": user.name,
-                    "last_name": user.last_name,
-                    "avatar": user.avatar
-                }
-                school = user.school
-                school_dict = {}
-                if school:
-                    classroom_list = [{'id': classroom.id, 'aulatype': classroom.name} for classroom in
-                                      Classroom.objects.filter(type='class', school=school)]
-                    labs_list = [{'id': lab.id, 'aulatype': lab.name} for lab in
-                                 Classroom.objects.filter(type='lab', school=school)]
-                    school_dict = {
-                        "id_scuola": school.custom_id,
-                        "name_scuola": school.name,
-                        "tema": school.theme,
-                        "modulo_ingresso": school.modulo_ingresso,
-                        "modulo_comunicazione_multipla": school.modulo_comunicazione_multipla,
-                        "modulo_personalizzato_apprendimento": school.modulo_personalizzato_apprendimento,
-                        "modulo_eventi": school.modulo_eventi,
-                        "modulo_segreteria": school.modulo_segreteria,
-                        "modulo_spazio_docenti": school.modulo_spazio_docenti,
-                        "modulo_classi_innovative": school.modulo_classi_innovative,
-                        "aule": classroom_list,
-                        "laboratori": labs_list,
+        try:
+            if request.query_params.get('username') and request.query_params.get('password'):
+                username = request.query_params.get('username')
+                password = request.query_params.get('password')
+                try:
+                    user = CustomUser.objects.get(username=username)
+                except:
+                    return Response({"auth_response": False, "error": "User not exist!"})
+                if user and user.check_password(password):
+                    # Le credenziali di autenticazione sono corrette prosegue
+                    user_dict = {
+                        "username": user.username,
+                        "name": user.name,
+                        "last_name": user.last_name,
+                        "avatar": user.avatar
                     }
+                    school = user.school
+                    school_dict = {}
+                    if school:
+                        classroom_list = [{'id': classroom.id, 'aulatype': classroom.name} for classroom in
+                                          Classroom.objects.filter(type='class', school=school)]
+                        labs_list = [{'id': lab.id, 'aulatype': lab.name} for lab in
+                                     Classroom.objects.filter(type='lab', school=school)]
+                        school_dict = {
+                            "id_scuola": school.custom_id,
+                            "name_scuola": school.name,
+                            "tema": school.theme,
+                            "modulo_ingresso": school.modulo_ingresso,
+                            "modulo_comunicazione_multipla": school.modulo_comunicazione_multipla,
+                            "modulo_personalizzato_apprendimento": school.modulo_personalizzato_apprendimento,
+                            "modulo_eventi": school.modulo_eventi,
+                            "modulo_segreteria": school.modulo_segreteria,
+                            "modulo_spazio_docenti": school.modulo_spazio_docenti,
+                            "modulo_classi_innovative": school.modulo_classi_innovative,
+                            "aule": classroom_list,
+                            "laboratori": labs_list,
+                        }
 
-                return Response({
-                    "auth_response": True,
-                    "user": user_dict,
-                    "school": school_dict
-                })
+                    return Response({
+                        "auth_response": True,
+                        "user": user_dict,
+                        "school": school_dict
+                    })
 
-        # Se le credenziali non sono corrette, ritorna False
-        return Response({"auth_response": False})
+            # Se le credenziali non sono corrette, ritorna False
+            return Response({"auth_response": False})
+        except:
+            return Response({"Something went wrong!"})
 
 
 class UserChangeAvatarView(APIView):
@@ -63,6 +68,7 @@ class UserChangeAvatarView(APIView):
 
                 user = CustomUser.objects.get(username=username)
                 user.avatar = avatar
+                user.save()
                 return Response({"Avatar updated correctly!"})
         except:
             return Response({"Something went wrong!"})
@@ -82,7 +88,7 @@ class MediaFilesClassroom(APIView):
                     for mediafile in classroom.media_files.all():
                         mediafiles_dict[mediafile.id] = {
                             'type': mediafile.type.macro_type,
-                            'url': mediafile.path,
+                            'url': mediafile.file.path,
                         }
                     return Response(mediafiles_dict)
             return Response({"No parameters!"})
@@ -124,6 +130,7 @@ class FaqsView(APIView):
 
 class NoticesView(APIView):
     def post(self, request):
+        # if request.query_params.get('token'):
         TYPE_CHOICES = {
             'news': 'news',
             'doc': 'documents',
@@ -161,7 +168,8 @@ class NoticesView(APIView):
             return Response({"No notices!"})
         except:
             return Response({"Something went wrong!"})
-
+    # else:
+    #     return Response({"Not Authorized!"})
 # class SchoolSerializer(serializers.Serializer):
 #     class Meta:
 #         model = School

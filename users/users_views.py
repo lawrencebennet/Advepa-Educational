@@ -6,19 +6,12 @@ from django.db.models import Max, Min
 from django.urls import reverse
 from django.utils import timezone
 from users.models import *
-from advepa.forms import (ExhibitionForm, EditExhibitionForm, EditPavilionForm, PavilionForm, StandForm,
-                          EditStandForm, )
+from advepa.forms import *
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from users.models import CustomUser
 
-from users.forms import (CustomUserForm,
-                         LoginForm,
-                         GroupForm,
-                         PermissionsForm,
-                         UserPermissionsForm,
-                         EditUserForm
-                         )
+from users.forms import *
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import Group, Permission
@@ -54,7 +47,10 @@ def change_password(request):
 @login_required(login_url='advepa:login')
 @permission_required({'users.view_customuser'}, raise_exception=True)
 def users(request):
-    user_list = CustomUser.objects.filter().order_by('-is_superuser', 'role')
+    if request.user.role == 'admin':
+        user_list = CustomUser.objects.filter(school=request.user.school).order_by('-role')
+    else:
+        user_list = CustomUser.objects.filter().order_by('-is_superuser', 'role')
     paginator = Paginator(user_list, 7)  # Mostra 7 utenti per pagina
     context = {
         "user_list": paginator.get_page(request.GET.get('page')),
@@ -188,9 +184,6 @@ def login_user(request):
                         return redirect('advepa:dashboard')
                     elif role == "Nessun ruolo":
                         return redirect('advepa:page-error-403')
-                    else:
-                        messages.success(request, mex)
-                        return redirect('advepa:actions')
             else:
                 messages.warning(request, "Attenzione! L'utente non è attivo")
 
@@ -433,8 +426,8 @@ def calcolachart(start_date, finish_date, filters, chart_labels, chart_action_co
 # FIERE E GRAFICI
 @login_required(login_url='advepa:login')
 def actions_charts(request):
-    if check_stand_or_exhibition_setted(request):
-        return redirect('advepa:page-error-403')
+    # if check_stand_or_exhibition_setted(request):
+    #     return redirect('advepa:page-error-403')
     disabled_exhibition = False
     disabled_stand = False
     exhibition_from_user = None
@@ -614,8 +607,8 @@ def get_stands(request, exhibition_id):
 
 @login_required(login_url='advepa:login')
 def access_charts(request):
-    if check_stand_or_exhibition_setted(request):
-        return redirect('advepa:page-error-403')
+    # if check_stand_or_exhibition_setted(request):
+    #     return redirect('advepa:page-error-403')
     if request.user.role == 'administrator' or request.user.role == 'standist':
         return redirect('advepa:page-error-403')
     selected_user = 'all'
@@ -934,8 +927,8 @@ def delete_multiple_stand(request):
 
 @login_required(login_url='advepa:login')
 def import_actions(request):
-    if check_stand_or_exhibition_setted(request):
-        return redirect('advepa:page-error-403')
+    # if check_stand_or_exhibition_setted(request):
+    #     return redirect('advepa:page-error-403')
     action_count = 0
     start_time = datetime.now()
     list_actions = []
@@ -996,13 +989,62 @@ def import_actions(request):
     return redirect(reverse('advepa:dashboard'))
 
 
-# SCHOOL DASHBOARD
+# SCHOOL
+
+
 @login_required(login_url='advepa:login')
-def school_dashboard(request):
-    classrooms = None
-    uploaded_file_list = None
-    all_file_list = None
-    paginator = None
+@permission_required({'users.view_school'}, raise_exception=True)
+def schools(request):
+    school_list = School.objects.filter().order_by('name')
+    paginator = Paginator(school_list, 7)  # Mostra 7 utenti per pagina
+    context = {
+        "school_list": paginator.get_page(request.GET.get('page')),
+        "page_title": "Scuole"
+    }
+    return render(request, "advepa/modules/schools.html", context)
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_school', 'users.add_school'}, raise_exception=True)
+def add_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST, request.FILES)
+        if form.is_valid():
+            school_obj = form.save()
+            messages.success(request, f"La scuola {school_obj} è stata creata con successo!")
+            return redirect('advepa:schools')
+    else:
+        initial_data = {'custom_id': generate_unique_code()}  # Imposta il valore predefinito per custom_id
+        form = SchoolForm(initial=initial_data)
+    return render(request, 'advepa/modules/add-school.html', {'form': form, "page_title": "Crea Scuola"})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_school', 'users.change_school'}, raise_exception=True)
+def edit_school(request, id):
+    school_obj = get_object_or_404(School, id=id)
+    if request.method == 'POST':
+        if request.user.role == "admin":
+            form = EditSchoolAdminForm(request.POST, request.FILES, instance=school_obj)
+        else:
+            form = EditSchoolForm(request.POST, request.FILES, instance=school_obj)
+
+        if form.is_valid():
+            school_obj = form.save()
+            messages.success(request, f"La scuola {school_obj} è stata modificata con successo!")
+            return redirect('advepa:schools')
+    else:
+        if request.user.role == "admin":
+            form = EditSchoolAdminForm(instance=school_obj)
+        else:
+            form = EditSchoolForm(instance=school_obj)
+    status = "Modifica"
+    return render(request, 'advepa/modules/add-school.html',
+                  {'form': form, 'status': status, "page_title": "Modifica Scuola"})
+
+
+@login_required(login_url='advepa:login')
+def school_dashboard(request, school_id=None):
     if request.method == 'POST':
         classroom_id = request.POST.get('classroom-select')
         file_id = request.POST.get('file-select')
@@ -1014,21 +1056,62 @@ def school_dashboard(request):
         classroom.save()
     if request.user.school:
         school = request.user.school
-        # Trova le classi collegate alla stessa scuola dell'utente
-        classrooms = Classroom.objects.filter(school=school)
-        # Trova i file collegati a queste classi
-        uploaded_file_list = MediaFile.objects.filter(classroom__in=classrooms, teacher=request.user).order_by(
-            '-create_date').distinct()
-        all_file_list = MediaFile.objects.filter(teacher=request.user).order_by('-create_date')
-        paginator = Paginator(uploaded_file_list, 7)  # Mostra 7 file per pagina
+    elif school_id:
+        school = School.objects.get(custom_id=school_id)
+    else:
+        context = {
+            "school": None,
+            "classroom_list": None,
+            "uploaded_file_list": None,
+            "all_file_list": None,
+            "page_title": "Dashboard Scuola",
+        }
+        return render(request, 'advepa/school-dashboard.html', context)
+
+    # Trova le classi collegate alla stessa scuola dell'utente
+    classrooms = Classroom.objects.filter(school=school)
+    # Trova i file collegati a queste classi
+    uploaded_file_list = MediaFile.objects.filter(classroom__in=classrooms, teacher=request.user).order_by(
+        '-create_date').distinct()
+    all_file_list = MediaFile.objects.filter(teacher=request.user).order_by('-create_date')
+    paginator = Paginator(uploaded_file_list, 7)  # Mostra 7 file per pagina
+
+    faq_section_1 = FaqSection.objects.filter(school=school, area_id='1').first()
+    faq_section_2 = FaqSection.objects.filter(school=school, area_id='2').first()
+    faq_section_3 = FaqSection.objects.filter(school=school, area_id='3').first()
     context = {
-        # "room_numbers": room_numbers,
+        "school": school,
         "classroom_list": classrooms,
         "uploaded_file_list": paginator.get_page(request.GET.get('page')) if paginator else None,
         "all_file_list": all_file_list,
         "page_title": "Dashboard Scuola",
+        "faq_section_1": faq_section_1,
+        "faq_section_2": faq_section_2,
+        "faq_section_3": faq_section_3
     }
     return render(request, 'advepa/school-dashboard.html', context)
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_school', 'users.delete_school'}, raise_exception=True)
+def delete_school(request, id):
+    u = School.objects.get(id=id)
+    u.delete()
+    messages.success(request, "Scuola eliminata correttamente!")
+    return redirect('advepa:schools')
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_school', 'users.delete_school'}, raise_exception=True)
+def delete_multiple_school(request):
+    id_list = request.POST.getlist('id[]')
+    id_list = [i for i in id_list if i != '']
+    for id in id_list:
+        school_obj = School.objects.get(pk=id)
+        school_obj.delete()
+    response = JsonResponse({"success": 'Scuole eliminate con successo!'})
+    response.status_code = 200
+    return response
 
 
 # FILE MANAGER
@@ -1063,12 +1146,11 @@ def file_manager(request):
 
 
 @login_required(login_url='advepa:login')
-def delete_file(request, id):
-    f = MediaFile.objects.get(id=id)
+def delete_file(request, file_id):
+    f = MediaFile.objects.get(id=file_id)
     f.delete()
     messages.success(request, "File eliminato con successo")
-    return redirect('advepa:file-manager') \
-           @ login_required(login_url='advepa:login')
+    return redirect('advepa:file-manager')
 
 
 @login_required(login_url='advepa:login')

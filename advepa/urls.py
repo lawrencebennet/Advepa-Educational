@@ -60,15 +60,23 @@ urlpatterns = [
     path('page-error-500/', advepa_views.page_error_500, name="page-error-500"),
     path('page-error-503/', advepa_views.page_error_503, name="page-error-503"),
 
-    # SCHOOOL DASHBOARD
+    # SCHOOOL
+    path('schools/', users_views.schools, name="schools"),
+    path('school-details/<int:id>/', users_views.edit_school, name="school-details"),
+    path('add-school/', users_views.add_school, name="add-school"),
+    path('edit-school/<int:id>/', users_views.edit_school, name="edit-school"),
+    path('delete-school/<int:id>/', users_views.delete_school, name="delete-school"),
+
+    path('delete-multiple-school/', users_views.delete_multiple_school, name="delete-multiple-school"),
     path('school-dashboard/', users_views.school_dashboard, name="school-dashboard"),
     path('', users_views.school_dashboard, name="dashboard"),
-    # path('', users_views.advepa_dashboard, name="dashboard"),
     path('index/', advepa_views.index, name="index"),
+
     # MEDIAFILES
     path('file-manager/', users_views.file_manager, name="file-manager"),
-    path('delete-file/<int:id>/', users_views.delete_file, name="delete-file"),
-    path('unlink-file-classroom/<int:classroom_id>/<int:file_id>/', users_views.unlink_file_classroom, name="unlink-file-classroom"),
+    path('manager-delete-file/<int:file_id>/', users_views.delete_file, name="manager-delete-file"),
+    path('unlink-file-classroom/<int:classroom_id>/<int:file_id>/', users_views.unlink_file_classroom,
+         name="unlink-file-classroom"),
     path('delete-multiple-files/', users_views.delete_multiple_files, name="delete-multiple-files"),
 
     # API

@@ -95,14 +95,15 @@
                                         <td>{{ file.byte_space }}</td>
                                         <td>{{ file.create_date }}</td>
                                         <td>
-                                            <div class="sweetalert">
-                                                <div class="d-flex">
-                                                    <a href="{% url 'advepa:delete-file' id=file.id %}"
-                                                       class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash"></i></a>
-                                                </div>
+                                        <div class="sweetalert">
+                                            <div class="d-flex">
+                                                <a href="{% url 'advepa:manager-delete-file' file_id=file.id %}"
+                                                   class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
                                             </div>
-                                        </td>
+                                        </div>
+                                    </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
