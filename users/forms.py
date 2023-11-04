@@ -1,9 +1,9 @@
 from django import forms
-from users.models import CustomUser, Pavilion, Exhibition, Stand, School
+from users.models import *
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import PasswordResetForm
-from .models import CustomUser, MediaFile, MediaType
+from .models import *
 from django.core.exceptions import ValidationError
 
 
@@ -114,6 +114,24 @@ class EditUserForm(forms.ModelForm):
         return user
 
 
+class FaqForm(forms.ModelForm):
+    question = forms.CharField(required=True)
+    answer = forms.CharField(required=True)
+    link = forms.CharField(required=False)
+
+    class Meta:
+        model = Faq
+        fields = (
+            'question', 'answer', 'link', 'section')
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(FaqForm, self).__init__(*args, **kwargs)
+
+        if user:
+            self.fields['section'].queryset = FaqSection.objects.filter(school=user.school)
+
+
 class SchoolForm(forms.ModelForm):
     name = forms.CharField(required=True)
     custom_id = forms.CharField(required=True)
@@ -143,11 +161,6 @@ class EditSchoolForm(forms.ModelForm):
             'modulo_classi_innovative',
         )
 
-    def save(self, commit=True):
-        # Save the provided password in hashed format
-        school = super().save()
-        return school
-
 
 class EditSchoolAdminForm(forms.ModelForm):
     name = forms.CharField(required=True)
@@ -160,10 +173,6 @@ class EditSchoolAdminForm(forms.ModelForm):
         fields = (
             'name', 'custom_id', 'info', 'theme'
         )
-
-    def save(self, commit=True):
-        school = super().save()
-        return school
 
 
 class LoginForm(forms.Form):

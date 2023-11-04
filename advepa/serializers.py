@@ -101,29 +101,30 @@ class FaqsView(APIView):
         try:
             if request.query_params.get('school_id'):
                 school_id = request.query_params.get('school_id')
-                faqs = Faq.objects.filter(school__custom_id=school_id).order_by('area_id')
-                if faqs:
-                    faqs_list = []  # Inizializza la lista principale fuori dal ciclo
-                    for area_id, faq_group in groupby(faqs, key=lambda faq: faq.area_id):
-                        faq_list = list(faq_group)  # Lista di FAQ per l'area corrente
-                        if faq_list:
-                            url_avatar = None
-                            faqs_final_list = []  # Inizializza la lista delle FAQ per l'area corrente
-                            for faq in faq_list:
-                                url_avatar = faq.url_avatar
-                                faqs_final_list.append({
+                faq_sections = FaqSection.objects.filter(school__custom_id=school_id).order_by('area_id')
+                if faq_sections:
+                    section_faqs_list = []
+                    for section in faq_sections:
+                        faqs_list = []
+                        for faq in section.faqs:
+                            if faq.link:
+                                faqs_list.append({
                                     'question': faq.question,
                                     'answer': faq.answer,
-                                    'link': faq.link,
+                                    'link': faq.link
                                 })
-                            faqs_list.append({
-                                'area_id': area_id,
-                                'url_avatar': url_avatar,
-                                'faq': faqs_final_list
-                            })
-                    return Response({'faqs': faqs_list})
+                            else:
+                                faqs_list.append({
+                                    'question': faq.question,
+                                    'answer': faq.answer
+                                })
+                        section_faqs_list.append({
+                            'area_id': section.area_id,
+                            'url_avatar': section.url_avatar,
+                            'faq': faqs_list
+                        })
+                    return Response({'faqs': section_faqs_list})
             return Response({"No parameters!"})
-
         except:
             return Response({"Something went wrong!"})
 
@@ -143,21 +144,21 @@ class NoticesView(APIView):
                 if notices:
                     notices_list = []  # Inizializza la lista principale fuori dal ciclo
                     for type, notice_group in groupby(notices, key=lambda notice: notice.type):
-                        notice_list = list(notice_group)  # Lista di FAQ per l'area corrente
+                        notice_list = list(notice_group)  # Lista di Notices per l'area corrente
                         if notice_list:
-                            notices_final_list = []  # Inizializza la lista delle FAQ per l'area corrente
+                            notices_final_list = []  # Inizializza la lista delle Notices per l'area corrente
                             for notice in notice_list:
                                 if type == 'news':
                                     notices_final_list.append({
                                         'title': notice.title,
-                                        'data': notice.date.date(),
+                                        'data': notice.last_modify_date.date(),
                                         'text': notice.text,
                                         'link': notice.link,
                                     })
-                                elif type == 'document':
+                                elif type == 'doc':
                                     notices_final_list.append({
                                         'title': notice.title,
-                                        'link': notice.media_file.path,
+                                        'link': notice.media_file.file.path,
                                     })
                                 elif type == 'meet':
                                     notices_final_list.append(notice.meet_link)

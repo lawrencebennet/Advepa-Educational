@@ -44,23 +44,28 @@
                                         </svg>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li class="dropdown-item">
-                                            <a href="{% url 'advepa:edit-school' id=school.id %}"><i
-                                                    class="fa fa-pencil text-primary me-2"></i>
+                                        <a href="{% url 'advepa:edit-school' id=school.id %}">
+                                            <li class="dropdown-item">
+                                                <i class="fa fa-pencil text-primary me-2"></i>
                                                 Modifica Nome Scuola
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="{% url 'advepa:add-school' %}">
+                                            </li>
+                                        </a>
+                                        <a href="{% url 'advepa:add-user' %}">
+                                            <li class="dropdown-item">
+
                                                 <i class="fa fa-users text-primary me-2"></i> Crea
                                                 credenziali utenti
-                                            </a>
-                                        </li>
+
+                                            </li>
+                                        </a>
                                         <li class="dropdown-item"><i class="fa fa-clipboard text-primary me-2"></i>
                                             Aggiungi news, bandi o appuntamenti
                                         </li>
-                                        <li class="dropdown-item"><i class="fa fa-plus text-primary me-2"></i> FAQS
-                                        </li>
+                                        <a href="{% url 'advepa:add-faq' %}">
+                                            <li class="dropdown-item"><i
+                                                    class="fa fa-plus text-primary me-2"></i> FAQS
+                                            </li>
+                                        </a>
                                     </ul>
                                 </div>
                             </div>
@@ -90,8 +95,8 @@
     {% endif %}
     <div class="tab-content">
         <div class="tab-pane fade show active" id="files-classrooms" role="tabpanel">
-            <div class="row">
-                <div class="col-xl-9 col-lg-18 col-sm-18">
+            <div class="row h-100">
+                <div class="col-xl-9 col-lg-18 col-sm-18 h-100" id="planimetria_aule">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Planimetria Aule</h4>
@@ -99,52 +104,10 @@
                         <div class="card-body">
                             <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width="100%" height="100%"
                                  alt="">
-                            {#                    <ul class="nav nav-pills mb-4 light">#}
-                            {#                        <li class="nav-item">#}
-                            {#                            <a href="#data-lines-graph" class="nav-link active" data-bs-toggle="tab"#}
-                            {#                               aria-expanded="false">#}
-                            {#                                Grafico a linee</a>#}
-                            {#                        </li>#}
-                            {#                        <li class=" nav-item">#}
-                            {#                            <a href="#data-bar-graph" class="nav-link" data-bs-toggle="tab"#}
-                            {#                               aria-expanded="false"#}
-                            {#                               {% if selected_date_radio == 'range' or selected_date_interval == 'all' %}disabled{% endif %}>#}
-                            {#                                Grafico a barre</a>#}
-                            {#                        </li>#}
-                            {#                        <li class="nav-item">#}
-                            {#                            <a href="#data-area-graph" class="nav-link" data-bs-toggle="tab" aria-expanded="true"#}
-                            {#                               disabled>#}
-                            {#                                Grafico ad area</a>#}
-                            {#                        </li>#}
-                            {#                    </ul>#}
-                            {#                    <div class="tab-content">#}
-                            {#                        <div id="data-bar-graph" class="tab-pane">#}
-                            {#                            <div class="row">#}
-                            {#                                <div class="col-md-12">#}
-                            {#                                    <canvas id="barChart_2"></canvas>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                            {#                        </div>#}
-                            {#                        <div id="data-lines-graph" class="tab-pane active">#}
-                            {#                            <div class="row">#}
-                            {#                                <div class="col-md-12">#}
-                            {#                                    <canvas id="lineChart_2"></canvas>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                            {#                        </div>#}
-                            {#                        <div id="data-area-graph" class="tab-pane">#}
-                            {#                            <div class="row">#}
-                            {#                                <div class="col-md-12">#}
-                            {#                                    <canvas id="areaChart_2"></canvas>#}
-                            {#                                </div>#}
-                            {#                            </div>#}
-                            {#                        </div>#}
-                            {#                    </div>#}
                         </div>
                     </div>
-
                 </div>
-                <div class="col-xl-3 col-lg-6 col-sm-6">
+                <div class="col-xl-3 col-lg-6 col-sm-6" id="select_file_class">
                     <form id="filter-form" method="POST" action="{% url 'advepa:school-dashboard' %}">
                         {% csrf_token %}
                         <div class="card">
@@ -163,22 +126,7 @@
                                         </span>
                                             </a>
                                         </li>
-                                        {#                                <li class="nav-item">#}
-                                        {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_calendar">#}
-                                        {#                                        <span>#}
-                                        {#                                            <i class="ti-calendar"></i>#}
-                                        {#                                        </span>#}
-                                        {#                                    </a>#}
-                                        {#                                </li>#}
-                                        {#                                <li class="nav-item">#}
-                                        {#                                    <a class="nav-link" data-bs-toggle="tab" href="#graph_filter_access">#}
-                                        {#                                        <span>#}
-                                        {#                                            <i class="ti-location-pin"></i>#}
-                                        {#                                        </span>#}
-                                        {#                                    </a>#}
-                                        {#                                </li>#}
                                     </ul>
-                                    <!-- Tab panes -->
                                 </div>
                                 <div class="tab-content tabcontent-border">
                                     <div class="tab-pane fade show active" id="graph_filter_position" role="tabpanel">
@@ -208,129 +156,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {#                            <div class="tab-pane fade disabled" id="graph_filter_calendar" role="tabpanel">#}
-                                    {#                                <div class="pt-4">#}
-                                    {#                                    <div id="date-interval">#}
-                                    {#                                        <div class="mb-4">#}
-                                    {#                                            <h4 class="card-title">Seleziona l'intervallo di tempo</h4>#}
-                                    {#                                        </div>#}
-                                    {#                                        <select id="date-interval-select" name="date-interval-select">#}
-                                    {#                                            <option value="all"#}
-                                    {#                                                    {% if selected_date_interval == 'all' %}selected{% endif %}>Tutti#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="lastseven"#}
-                                    {#                                                    {% if selected_date_interval == 'lastseven' %}selected{% endif %}>#}
-                                    {#                                                Ultimi 7 giorni#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="lastfourteen"#}
-                                    {#                                                    {% if selected_date_interval == 'lastfourteen' %}selected{% endif %}>#}
-                                    {#                                                Ultimi 14 giorni#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="lastthirty"#}
-                                    {#                                                    {% if selected_date_interval == 'lastthirty' %}selected{% endif %}>#}
-                                    {#                                                Ultimi 30 giorni#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="lastninety"#}
-                                    {#                                                    {% if selected_date_interval == 'lastninety' %}selected{% endif %}>#}
-                                    {#                                                Ultimi 90 giorni#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="lastyear"#}
-                                    {#                                                    {% if selected_date_interval == 'lastyear' %}selected{% endif %}>#}
-                                    {#                                                Ultimo anno#}
-                                    {#                                            </option>#}
-                                    {#                                        </select>#}
-                                    {#                                    </div>#}
-                                    {#                                    <br/>#}
-                                    {#                                    <div id="date-start-end">#}
-                                    {#                                        <div class="mb-4">#}
-                                    {#                                            <h4 class="card-title">Seleziona la data di inizio e di fine</h4>#}
-                                    {#                                            <input class="form-control input-daterange-datepicker" type="text"#}
-                                    {#                                                   name="date-range" id="date-range" value="{{ selected_date_range }}">#}
-                                    {#                                        </div>#}
-                                    {#                                    </div>#}
-                                    {##}
-                                    {#                                    <div class="form-group mb-0">#}
-                                    {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
-                                    {#                                                                                class="form-check-input"#}
-                                    {#                                                                                value="interval"#}
-                                    {#                                                                                {% if selected_date_radio == 'interval' %}checked{% endif %}>#}
-                                    {#                                            Intervalli#}
-                                    {#                                            date#}
-                                    {#                                        </label>#}
-                                    {#                                        <label class="radio-inline me-3"><input type="radio" name="date-radio"#}
-                                    {#                                                                                class="form-check-input" value="range"#}
-                                    {#                                                                                {% if selected_date_radio == 'range' %}checked{% endif %}>#}
-                                    {#                                            Range date#}
-                                    {#                                        </label>#}
-                                    {##}
-                                    {#                                    </div>#}
-                                    {##}
-                                    {#                                </div>#}
-                                    {#                            </div>#}
-                                    {#                            <div class="tab-pane fade disabled" id="graph_filter_access" role="tabpanel">#}
-                                    {#                                <div class="pt-4">#}
-                                    {##}
-                                    {#                                    <div id="platform">#}
-                                    {#                                        <div class="mb-4">#}
-                                    {#                                            <h4 class="card-title">Seleziona il dispositivo</h4>#}
-                                    {#                                        </div>#}
-                                    {#                                        <select id="platform-select" name="platform-select">#}
-                                    {#                                            <option value="all" {% if selected_platform == 'all' %}selected{% endif %}>#}
-                                    {#                                                Tutti#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="iPhone"#}
-                                    {#                                                    {% if selected_platform == 'iPhone' %}selected{% endif %}>iPhone#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="android"#}
-                                    {#                                                    {% if selected_platform == 'android' %}selected{% endif %}>Android#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="windows"#}
-                                    {#                                                    {% if selected_platform == 'windows' %}selected{% endif %}}>Windows#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="macOS"#}
-                                    {#                                                    {% if selected_platform == 'macOS' %}selected{% endif %}>macOS#}
-                                    {#                                            </option>#}
-                                    {#                                            <option value="browser"#}
-                                    {#                                                    {% if selected_platform == 'browser' %}selected{% endif %}>Browser#}
-                                    {#                                            </option>#}
-                                    {#                                        </select>#}
-                                    {#                                    </div>#}
-                                    {#                                    <br/>#}
-                                    {#                                    <hr>#}
-                                    {#                                    <div id="geo-country">#}
-                                    {#                                        <div class="mb-4">#}
-                                    {#                                            <h4 class="geo-country-title">Seleziona la Nazione</h4>#}
-                                    {#                                        </div>#}
-                                    {#                                        <select id="geo-country-select" disabled>#}
-                                    {#                                            <option value="all">Tutti</option>#}
-                                    {#                                            <option value="Italia">Italia</option>#}
-                                    {#                                            <option value="Francia">Francia</option>#}
-                                    {#                                            <option value="Svizzera">Svizzera</option>#}
-                                    {#                                            <option value="Germania">Germania</option>#}
-                                    {#                                            <option value="Spagna">Spagna</option>#}
-                                    {#                                        </select>#}
-                                    {#                                    </div>#}
-                                    {#                                    <br/>#}
-                                    {#                                    <div id="geo-region">#}
-                                    {#                                        <div class="mb-4">#}
-                                    {#                                            <h4 class="card-title">Seleziona la regione</h4>#}
-                                    {#                                        </div>#}
-                                    {#                                        <select id="geo-region-select" disabled>#}
-                                    {#                                            <option value="all">Tutti</option>#}
-                                    {#                                            <option value="Toscana">Toscana</option>#}
-                                    {#                                            <option value="Lombardia">Lombardia</option>#}
-                                    {#                                            <option value="Piemonte">Piemonte</option>#}
-                                    {#                                            <option value="Sicilia">Sicilia</option>#}
-                                    {#                                        </select>#}
-                                    {#                                    </div>#}
-                                    {#                                </div>#}
-                                    {#                            </div>#}
+
                                 </div>
                             </div>
                             <div class="card-footer">
-                                {#                        <p class="d-inline">#}
-                                {#                            <button type="button" class="btn btn-rounded btn-outline-light">Reset</button>#}
-                                {#                        </p>#}
                                 <p class="float-end">
                                     <button type="submit" class="btn btn-rounded btn-secondary">Inserisci</button>
                                 </p>
@@ -389,43 +218,6 @@
                                             <td>{{ file.byte_space }}</td>
                                             <td>{{ file.create_date }}</td>
                                             <td>{{ class.room_number }}</td>
-                                            {#                                        <td>#}
-                                            {#                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">#}
-                                            {#                                                <input name="user_id[]" type="checkbox" class="form-check-input"#}
-                                            {#                                                       value="{{ user.id }}">#}
-                                            {#                                                <label class="form-check-label" for="checkbox-{{ user.id }}"></label>#}
-                                            {#                                            </div>#}
-                                            {#                                        </td>#}
-
-
-                                            {#                                        <td>#}
-                                            {#                                            <a href="{% url 'advepa:user-details' id=user.id %}">#}
-                                            {#                                                <div class="d-flex align-items-center">#}
-                                            {#                                            <img src="/media/{{ user.avatar }}" class="rounded-lg me-2" width="24" alt=""> #}
-                                            {#                                                    <span class="w-space-no">{{ user.username }}</span>#}
-                                            {#                                                </div>#}
-                                            {#                                            </a>#}
-                                            {#                                        </td>#}
-                                            {#                                        <td><strong>{{ user.email }}</strong></td>#}
-                                            {#                                        <td>{{ user.get_role_display }}</td>#}
-
-
-                                            {#                                        <td>#}
-                                            {#                                            {% for g in user.groups.all %}#}
-                                            {#                                                <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
-                                            {#                                            {% endfor %}#}
-                                            {#                                        </td>#}
-                                            {#                                    <td>{{ user.phone_number }}</td>#}
-                                            {#                                    <td>{{ user.dob }}</td>#}
-                                            {#                                        <td>#}
-                                            {#                                            <div class="d-flex align-items-center">#}
-                                            {#                                                {% if user.is_active %}#}
-                                            {#                                                    <i class="fa fa-circle text-success me-1"></i>#}
-                                            {#                                                {% else %}#}
-                                            {#                                                    <i class="fa fa-circle text-dark me-1"></i>#}
-                                            {#                                                {% endif %}#}
-                                            {#                                            </div>#}
-                                            {#                                        </td>#}
                                             <td>
                                                 <div class="sweetalert">
                                                     <div class="d-flex">
@@ -495,6 +287,110 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane fade" id="notices" role="tabpanel">
+            <div class="col-xl-12">
+                <div class="card message-bx">
+                    <div class="card-header d-sm-flex d-block shadow-sm">
+                        <div>
+                            <h4 class="fs-20 mb-0 font-w600 text-black mb-sm-0 mb-2">Bacheca</h4>
+                            <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
+                                <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#notices_news" class="nav-link active" data-bs-toggle="tab"
+                                           aria-expanded="false"><span
+                                                class="badge light badge-primary">{{ news|length }}</span>News
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#notices_docs" class="nav-link" data-bs-toggle="tab"
+                                           aria-expanded="false"><span
+                                                class="badge light badge-primary">{{ docs|length }}</span>Bandi</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#notices_meet" class="nav-link" data-bs-toggle="tab"
+                                           aria-expanded="false">Appuntamento</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary rounded" href="{% url 'advepa:add-school' %}">
+                            + Aggiungi elemento in Bacheca
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="notices_news" role="tabpanel">
+                                {% for obj in news %}
+                                    <div class="media mb-4">
+                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+                                            <div class="me-sm-3 me-0">
+                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                        class="text-black">{{ obj.title }}</a><a
+                                                        href="{% url 'advepa:edit-faq' id=obj.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                    <a
+                                                            href="{% url 'advepa:delete-faq' id=obj.id %}"
+                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash -align-right"></i></a>
+                                                </h6>
+                                                <p class="text-black mb-sm-3 mb-1">{{ obj.text }}</p>
+                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                {% endfor %}
+                            </div>
+                            <div class="tab-pane fade" id="notices_docs" role="tabpanel">
+                                {% for obj in docs %}
+                                    <div class="media mb-4">
+                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+                                            <div class="me-sm-3 me-0">
+                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                        class="text-black">{{ obj.title }}</a><a
+                                                        href="{% url 'advepa:edit-faq' id=obj.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                    <a
+                                                            href="{% url 'advepa:delete-faq' id=obj.id %}"
+                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash -align-right"></i></a>
+                                                </h6>
+                                                <p class="text-sm-left">{{ obj.media_file }}</p>
+                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                {% endfor %}
+                            </div>
+                            <div class="tab-pane fade" id="notices_meet" role="tabpanel">
+                                {% if meet %}
+                                    <div class="media mb-4">
+
+                                        <div class="media-body">
+                                            <div class="d-flex mb-sm-2 mb-0">
+                                                <h6 class="text-black mb-0 font-w600 fs-16">{{ meet.title }}</h6>
+                                                <span class="ms-auto fs-14"><a
+                                                        href="{% url 'advepa:edit-faq' id=meet.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                <a
+                                                        href="{% url 'advepa:delete-faq' id=meet.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a></span>
+                                            </div>
+                                            <p class="text-black">Link: {{ meet.meet_link }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="tab-pane fade" id="faqs" role="tabpanel">
             <div class="col-xl-12">
                 <div class="card message-bx">
@@ -525,9 +421,8 @@
                                 </ul>
                             </div>
                         </div>
-                        <a class="btn btn-primary rounded" href="{% url 'advepa:edit-school' id=school.id %}"><i
-                                class="fa fa-pencil text-white me-2"></i>
-                            Modifica FAQS
+                        <a class="btn btn-primary rounded" href="{% url 'advepa:add-faq' %}">
+                            + Aggiungi FAQ
                         </a>
                     </div>
                     <div class="card-body">
@@ -538,10 +433,20 @@
                                         <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
                                             <div class="me-sm-3 me-0">
                                                 <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a>
+                                                        class="text-black">{{ faq.question }}</a><a
+                                                        href="{% url 'advepa:edit-faq' id=faq.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                    <a
+                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash -align-right"></i></a>
                                                 </h6>
                                                 <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
-                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                                {% if faq.link %}
+                                                    <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
+                                                {% endif %}
+                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -554,10 +459,19 @@
                                         <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
                                             <div class="me-sm-3 me-0">
                                                 <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a>
+                                                        class="text-black">{{ faq.question }}</a><a
+                                                        href="{% url 'advepa:edit-faq' id=faq.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                    <a
+                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash -align-right"></i></a>
                                                 </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
-                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
+                                                <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
+                                            {% endif %}
+                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -572,14 +486,22 @@
 
                                             <div class="me-sm-3 me-0">
                                                 <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a>
+                                                        class="text-black">{{ faq.question }}</a><a
+                                                        href="{% url 'advepa:edit-faq' id=faq.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                    <a
+                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                            class="fa fa-trash -align-right"></i></a>
                                                 </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
-                                                <span class="fs-14">{{ faq.last_modify }}</span>
+                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
+                                                <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
+                                            {% endif %}
+                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
                                             </div>
                                         </div>
                                     </div>
-
                                     <hr/>
                                 {% endfor %}
                             </div>
@@ -589,7 +511,6 @@
             </div>
         </div>
     </div>
-
 
 
 {% endblock %}

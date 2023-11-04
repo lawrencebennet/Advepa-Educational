@@ -60,7 +60,7 @@ urlpatterns = [
     path('page-error-500/', advepa_views.page_error_500, name="page-error-500"),
     path('page-error-503/', advepa_views.page_error_503, name="page-error-503"),
 
-    # SCHOOOL
+    # SCHOOL
     path('schools/', users_views.schools, name="schools"),
     path('school-details/<int:id>/', users_views.edit_school, name="school-details"),
     path('add-school/', users_views.add_school, name="add-school"),
@@ -71,6 +71,11 @@ urlpatterns = [
     path('school-dashboard/', users_views.school_dashboard, name="school-dashboard"),
     path('', users_views.school_dashboard, name="dashboard"),
     path('index/', advepa_views.index, name="index"),
+
+    #FAQ
+    path('add-faq/', users_views.add_faq, name="add-faq"),
+    path('edit-faq/<int:id>/', users_views.edit_faq, name="edit-faq"),
+    path('delete-faq/<int:id>/', users_views.delete_faq, name="delete-faq"),
 
     # MEDIAFILES
     path('file-manager/', users_views.file_manager, name="file-manager"),

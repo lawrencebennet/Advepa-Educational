@@ -1,0 +1,73 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static widget_tweaks %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+{% block message %}
+    {% include 'advepa/elements/alert.html' %}
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" novalidate autocomplete="off">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card  card-bx m-b30">
+                    <div class="card-header">
+                        <h6 class="title">FAQ</h6>
+                    </div>
+                    <div class="profile-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Domanda {% if form.question.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.question|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Domanda" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.question.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Risposta {% if form.answer.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.answer|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Risposta" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.answer.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Link {% if form.link.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.link|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Link" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.link.errors }}
+                                    </div>
+                                </div>
+                                <label class="form-label">Sezione
+                                    <span class="text-danger">*</span></label>
+                                {{ form.section|attr:"class:form-control"|attr:"id:id_section" }}
+                                <div class="text-danger w-100 d-block mt-1">
+                                    {{ form.section.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Salva</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+
+{% block additional_js %}
+{% endblock %}
+
+

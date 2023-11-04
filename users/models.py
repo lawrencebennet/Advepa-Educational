@@ -164,7 +164,7 @@ class Notice(models.Model):
     media_file = models.ForeignKey(MediaFile, null=True, blank=True, on_delete=models.CASCADE)
     meet_link = models.CharField(max_length=100, blank=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    last_modify_date = models.DateTimeField(auto_now=True)
 
 
 class FaqSection(models.Model):
@@ -190,7 +190,7 @@ class Faq(models.Model):
     question = models.TextField(blank=True)
     answer = models.TextField(blank=True)
     link = models.CharField(max_length=100, blank=True)
-    last_modify = models.DateTimeField(auto_now=True)
+    last_modify_date = models.DateTimeField(auto_now=True)
 
 
 class SiteLogins(models.Model):

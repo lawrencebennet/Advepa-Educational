@@ -24,7 +24,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from advepa.models import Action, Import, GraphInteraction
 from django.shortcuts import render
-from users.forms import UploadMediaFileForm
 
 
 @login_required(login_url='advepa:login')
@@ -167,26 +166,21 @@ def login_user(request):
                 SiteLogins.objects.create(**{'user': user})
                 if not check_school_setted(request):
                     return redirect('advepa:page-error-403')
-                role = request.user.get_role_display()
                 if request.user.is_superuser or request.user.role == 'advepa':
                     mex = "Benvenuto nella dashboard di amministrazione"
-                elif role == "student":
+                elif request.user.role == "teacher":
+                    mex = f'Benvenuto alla Dashboard Insegnanti'
+                else:
                     messages.warning(request, "Non sei autorizzato ad entrare!")
                     return redirect('advepa:page-error-403')
-                else:
-                    mex = f'Benvenuto alla Dashboard per gli {role}'
                 next_url = request.GET.get('next')
                 if next_url:
                     return HttpResponseRedirect(next_url)
                 else:
-                    if request.user.is_superuser or request.user.role == 'advepa':
-                        messages.success(request, mex)
-                        return redirect('advepa:dashboard')
-                    elif role == "Nessun ruolo":
-                        return redirect('advepa:page-error-403')
+                    messages.success(request, mex)
+                    return redirect('advepa:dashboard')
             else:
                 messages.warning(request, "Attenzione! L'utente non è attivo")
-
         else:
             messages.warning(request, 'Attenzione! Username o password non corretti')
             return render(request, 'advepa/modules/login.html', context={'form': form})
@@ -990,6 +984,44 @@ def import_actions(request):
 
 
 # SCHOOL
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_faq', 'users.add_faq'}, raise_exception=True)
+def add_faq(request):
+    if request.method == 'POST':
+        form = FaqForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Faq aggiunta con successo")
+            return redirect('advepa:school-dashboard')
+    else:
+        form = FaqForm(user=request.user)
+    return render(request, 'advepa/modules/add-faq.html', {'form': form, "page_title": "Crea Faq"})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_faq', 'users.change_faq'}, raise_exception=True)
+def edit_faq(request, id):
+    faq_obj = get_object_or_404(Faq, id=id)
+    if request.method == 'POST':
+        form = FaqForm(request.POST, instance=faq_obj)
+        if form.is_valid():
+            faq_obj = form.save()
+            messages.success(request, f'Faq "{faq_obj.question}" modificata con successo!')
+            return redirect('advepa:school-dashboard')
+    else:
+        form = FaqForm(instance=faq_obj)
+    status = "Modifica"
+    return render(request, 'advepa/modules/add-faq.html',
+                  {'form': form, 'status': status, "page_title": "Modifica Faq"})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_faq', 'users.delete_faq'}, raise_exception=True)
+def delete_faq(request, id):
+    u = Faq.objects.get(id=id)
+    u.delete()
+    messages.success(request, "Faq eliminata correttamente!")
+    return redirect('advepa:school-dashboard')
 
 
 @login_required(login_url='advepa:login')
@@ -1079,6 +1111,10 @@ def school_dashboard(request, school_id=None):
     faq_section_1 = FaqSection.objects.filter(school=school, area_id='1').first()
     faq_section_2 = FaqSection.objects.filter(school=school, area_id='2').first()
     faq_section_3 = FaqSection.objects.filter(school=school, area_id='3').first()
+
+    news = Notice.objects.filter(school=school, type='news').order_by('-last_modify_date')
+    docs = Notice.objects.filter(school=school, type='doc').order_by('-last_modify_date')
+    meet = Notice.objects.filter(school=school, type='meet').first()
     context = {
         "school": school,
         "classroom_list": classrooms,
@@ -1087,7 +1123,10 @@ def school_dashboard(request, school_id=None):
         "page_title": "Dashboard Scuola",
         "faq_section_1": faq_section_1,
         "faq_section_2": faq_section_2,
-        "faq_section_3": faq_section_3
+        "faq_section_3": faq_section_3,
+        'news': news,
+        'docs': docs,
+        'meet': meet
     }
     return render(request, 'advepa/school-dashboard.html', context)
 
