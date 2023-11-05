@@ -32,7 +32,7 @@
 
                     {% endif %}
 
-                    {% if perms.users.add_customuser %}
+                    {% if request.user.role == "admin" or request.user.role == "superadmin" %}
                         <a href="{% url 'advepa:add-user' %}" class="btn btn-primary btn-sm ">Crea Utente <span
                                 class="btn-icon-end">
                             <i class="fa fa-plus"></i></span>
@@ -57,7 +57,7 @@
                             <th>Username</th>
                             <th>Ruolo</th>
                             <th>Scuola</th>
-{#                            <th>Gruppo</th>#}
+                            {#                            <th>Gruppo</th>#}
                             <th>Status</th>
                             {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}
                                 <th></th>
@@ -86,11 +86,11 @@
                                     </td>
                                     <td>{{ user.get_role_display }}</td>
                                     <td>{{ user.school }}</td>
-{#                                    <td>#}
-{#                                        {% for g in user.groups.all %}#}
-{#                                            <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
-{#                                        {% endfor %}#}
-{#                                    </td>#}
+                                    {#                                    <td>#}
+                                    {#                                        {% for g in user.groups.all %}#}
+                                    {#                                            <span class="badge  badge-xs light badge-primary">{{ g.name }}</span>#}
+                                    {#                                        {% endfor %}#}
+                                    {#                                    </td>#}
                                     <td>
                                         <div class="d-flex align-items-center">
                                             {% if user.is_active %}
@@ -108,11 +108,11 @@
                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
                                                             class="fa fa-pencil"></i></a>
                                                 {% endif %}
-{#                                                {% if perms.auth.change_permission %}#}
-{#                                                    <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"#}
-{#                                                       class="btn btn-success shadow btn-xs sharp me-1"><i#}
-{#                                                            class="fa fa-shield"></i></a>#}
-{#                                                {% endif %}#}
+                                                {#                                                {% if perms.auth.change_permission %}#}
+                                                {#                                                    <a href="{% url 'advepa:assign-permissions-to-user' id=user.id %}"#}
+                                                {#                                                       class="btn btn-success shadow btn-xs sharp me-1"><i#}
+                                                {#                                                            class="fa fa-shield"></i></a>#}
+                                                {#                                                {% endif %}#}
                                                 {% if perms.users.delete_customuser and not user.is_superuser %}
                                                     <a href="{% url 'advepa:delete-user' id=user.id %}"
                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i

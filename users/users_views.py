@@ -25,6 +25,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 
+def is_admin_or_superadmin(user):
+    return user.role in ['admin', 'superadmin']
+
+
 @login_required(login_url='advepa:login')
 def change_password(request):
     if request.method == 'POST':
@@ -43,8 +47,9 @@ def change_password(request):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser'}, raise_exception=True)
 def users(request):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     if request.user.role == 'admin':
         user_list = CustomUser.objects.filter(school=request.user.school).order_by('-role')
     else:
@@ -72,8 +77,9 @@ def create_unique_username(name, last_name):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser', 'users.add_customuser'}, raise_exception=True)
 def add_user(request):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     if request.method == 'POST':
         form = CustomUserForm(request.POST, request.FILES)
         if form.is_valid():
@@ -100,8 +106,9 @@ def add_user(request):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser', 'users.change_customuser'}, raise_exception=True)
 def edit_user(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     user_obj = get_object_or_404(CustomUser, id=id)
     if request.method == 'POST':
         form = EditUserForm(request.POST, request.FILES, instance=user_obj)
@@ -119,8 +126,9 @@ def edit_user(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser'}, raise_exception=True)
 def user_details(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     user_obj = get_object_or_404(CustomUser, id=id)
     context = {
         "user_obj": user_obj,
@@ -133,8 +141,9 @@ def user_details(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser', 'users.delete_customuser'}, raise_exception=True)
 def delete_user(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     u = CustomUser.objects.get(id=id)
     u.delete()
     messages.success(request, "Utente eliminato correttamente!")
@@ -142,8 +151,9 @@ def delete_user(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_customuser', 'users.delete_customuser'}, raise_exception=True)
 def delete_multiple_user(request):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     id_list = request.POST.getlist('id[]')
     id_list = [i for i in id_list if i != '']
     for id in id_list:
@@ -332,11 +342,10 @@ def assign_permissions_to_user(request, id):
                   {'form': form, "page_title": "Assign Permissions"})
 
 
-
-
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_notice', 'users.change_notice'}, raise_exception=True)
 def edit_notice(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     notice_obj = get_object_or_404(Notice, id=id)
     notice_type = notice_obj.type
     if notice_type == "meet":
@@ -363,8 +372,9 @@ def edit_notice(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_faq', 'users.add_faq'}, raise_exception=True)
 def add_notice(request, notice_type=None):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     if notice_type:
         if notice_type == "meet":
             type_title = "Appuntamento"
@@ -403,8 +413,9 @@ def add_notice(request, notice_type=None):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_notice', 'users.delete_notice'}, raise_exception=True)
 def delete_notice(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     u = Notice.objects.get(id=id)
     u.delete()
     messages.success(request, "Elemento rimosso correttamente dalla bacheca!")
@@ -412,8 +423,9 @@ def delete_notice(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_faq', 'users.add_faq'}, raise_exception=True)
 def add_faq(request):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     if request.method == 'POST':
         form = FaqForm(request.POST, user=request.user)
         if form.is_valid():
@@ -426,8 +438,9 @@ def add_faq(request):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_faq', 'users.change_faq'}, raise_exception=True)
 def edit_faq(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     faq_obj = get_object_or_404(Faq, id=id)
     if request.method == 'POST':
         form = FaqForm(request.POST, instance=faq_obj)
@@ -443,8 +456,9 @@ def edit_faq(request, id):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_faq', 'users.delete_faq'}, raise_exception=True)
 def delete_faq(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     u = Faq.objects.get(id=id)
     u.delete()
     messages.success(request, "Faq eliminata correttamente!")
@@ -479,8 +493,9 @@ def add_school(request):
 
 
 @login_required(login_url='advepa:login')
-@permission_required({'users.view_school', 'users.change_school'}, raise_exception=True)
 def edit_school(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
     school_obj = get_object_or_404(School, id=id)
     if request.method == 'POST':
         if request.user.role == "admin":
