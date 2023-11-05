@@ -8,22 +8,6 @@
     $("#file-select").select2();
     $("#classroom-select").select2();
 
-
-    // FIERA
-    $("#exhibition-select").select2();
-    $("#pavilion-select").select2();
-    $("#stand-select").select2();
-
-    // ACCESSO
-    $("#platform-select").select2();
-    $("#geo-country-select").select2();
-    $("#geo-region-select").select2();
-
-    //INTERVALLO DATE
-    $("#date-interval-select").select2();
-    $("#date-start-select").select2();
-    $("#date-end-select").select2();
-
     //UTENTI
     $("#user-select").select2();
     // multi select box
@@ -205,45 +189,6 @@
     });
 
     // FIERA
-    $(".exhibition-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".pavilion-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".stand-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-
-    // ACCESSO
-    $(".platform-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".geo-country-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".geo-region-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    //INTERVALLO
-    $(".date-interval-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".date-start-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
-    $(".date-end-select-placeholder").select2({
-        placeholder: "Select a state",
-        allowClear: true
-    });
 
     // multi select placeholder
     $(".multi-select-placeholder").select2({

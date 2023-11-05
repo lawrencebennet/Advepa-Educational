@@ -19,12 +19,10 @@
                                     <p class="fs-12 mb-0">
                                         {% if request.user.is_superuser %}
                                             SuperAdmin
-                                        {% elif request.user.role == 'advepa' %}
-                                            Advepa
-                                        {% elif request.user.role == 'administrator' %}
-                                            {{ request.user.exhibitions.name }}
-                                        {% elif request.user.role == 'standist' %}
-                                            {{ request.user.stands.name }}
+                                        {% elif request.user.role == 'admin' %}
+                                            Amministratore {{ request.user.school }}
+                                        {% elif request.user.role == 'teacher' %}
+                                            Insegnante {{ request.user.school }}
                                         {% endif %}
                                     </p>
                                 {% endif %}

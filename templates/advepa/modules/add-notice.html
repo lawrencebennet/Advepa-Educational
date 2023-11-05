@@ -32,8 +32,8 @@
                                 </div>
                                 {% if notice_type == 'news' %}
                                     <div class="col-sm-6 m-b30">
-                                        <label class="form-label">Testo {% if form.text.field.required %}
-                                            <span class="text-danger">*</span> {% endif %}</label>
+                                        <label class="form-label">Testo
+                                            <span class="text-danger">*</span></label>
                                         {{ form.text|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Testo"|attr:"required" }}
                                         <div class="text-danger w-100 d-block mt-1">
                                             {{ form.text.errors }}
@@ -51,9 +51,9 @@
                                     </div>
                                 {% else %}
                                     <div class="col-sm-6 m-b30">
-                                        <label class="form-label">Link di Meet {% if form.meet_link.field.required %}
-                                            <span class="text-danger">*</span> {% endif %}</label>
-                                        {{ form.meet_link|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Link" }}
+                                        <label class="form-label">Link di Meet
+                                            <span class="text-danger">*</span></label>
+                                        {{ form.meet_link|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Link"|attr:"required" }}
                                         <div class="text-danger w-100 d-block mt-1">
                                             {{ form.meet_link.errors }}
                                         </div>
@@ -83,6 +83,36 @@
 
 
 {% block additional_js %}
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                if ($('#id_meet_link').val() === '') {
+                    alert('Il campo Meet Link è obbligatorio');
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                if ($('#id_text').val() === '') {
+                    alert('Il campo Testo è obbligatorio');
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                if ($('#id_media_file').val() === '') {
+                    alert('Il campo file è obbligatorio');
+                    return false;
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 

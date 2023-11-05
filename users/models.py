@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.models import Group
-from advepa.models import Stand, Pavilion, Exhibition
 from django.db import models
 import secrets
 import string
@@ -166,6 +165,9 @@ class Notice(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     last_modify_date = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.get_type_display() + ", " + str(self.title) + ", " + str(self.school))
+
 
 class FaqSection(models.Model):
     AREA_CHOICES = (
@@ -178,7 +180,7 @@ class FaqSection(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.get_area_id_display() + ", " + str(self.school))
+        return str(self.get_area_id_display()) + ", " + str(self.school)
 
     @property
     def faqs(self):
@@ -191,6 +193,9 @@ class Faq(models.Model):
     answer = models.TextField(blank=True)
     link = models.CharField(max_length=100, blank=True)
     last_modify_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.section) + ", " + str(self.question)
 
 
 class SiteLogins(models.Model):

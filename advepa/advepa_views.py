@@ -4,10 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='advepa:login')
 def index(request):
-    if request.user.role == 'administrator' or request.user.role == 'standist':
-        return redirect('advepa:actions')
-    else:
-        return redirect('advepa:dashboard')
+    return redirect('advepa:dashboard')
 
 
 def page_error_400(request, *args, **argv):

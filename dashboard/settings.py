@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'dashboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'advepa_v5.sqlite3',
+        'NAME': BASE_DIR / 'advepa_educational.sqlite3',
     }
 }
 # DATABASE POSTGRES

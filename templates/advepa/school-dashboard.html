@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if request.user.role == 'admin' or request.user.role == 'superadmin' and school != None %}
+    {% if school != None %}
         <div class="row">
             <div class="col-lg-12">
                 <div class="profile card card-body px-3 pt-3 pb-0">
@@ -30,7 +30,9 @@
                                     <p>Codice Univoco</p>
                                 </div>
                                 <div class="dropdown ms-auto">
-                                    <a href="#" class="btn btn-primary light sharp" data-bs-toggle="dropdown"
+                                    <a href="#"
+                                       class="btn btn-primary light sharp {% if request.user.role == "teacher" %}disabled{% endif %}"
+                                       data-bs-toggle="dropdown"
                                        aria-expanded="true">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -71,222 +73,260 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
-                        <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a href="#files-classrooms" class="nav-link active" data-bs-toggle="tab"
-                                   aria-expanded="false">Files e
-                                    Aule</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a href="#notices" class="nav-link" data-bs-toggle="tab"
-                                   aria-expanded="false">Bacheca</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a href="#faqs" class="nav-link" data-bs-toggle="tab"
-                                   aria-expanded="true">Faqs</a>
-                            </li>
-                        </ul>
-                    </div>
+                    {% if request.user.role == "superadmin" or request.user.role == "admin" or request.user.is_staff %}
+                        <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#files-classrooms"
+                                       role="tab" aria-selected="false">
+                                        Files e Aule
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#notices" role="tab"
+                                       aria-selected="false">
+                                        Bacheca
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#faqs" role="tab"
+                                       aria-selected="true">
+                                        Faqs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
                     <br/>
                 </div>
             </div>
         </div>
     {% endif %}
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="files-classrooms" role="tabpanel">
-            <div class="row h-100">
-                <div class="col-xl-9 col-lg-18 col-sm-18 h-100" id="planimetria_aule">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Planimetria Aule</h4>
-                        </div>
-                        <div class="card-body">
-                            <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width="100%" height="100%"
-                                 alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-sm-6" id="select_file_class">
-                    <form id="filter-form" method="POST" action="{% url 'advepa:school-dashboard' %}">
-                        {% csrf_token %}
+        {% if classroom_list %}
+            <div class="tab-pane fade show active" id="files-classrooms" role="tabpanel">
+                <div class="row h-100">
+                    <div class="col-xl-9 col-lg-18 col-sm-18 h-100" id="planimetria_aule">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Carica File</h4>
+                                <h4 class="card-title">Planimetria Aule</h4>
                             </div>
                             <div class="card-body">
-                                <div class="tab-width-icon">
-                                    <!-- Nav tabs -->
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" data-bs-toggle="tab"
-                                               href="#graph_filter_position">
+                                <img src="{% static 'advepa/images/Planimetria_numerata.png' %}" width="100%"
+                                     height="100%"
+                                     alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-sm-6" id="select_file_class">
+                        <form id="filter-form" method="POST" action="{% url 'advepa:school-dashboard' %}">
+                            {% csrf_token %}
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Carica File</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-width-icon">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-bs-toggle="tab"
+                                                   href="#graph_filter_position">
                                         <span>
                                             <i class="ti-home"></i>
                                         </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="tab-content tabcontent-border">
-                                    <div class="tab-pane fade show active" id="graph_filter_position" role="tabpanel">
-                                        <div class="pt-4">
-                                            <div id="stand">
-                                                <div class="mb-4">
-                                                    <h4 class="card-title">Seleziona la classe</h4>
-                                                </div>
-                                                <select id="classroom-select" name="classroom-select">
-                                                    {% for class in classroom_list %}
-                                                        <option value="{{ class.id }}">{{ class.get_name_for_list }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <br/>
-                                            <br/>
-                                            <div id="exhibition">
-                                                <div class="mb-4">
-                                                    <h4 class="card-title">Seleziona il file</h4>
-                                                </div>
-
-                                                <select id="file-select" name="file-select">
-                                                    {% for file in all_file_list %}
-                                                        <option value="{{ file.id }}">{{ file.get_name_for_select }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
+                                    <div class="tab-content tabcontent-border">
+                                        <div class="tab-pane fade show active" id="graph_filter_position"
+                                             role="tabpanel">
+                                            <div class="pt-4">
+                                                <div id="class_select">
+                                                    <div class="mb-4">
+                                                        <h4 class="card-title">Seleziona la classe</h4>
+                                                    </div>
+                                                    <select id="classroom-select" name="classroom-select">
+                                                        {% for class in classroom_list %}
+                                                            <option value="{{ class.id }}">{{ class.get_name_for_list }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <br/>
+                                                <br/>
+                                                <div id="file_select">
+                                                    <div class="mb-4">
+                                                        <h4 class="card-title">Seleziona il file</h4>
+                                                    </div>
 
+                                                    <select id="file-select" name="file-select">
+                                                        {% for file in all_file_list %}
+                                                            <option value="{{ file.id }}">{{ file.get_name_for_select }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <p class="float-end">
+                                        <button type="submit" class="btn btn-rounded btn-secondary">Inserisci</button>
+                                    </p>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <p class="float-end">
-                                    <button type="submit" class="btn btn-rounded btn-secondary">Inserisci</button>
-                                </p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Files Caricati</h4>
+                        </form>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-responsive-md">
-                                <thead>
-                                <tr>
-                                    <th style="width:50px;">
-                                        <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                            <input type="checkbox" class="form-check-input"
-                                                   id="checkAll" value="">
-                                            <label class="form-check-label" for="checkAll"></label>
-                                        </div>
-                                    </th>
-                                    <th>Nome</th>
-                                    <th>Tipo</th>
-                                    <th>Estensione</th>
-                                    <th>Dimensione</th>
-                                    <th>Aggiunto il</th>
-                                    <th>Aula</th>
-                                    {#                                    {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}#}
-                                    <th></th>
-                                    {#                                    {% endif %}#}
-
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% csrf_token %}
-                                {% for file in uploaded_file_list %}
-                                    {% for class in file.classroom_set.all %}
-                                        <tr id="{{ file.id }}" data-classroom-id="{{ class.id }}" class="file-row">
-                                            <td>
-                                                <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
-                                                    <input name="file_id[]" type="checkbox"
-                                                           class="form-check-input"
-                                                           value="{{ file.id }}">
-                                                    <label class="form-check-label"
-                                                           for="checkbox-{{ file.id }}"></label>
-                                                </div>
-                                            </td>
-                                            <td>{{ file.name }}</td>
-                                            <td>{{ file.type.get_macro_type_display }}</td>
-                                            <td>{{ file.type.extension }}</td>
-                                            <td>{{ file.byte_space }}</td>
-                                            <td>{{ file.create_date }}</td>
-                                            <td>{{ class.room_number }}</td>
-                                            <td>
-                                                <div class="sweetalert">
-                                                    <div class="d-flex">
-                                                        <a href="{% url 'advepa:unlink-file-classroom' classroom_id=class.id file_id=file.id %}"
-                                                           class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
-                                                            <i class="fa fa-trash"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Files Caricati</h4>
                         </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-responsive-md">
+                                    <thead>
+                                    <tr>
+                                        <th style="width:50px;">
+                                            <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                                <input type="checkbox" class="form-check-input"
+                                                       id="checkAll" value="">
+                                                <label class="form-check-label" for="checkAll"></label>
+                                            </div>
+                                        </th>
+                                        <th>Nome</th>
+                                        <th>Tipo</th>
+                                        <th>Estensione</th>
+                                        <th>Dimensione</th>
+                                        <th>Aggiunto il</th>
+                                        <th>Aula</th>
+                                        {#                                    {% if perms.users.delete_customuser or perms.users.change_customuser or perms.auth.change_permission %}#}
+                                        <th></th>
+                                        {#                                    {% endif %}#}
 
 
-                        <nav mt-5>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% csrf_token %}
+                                    {% for file in uploaded_file_list %}
+                                        {% for class in file.classroom_set.all %}
+                                            <tr id="{{ file.id }}" data-classroom-id="{{ class.id }}" class="file-row">
+                                                <td>
+                                                    <div class="form-check custom-checkbox checkbox-primary check-lg me-3">
+                                                        <input name="file_id[]" type="checkbox"
+                                                               class="form-check-input"
+                                                               value="{{ file.id }}">
+                                                        <label class="form-check-label"
+                                                               for="checkbox-{{ file.id }}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{ file.name }}</td>
+                                                <td>{{ file.type.get_macro_type_display }}</td>
+                                                <td>{{ file.type.extension }}</td>
+                                                <td>{{ file.byte_space }}</td>
+                                                <td>{{ file.create_date }}</td>
+                                                <td>{{ class.room_number }}</td>
+                                                <td>
+                                                    <div class="sweetalert">
+                                                        <div class="d-flex">
+                                                            <a href="{% url 'advepa:unlink-file-classroom' classroom_id=class.id file_id=file.id %}"
+                                                               class="btn btn-danger shadow btn-xs sharp sweet-success-cancel">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                            <p>
+
+                            <nav mt-5>
+
+                                <p>
                             <span class="current">
                             Pagina {{ uploaded_file_list.number }} di {{ uploaded_file_list.paginator.num_pages }}.
                            </span>
-                            </p>
+                                </p>
 
 
-                            <ul class="pagination pagination-gutter  justify-content-end">
+                                <ul class="pagination pagination-gutter  justify-content-end">
 
-                                <li class="page-item page-indicator ">
-                                    <a class="page-link" href="{% if uploaded_file_list.has_previous %}
+                                    <li class="page-item page-indicator ">
+                                        <a class="page-link" href="{% if uploaded_file_list.has_previous %}
                                                                 ?page={{ uploaded_file_list.previous_page_number }}
                                                                 {% else %}
                                                                 javascript:void(0);
                                                                 {% endif %}">
-                                        <i class="la la-angle-left"></i></a>
-                                </li>
+                                            <i class="la la-angle-left"></i></a>
+                                    </li>
 
-                                {% for i in uploaded_file_list.paginator.page_range|slice:":3" %}
+                                    {% for i in uploaded_file_list.paginator.page_range|slice:":3" %}
 
-                                    <li class="page-item {% if uploaded_file_list.number == i %}
+                                        <li class="page-item {% if uploaded_file_list.number == i %}
                                                     active{% endif %}"><a class="page-link"
                                                                           href="?page={{ i }}">{{ i }}</a></li>
 
-                                {% endfor %}
+                                    {% endfor %}
 
 
-                                {% if uploaded_file_list.number > 3 %}
-                                    <li class="page-item active"><a class="page-link"
-                                                                    href="?page={{ uploaded_file_list.number }}">{{ uploaded_file_list.number }}</a>
-                                    </li>
-                                {% endif %}
+                                    {% if uploaded_file_list.number > 3 %}
+                                        <li class="page-item active"><a class="page-link"
+                                                                        href="?page={{ uploaded_file_list.number }}">{{ uploaded_file_list.number }}</a>
+                                        </li>
+                                    {% endif %}
 
-                                <li class="page-item page-indicator ">
-                                    <a class="page-link" href="{% if uploaded_file_list.has_next %}
+                                    <li class="page-item page-indicator ">
+                                        <a class="page-link" href="{% if uploaded_file_list.has_next %}
                                                             ?page={{ uploaded_file_list.next_page_number }}
                                                             {% else %}
                                                             javascript:void(0);
                                                             {% endif %}">
-                                        <i class="la la-angle-right"></i></a>
-                                </li>
-                                <li>
-                                </li>
-                            </ul>
-                        </nav>
+                                            <i class="la la-angle-right"></i></a>
+                                    </li>
+                                    <li>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% else %}
+
+            <div class="tab-pane fade show active" id="files-classrooms" role="tabpanel">
+                <div class="row">
+                    <div class="col-xl-3"></div>
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Sezione Aule ancora non disponibile!</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Gentile utente, la sezione aule non è ancora disponibile, se pensi
+                                    si
+                                    tratti di un errore, contattaci. <br> Grazie</p>
+                            </div>
+                            <div class="card-footer d-sm-flex justify-content-between align-items-center">
+                                <div class="card-footer-link mb-4 mb-sm-0">
+                                    <p class="card-text text-dark d-inline">Aggiornato al 06/11/2023</p>
+                                </div>
+
+                                <a href="{% url 'advepa:file-manager' %}" class="btn btn-primary">Vai al
+                                    File-Manager</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="tab-pane fade" id="notices" role="tabpanel">
             <div class="col-xl-12">
                 <div class="card message-bx">
@@ -308,8 +348,10 @@
                                     <h4 class="fs-20 mb-0 font-w600 text-black">News
                                         ( {{ news|length }} )</h4>
                                 </div>
-                                <a href="{% url 'advepa:add-notice' notice_type='news' %}" class="plus-icon"><i
-                                        class="fa fa-plus" aria-hidden="true"></i></a>
+                                <a href="{% url 'advepa:add-notice' notice_type='news' %}"
+                                   class="plus-icon {% if news|length >= 10 %}disabled{% endif %}"><i
+                                        class="fa fa-plus"
+                                        aria-hidden="true"></i></a>
                             </div>
                             <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
                                  id="RecentActivitiesContent">
@@ -350,7 +392,8 @@
                                     <h4 class="fs-20 mb-0 font-w600 text-black">Bandi
                                         ( {{ docs|length }} )</h4>
                                 </div>
-                                <a href="{% url 'advepa:add-notice' notice_type='doc' %}" class="plus-icon"><i
+                                <a href="{% url 'advepa:add-notice' notice_type='doc' %}"
+                                   class="plus-icon {% if docs|length >= 10 %}disabled{% endif %}"><i
                                         class="fa fa-plus" aria-hidden="true"></i></a>
                             </div>
                             <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
@@ -391,32 +434,33 @@
                                 <div>
                                     <h4 class="fs-20 mb-0 font-w600 text-black">Appuntamento</h4>
                                 </div>
-                                <a href="{% url 'advepa:add-notice' notice_type='meet' %}" class="plus-icon"><i
+                                <a href="{% url 'advepa:add-notice' notice_type='meet' %}"
+                                   class="plus-icon {% if meet %}disabled{% endif %}"><i
                                         class="fa fa-plus" aria-hidden="true"></i></a>
                             </div>
                             <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
                                  id="RecentActivitiesContent">
                                 <div class="border-bottom pb-4 mb-4 draggable-handle draggable">
                                     {% if meet %}
-                                    <div class="media-body">
-                                        <div class="d-flex mb-sm-2 mb-0">
-                                            <h6 class="text-black mb-0 font-w600 fs-16">{{ meet.title }}</h6>
-                                            <span class="ms-auto fs-14"><a
-                                                    href="{% url 'advepa:edit-notice' id=meet.id %}"
-                                                    class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                    class="fa fa-pencil -align-right"></i></a>
+                                        <div class="media-body">
+                                            <div class="d-flex mb-sm-2 mb-0">
+                                                <h6 class="text-black mb-0 font-w600 fs-16">{{ meet.title }}</h6>
+                                                <span class="ms-auto fs-14"><a
+                                                        href="{% url 'advepa:edit-notice' id=meet.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
                                                 <a
                                                         href="{% url 'advepa:delete-notice' id=meet.id %}"
                                                         class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
                                                         class="fa fa-trash -align-right"></i></a></span>
+                                            </div>
+                                            <p class="text-black">Link: {{ meet.meet_link }}</p>
                                         </div>
-                                        <p class="text-black">Link: {{ meet.meet_link }}</p>
-                                    </div>
-                                    <div class="row justify-content-between">
-                                        <div class="col-12 ps-0">
-                                            <span class="fs-14">{{ meet.last_modify_date }}</span>
+                                        <div class="row justify-content-between">
+                                            <div class="col-12 ps-0">
+                                                <span class="fs-14">{{ meet.last_modify_date }}</span>
+                                            </div>
                                         </div>
-                                    </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -432,7 +476,7 @@
                         <div>
                             <h4 class="fs-20 mb-0 font-w600 text-black mb-sm-0 mb-2">Lista FAQS</h4>
                             <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
-                                <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
+                                <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <a href="#section1" class="nav-link active" data-bs-toggle="tab"
                                            aria-expanded="false"><span

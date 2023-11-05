@@ -2,27 +2,10 @@ from django.contrib import admin
 from users.models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 from django.forms import Textarea
-
-from advepa.models import Action
-
 from django.contrib import admin
 from django.http import HttpResponseBadRequest
 from .models import *
 from .forms import *
-# class UserAdminConfig(UserAdmin):
-#     model = CustomUser
-#     search_fields = ('email', 'username')
-#     list_filter = ('email', 'username', 'is_active', 'is_staff')
-#     list_display = ('email', 'username', 'is_active', 'is_staff')
-#
-#     formfield_overrides = {
-#         CustomUser.about: {'widget': Textarea(attrs={'rows': 10, 'cols': 40})},
-#     }
-#
-#
-# admin.site.register(CustomUser, UserAdminConfig)
-#
-# admin.site.register(Action)
 
 admin.site.register(School)
 admin.site.register(CustomUser)
