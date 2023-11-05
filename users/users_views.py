@@ -506,7 +506,10 @@ def edit_school(request, id):
         if form.is_valid():
             school_obj = form.save()
             messages.success(request, f"La scuola {school_obj} è stata modificata con successo!")
-            return redirect('advepa:schools')
+            if request.user.role == "admin":
+                return redirect('advepa:school-dashboard')
+            else:
+                return redirect('advepa:schools')
     else:
         if request.user.role == "admin":
             form = EditSchoolAdminForm(instance=school_obj)

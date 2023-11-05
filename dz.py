@@ -183,6 +183,9 @@ dz_array = {
                     "schools": [
                         f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.css",
                     ],
+                    "file_manager": [
+                        f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.css",
+                    ],
                     "add_school": [
                         f"{folder_name}/vendor/bootstrap-daterangepicker/daterangepicker.css",
                         f"{folder_name}/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css",
@@ -372,6 +375,8 @@ dz_array = {
                     "schools": [
                         f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.js",
                     ],
+                    "file_manager": [f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.js",
+                                    ],
                     "add_school": [
                         f"{folder_name}/vendor/jquery-nice-select/js/jquery.nice-select.min.js",
                         f"{folder_name}/vendor/moment/moment.min.js",

@@ -36,9 +36,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost']
-CORS_ORIGIN_WHITELIST = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost']
+# CORS_ORIGIN_WHITELIST = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost', 'https://cc73-2a02-29e1-503-9c00-785e-cf62-af3c-cb56.ngrok-free.app']
 # Application definition
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -52,7 +54,15 @@ INSTALLED_APPS = [
     'users',
 
 ]
-
+# GNU nano 6.2                                      advepa_analytics.conf
+# [program:advepa_educational]
+# command=/home/admin/domains/analytics.advepa.eu/public_html/Advepa-Software/advepaenv/bin/gunicorn -c /home/admin/domains/analytics.advepa.eu/public_html/Advepa-Software/gunicorn_config.py dasb.wsgi:application
+# user=admin
+# autostart=true
+# autorestart=true
+# redirect_stderr=true
+# errorlog = '/var/log/supervisor/advepa_analytics/error.log'
+# accesslog = '/var/log/supervisor/advepa_analytics/access.log'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
