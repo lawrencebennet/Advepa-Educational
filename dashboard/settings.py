@@ -40,8 +40,10 @@ ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost']
 # CORS_ORIGIN_WHITELIST = ['https://analytics.advepa.eu', 'analytics.advepa.eu', '127.0.0.1', 'localhost', 'https://cc73-2a02-29e1-503-9c00-785e-cf62-af3c-cb56.ngrok-free.app']
 # Application definition
-CORS_ALLOW_ALL_ORIGINS = True
-
+# CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://analytics.advepa.eu',
+]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
