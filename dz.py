@@ -15,7 +15,6 @@ dz_array = {
             f"{folder_name}/vendor/bootstrap-select/dist/css/bootstrap-select.min.css",
             f"{folder_name}/css/style.css"
         ],
-
         "js": {
             "top": [
                 f"{folder_name}/vendor/global/global.min.js",
@@ -26,10 +25,9 @@ dz_array = {
                 f"{folder_name}/js/dlabnav-init.js",
             ]
         },
-
     },
     "pagelevel": {
-        "advepa": {  # AppName
+        "advepa": {
             "advepa_views": {
                 "css": {
                     "index": [
@@ -53,7 +51,6 @@ dz_array = {
                         f"{folder_name}/vendor/fullcalendar-5.11.0/lib/main.css",
                     ],
                     "messages": [],
-
                     "permissions": [
                         f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.css",
                     ],
@@ -198,6 +195,13 @@ dz_array = {
                         f"{folder_name}/vendor/sweetalert2/dist/sweetalert2.min.css",
                     ],
                     "add_school": [
+                        f"{folder_name}/vendor/bootstrap-daterangepicker/daterangepicker.css",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
+                        f"{folder_name}/vendor/select2/css/select2.min.css",
+                    ],
+                    "add_notice": [
                         f"{folder_name}/vendor/bootstrap-daterangepicker/daterangepicker.css",
                         f"{folder_name}/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css",
                         f"{folder_name}/vendor/jquery-nice-select/css/nice-select.css",
@@ -415,7 +419,14 @@ dz_array = {
                         f"{folder_name}/vendor/moment/moment.min.js",
                         f"{folder_name}/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js",
                         f"{folder_name}/js/plugins-init/material-date-picker-init.js",
-
+                        f"{folder_name}/vendor/select2/js/select2.full.min.js",
+                        f"{folder_name}/js/plugins-init/select2-init.js"
+                    ],
+                    "add_notice": [
+                        f"{folder_name}/vendor/jquery-nice-select/js/jquery.nice-select.min.js",
+                        f"{folder_name}/vendor/moment/moment.min.js",
+                        f"{folder_name}/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js",
+                        f"{folder_name}/js/plugins-init/material-date-picker-init.js",
                         f"{folder_name}/vendor/select2/js/select2.full.min.js",
                         f"{folder_name}/js/plugins-init/select2-init.js"
                     ],
@@ -457,6 +468,7 @@ dz_array = {
                         f"{folder_name}/js/plugins-init/jquery-asColorPicker.init.js",
                         f"{folder_name}/js/plugins-init/material-date-picker-init.js",
                         f"{folder_name}/js/plugins-init/pickadate-init.js",
+                        f"{folder_name}/vendor/draggable/draggable.js",
                     ],
                     "access_charts": [
                         f"{folder_name}/vendor/chart.js/Chart.bundle.min.js",

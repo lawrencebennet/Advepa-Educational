@@ -121,8 +121,7 @@ class FaqForm(forms.ModelForm):
 
     class Meta:
         model = Faq
-        fields = (
-            'question', 'answer', 'link', 'section')
+        fields = ('question', 'answer', 'link', 'section')
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -130,6 +129,111 @@ class FaqForm(forms.ModelForm):
 
         if user:
             self.fields['section'].queryset = FaqSection.objects.filter(school=user.school)
+
+
+class NoticeForm(forms.ModelForm):
+    title = forms.CharField(required=True)
+
+    class Meta:
+        model = Notice
+        fields = ('title', 'text', 'link', 'meet_link', 'media_file')
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(NoticeForm, self).__init__(*args, **kwargs)
+
+        if user:
+            self.fields['media_file'].queryset = MediaFile.objects.filter(teacher__school=user.school)
+
+
+# class NoticeForm(forms.ModelForm):
+#     title = forms.CharField(required=True)
+#     text = forms.CharField(required=False)
+#     link = forms.CharField(required=False)
+#     meet_link = forms.CharField(required=False)
+#     media_file = forms.ModelChoiceField(
+#         queryset=MediaFile.objects.none(),
+#         required=False
+#     )
+#
+#     class Meta:
+#         model = Notice
+#         fields = ('title', 'text', 'link', 'type', 'meet_link', 'media_file')
+#
+#     def __init__(self, *args, **kwargs):
+#         user = kwargs.pop('user', None)
+#         super(NoticeForm, self).__init__(*args, **kwargs)
+#
+#         if user:
+#             self.fields['media_file'].queryset = MediaFile.objects.filter(teacher__school=user.school)
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         notice_type = cleaned_data.get('type')
+#
+#         if notice_type == 'news':
+#             if not cleaned_data.get('text'):
+#                 self.add_error('text', "Questo campo è obbligatorio per l'avviso di tipo 'news'.")
+#         elif notice_type == 'doc':
+#             if not cleaned_data.get('media_file'):
+#                 self.add_error('media_file', "Questo campo è obbligatorio per l'avviso di tipo 'doc'.")
+#         elif notice_type == 'meet':
+#             if not cleaned_data.get('meet_link'):
+#                 self.add_error('meet_link', "Questo campo è obbligatorio per l'avviso di tipo 'meet'.")
+#
+#         return cleaned_data
+
+
+# class NoticeForm(forms.ModelForm):
+#     title = forms.CharField(required=True)
+#
+#     class Meta:
+#         model = Notice
+#         fields = ('title', 'text', 'media_file', 'link', 'meet_link')
+#
+#
+# class MeetNoticeForm(forms.ModelForm):
+#     title = forms.CharField(required=True)
+#     meet_link = forms.CharField(required=True)
+#
+#     class Meta:
+#         model = Notice
+#         fields = ('title', 'meet_link', 'school')
+#
+#
+# class NewsNoticeForm(forms.ModelForm):
+#     title = forms.CharField(required=True)
+#     question = forms.CharField(required=True)
+#     link = forms.CharField(required=False)
+#
+#     class Meta:
+#         model = Notice
+#         fields = (
+#             'title', 'question', 'link', 'school')
+#
+#
+# class DocNoticeForm(forms.ModelForm):
+#     title = forms.CharField(required=True)
+#     link = forms.CharField(required=False)
+#     media_file = forms.ModelChoiceField(
+#         queryset=MediaFile.objects.none(),
+#         required=True
+#     )
+#
+#     class Meta:
+#         model = Notice
+#         fields = ('title', 'media_file', 'link')
+#
+#     def __init__(self, *args, **kwargs):
+#         user = kwargs.pop('user', None)
+#         super(DocNoticeForm, self).__init__(*args, **kwargs)
+#
+#         if user:
+#             self.fields['media_file'].queryset = MediaFile.objects.filter(teacher__school=user.school)
+#
+#     def save(self, commit=True):
+#         notice = super(DocNoticeForm, self).save(commit=commit)
+#         return notice
 
 
 class SchoolForm(forms.ModelForm):

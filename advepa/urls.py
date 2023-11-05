@@ -72,10 +72,15 @@ urlpatterns = [
     path('', users_views.school_dashboard, name="dashboard"),
     path('index/', advepa_views.index, name="index"),
 
-    #FAQ
+    # FAQ
     path('add-faq/', users_views.add_faq, name="add-faq"),
     path('edit-faq/<int:id>/', users_views.edit_faq, name="edit-faq"),
     path('delete-faq/<int:id>/', users_views.delete_faq, name="delete-faq"),
+
+    # BACHECA
+    path('add-notice/<str:notice_type>/', users_views.add_notice, name="add-notice"),
+    path('edit-notice/<int:id>/', users_views.edit_notice, name="edit-notice"),
+    path('delete-notice/<int:id>/', users_views.delete_notice, name="delete-notice"),
 
     # MEDIAFILES
     path('file-manager/', users_views.file_manager, name="file-manager"),

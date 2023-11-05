@@ -984,6 +984,102 @@ def import_actions(request):
 
 
 # SCHOOL
+# @login_required(login_url='advepa:login')
+# @permission_required({'users.view_notice', 'users.add_notice'}, raise_exception=True)
+# @login_required(login_url='advepa:login')
+# def add_notice(request, notice_type=None):
+#     user = request.user
+#     school = user.school  # Ottieni la scuola dall'utente
+#     if request.method == 'POST':
+#
+#         if notice_type == "meet":
+#             type_title = "Appuntamento"
+#         elif notice_type == "doc":
+#             type_title = "Bando"
+#         elif notice_type == "news":
+#             type_title = "News"
+#         else:
+#             type_title = "Elemento in bacheca"
+#
+#         form = NoticeForm(request.POST, user=user, initial={'type': notice_type, 'school': school})
+#
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, f"Elemento aggiunto in bacheca con successo")
+#             return redirect('advepa:school-dashboard')
+#         else:
+#             messages.warning(request, "Errore sulla creazione!")
+#     else:
+#         if notice_type == "meet":
+#             type_title = "Appuntamento"
+#         elif notice_type == "doc":
+#             type_title = "Bando"
+#         elif notice_type == "news":
+#             type_title = "News"
+#         else:
+#             type_title = "Elemento in bacheca"
+#         form = NoticeForm(user=user, initial={'type': notice_type, 'school': user.school})
+#
+#     return render(request, 'advepa/modules/add-notice.html',
+#                   {'form': form, "page_title": "Aggiungi elemento in bacheca", "notice_type": notice_type,
+#                    "type_title": type_title})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_notice', 'users.change_notice'}, raise_exception=True)
+def edit_notice(request, id):
+    notice_obj = get_object_or_404(Faq, id=id)
+    if request.method == 'POST':
+        form = NoticeForm(request.POST, instance=notice_obj)
+        if form.is_valid():
+            notice_obj = form.save()
+            messages.success(request, f'Elemento "{notice_obj.title}" modificato con successo!')
+            return redirect('advepa:school-dashboard')
+    else:
+        form = NoticeForm(instance=faq_obj)
+    status = "Modifica"
+
+    return render(request, 'advepa/modules/add-notice.html',
+                  {'form': form, 'status': status, "page_title": "Modifica Elemento in bacheca"})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_faq', 'users.add_faq'}, raise_exception=True)
+def add_notice(request, notice_type=None):
+    if request.method == 'POST':
+        form = NoticeForm(request.POST, user=request.user)
+        if form.is_valid():
+            if not form.cleaned_data.get('school'):
+                form.instance.school = request.user.school
+            if not form.cleaned_data.get('notice_type'):
+                form.instance.type = notice_type
+            notice_obj = form.save()
+            messages.success(request, f"Elemento in bacheca aggiunto con successo")
+            return redirect('advepa:school-dashboard')
+    else:
+        form = NoticeForm(user=request.user)
+    if notice_type == "meet":
+        type_title = "Appuntamento"
+    elif notice_type == "doc":
+        type_title = "Bando"
+    elif notice_type == "news":
+        type_title = "News"
+    else:
+        type_title = "Elemento in bacheca"
+    return render(request, 'advepa/modules/add-notice.html',
+                  {'form': form, "page_title": "Crea elemento in bacheca", "notice_type": notice_type,
+                   "type_title": type_title})
+
+
+@login_required(login_url='advepa:login')
+@permission_required({'users.view_notice', 'users.delete_notice'}, raise_exception=True)
+def delete_notice(request, id):
+    u = Notice.objects.get(id=id)
+    u.delete()
+    messages.success(request, "Elemento rimosso correttamente dalla bacheca!")
+    return redirect('advepa:school-dashboard')
+
+
 @login_required(login_url='advepa:login')
 @permission_required({'users.view_faq', 'users.add_faq'}, raise_exception=True)
 def add_faq(request):

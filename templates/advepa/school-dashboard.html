@@ -293,98 +293,132 @@
                     <div class="card-header d-sm-flex d-block shadow-sm">
                         <div>
                             <h4 class="fs-20 mb-0 font-w600 text-black mb-sm-0 mb-2">Bacheca</h4>
-                            <div class="card-action card-tabs mb-lg-0 mb-3  me-auto">
-                                <ul class="nav nav-tabs tabs-lg" id="project" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#notices_news" class="nav-link active" data-bs-toggle="tab"
-                                           aria-expanded="false"><span
-                                                class="badge light badge-primary">{{ news|length }}</span>News
-                                        </a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#notices_docs" class="nav-link" data-bs-toggle="tab"
-                                           aria-expanded="false"><span
-                                                class="badge light badge-primary">{{ docs|length }}</span>Bandi</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#notices_meet" class="nav-link" data-bs-toggle="tab"
-                                           aria-expanded="false">Appuntamento</a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
-                        <a class="btn btn-primary rounded" href="{% url 'advepa:add-school' %}">
+                        <a class="btn btn-primary rounded disabled" href="{% url 'advepa:add-school' %}">
                             + Aggiungi elemento in Bacheca
                         </a>
                     </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="notices_news" role="tabpanel">
+                </div>
+                <div class="row kanban-bx">
+                    <div class="col-xl-4">
+                        <div class="card dropzoneContainer">
+                            <span class="line bg-secondary" style="min-height: 4px;"></span>
+                            <div class="card-header shadow-sm">
+                                <div>
+                                    <h4 class="fs-20 mb-0 font-w600 text-black">News
+                                        ( {{ news|length }} )</h4>
+                                </div>
+                                <a href="{% url 'advepa:add-notice' notice_type='news' %}" class="plus-icon"><i
+                                        class="fa fa-plus" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
+                                 id="RecentActivitiesContent">
                                 {% for obj in news %}
-                                    <div class="media mb-4">
-                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
-                                            <div class="me-sm-3 me-0">
-                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ obj.title }}</a><a
-                                                        href="{% url 'advepa:edit-faq' id=obj.id %}"
-                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil -align-right"></i></a>
-                                                    <a
-                                                            href="{% url 'advepa:delete-faq' id=obj.id %}"
-                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash -align-right"></i></a>
-                                                </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ obj.text }}</p>
-                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                {% endfor %}
-                            </div>
-                            <div class="tab-pane fade" id="notices_docs" role="tabpanel">
-                                {% for obj in docs %}
-                                    <div class="media mb-4">
-                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
-                                            <div class="me-sm-3 me-0">
-                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ obj.title }}</a><a
-                                                        href="{% url 'advepa:edit-faq' id=obj.id %}"
-                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil -align-right"></i></a>
-                                                    <a
-                                                            href="{% url 'advepa:delete-faq' id=obj.id %}"
-                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash -align-right"></i></a>
-                                                </h6>
-                                                <p class="text-sm-left">{{ obj.media_file }}</p>
-                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                {% endfor %}
-                            </div>
-                            <div class="tab-pane fade" id="notices_meet" role="tabpanel">
-                                {% if meet %}
-                                    <div class="media mb-4">
-
+                                    <div class="border-bottom pb-4 mb-4 draggable-handle draggable">
                                         <div class="media-body">
                                             <div class="d-flex mb-sm-2 mb-0">
-                                                <h6 class="text-black mb-0 font-w600 fs-16">{{ meet.title }}</h6>
+                                                <h6 class="text-black mb-0 font-w600 fs-16">{{ obj.title }}</h6>
                                                 <span class="ms-auto fs-14"><a
-                                                        href="{% url 'advepa:edit-faq' id=meet.id %}"
+                                                        href="{% url 'advepa:edit-notice' id=obj.id %}"
                                                         class="btn btn-primary shadow btn-xs sharp me-1"><i
                                                         class="fa fa-pencil -align-right"></i></a>
                                                 <a
-                                                        href="{% url 'advepa:delete-faq' id=meet.id %}"
+                                                        href="{% url 'advepa:delete-notice' id=obj.id %}"
                                                         class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
                                                         class="fa fa-trash -align-right"></i></a></span>
                                             </div>
-                                            <p class="text-black">Link: {{ meet.meet_link }}</p>
+                                            <p class="text-black">{{ obj.text }}</p>
+                                            {% if obj.link %}
+                                                <p class="text-gray">{{ obj.link }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="row justify-content-between">
+                                            <div class="col-12 ps-0">
+                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card dropzoneContainer">
+                            <span class="line bg-success" style="min-height: 4px;"></span>
+                            <div class="card-header shadow-sm">
+                                <div>
+                                    <h4 class="fs-20 mb-0 font-w600 text-black">Bandi
+                                        ( {{ docs|length }} )</h4>
+                                </div>
+                                <a href="{% url 'advepa:add-notice' notice_type='doc' %}" class="plus-icon"><i
+                                        class="fa fa-plus" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
+                                 id="RecentActivitiesContent">
+                                {% for obj in docs %}
+                                    <div class="border-bottom pb-4 mb-4 draggable-handle draggable">
+                                        <div class="media-body">
+                                            <div class="d-flex mb-sm-2 mb-0">
+                                                <h6 class="text-black mb-0 font-w600 fs-16">{{ obj.title }}</h6>
+                                                <span class="ms-auto fs-14"><a
+                                                        href="{% url 'advepa:edit-notice' id=obj.id %}"
+                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                        class="fa fa-pencil -align-right"></i></a>
+                                                <a
+                                                        href="{% url 'advepa:delete-notice' id=obj.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a></span>
+                                            </div>
+                                            <p class="text-black">{{ obj.media_file }}</p>
+                                            {% if obj.link %}
+                                                <p class="text-gray">{{ obj.link }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="row justify-content-between">
+                                            <div class="col-12 ps-0">
+                                                <span class="fs-14">{{ obj.last_modify_date }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card dropzoneContainer">
+                            <span class="line bg-warning" style="min-height: 4px;"></span>
+                            <div class="card-header shadow-sm">
+                                <div>
+                                    <h4 class="fs-20 mb-0 font-w600 text-black">Appuntamento</h4>
+                                </div>
+                                <a href="{% url 'advepa:add-notice' notice_type='meet' %}" class="plus-icon"><i
+                                        class="fa fa-plus" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="card-body draggable-zone  loadmore-content dlab-scroll  pb-0"
+                                 id="RecentActivitiesContent">
+                                <div class="border-bottom pb-4 mb-4 draggable-handle draggable">
+                                    {% if meet %}
+                                    <div class="media-body">
+                                        <div class="d-flex mb-sm-2 mb-0">
+                                            <h6 class="text-black mb-0 font-w600 fs-16">{{ meet.title }}</h6>
+                                            <span class="ms-auto fs-14"><a
+                                                    href="{% url 'advepa:edit-notice' id=meet.id %}"
+                                                    class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                    class="fa fa-pencil -align-right"></i></a>
+                                                <a
+                                                        href="{% url 'advepa:delete-notice' id=meet.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a></span>
+                                        </div>
+                                        <p class="text-black">Link: {{ meet.meet_link }}</p>
+                                    </div>
+                                    <div class="row justify-content-between">
+                                        <div class="col-12 ps-0">
+                                            <span class="fs-14">{{ meet.last_modify_date }}</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
