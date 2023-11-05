@@ -110,6 +110,9 @@ def edit_user(request, id):
     if not is_admin_or_superadmin(request.user):
         return redirect('advepa:page-error-403')
     user_obj = get_object_or_404(CustomUser, id=id)
+    if request.user.role == "admin" and (
+            user_obj.role in ["superadmin", "admin"] or user_obj.school != request.user.school):
+        return redirect('advepa:page-error-403')
     if request.method == 'POST':
         form = EditUserForm(request.POST, request.FILES, instance=user_obj)
         if form.is_valid():
@@ -145,6 +148,9 @@ def delete_user(request, id):
     if not is_admin_or_superadmin(request.user):
         return redirect('advepa:page-error-403')
     u = CustomUser.objects.get(id=id)
+    if request.user.role == "admin" and (
+            u.role in ["superadmin", "admin"] or u.school != request.user.school):
+        return redirect('advepa:page-error-403')
     u.delete()
     messages.success(request, "Utente eliminato correttamente!")
     return redirect('advepa:users')
@@ -158,6 +164,9 @@ def delete_multiple_user(request):
     id_list = [i for i in id_list if i != '']
     for id in id_list:
         user_obj = CustomUser.objects.get(pk=id)
+        if request.user.role == "admin" and (
+                user_obj.role in ["superadmin", "admin"] or user_obj.school != request.user.school):
+            return redirect('advepa:page-error-403')
         user_obj.delete()
 
     response = JsonResponse({"success": 'Utenti eliminati con successo!'})
@@ -632,6 +641,8 @@ def file_manager(request):
 @login_required(login_url='advepa:login')
 def delete_file(request, file_id):
     f = MediaFile.objects.get(id=file_id)
+    if request.user.role == "teacher" and f.teacher != request.user:
+        return redirect('advepa:page-error-403')
     f.delete()
     messages.success(request, "File eliminato con successo")
     return redirect('advepa:file-manager')
@@ -655,8 +666,10 @@ def delete_multiple_files(request):
     id_list = request.POST.getlist('id[]')
     id_list = [i for i in id_list if i != '']
     for id in id_list:
-        user_obj = MediaFile.objects.get(pk=id)
-        user_obj.delete()
+        f = MediaFile.objects.get(pk=id)
+        if request.user.role == "teacher" and f.teacher != request.user:
+            return redirect('advepa:page-error-403')
+        f.delete()
 
     response = JsonResponse({"success": 'Files eliminati con successo!'})
     response.status_code = 200
