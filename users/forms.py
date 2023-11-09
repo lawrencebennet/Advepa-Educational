@@ -241,11 +241,13 @@ class SchoolForm(forms.ModelForm):
     custom_id = forms.CharField(required=True)
     info = forms.CharField(required=False)
     theme = forms.CharField(required=False)
+    listening_desk = forms.CharField(required=False)
 
     class Meta:
         model = School
         fields = (
-            'name', 'custom_id', 'info', 'is_active', 'theme', 'modulo_ingresso', 'modulo_comunicazione_multipla',
+            'name', 'listening_desk', 'custom_id', 'info', 'is_active', 'theme', 'modulo_ingresso',
+            'modulo_comunicazione_multipla',
             'modulo_personalizzato_apprendimento', 'modulo_eventi', 'modulo_segreteria', 'modulo_spazio_docenti',
             'modulo_classi_innovative',
         )
@@ -256,11 +258,13 @@ class EditSchoolForm(forms.ModelForm):
     custom_id = forms.CharField(required=True)
     info = forms.CharField(required=False)
     theme = forms.CharField(required=False)
+    listening_desk = forms.CharField(required=False)
 
     class Meta:
         model = School
         fields = (
-            'name', 'custom_id', 'info', 'is_active', 'theme', 'modulo_ingresso', 'modulo_comunicazione_multipla',
+            'name', 'custom_id', 'listening_desk', 'info', 'is_active', 'theme', 'modulo_ingresso',
+            'modulo_comunicazione_multipla',
             'modulo_personalizzato_apprendimento', 'modulo_eventi', 'modulo_segreteria', 'modulo_spazio_docenti',
             'modulo_classi_innovative',
         )
@@ -271,11 +275,12 @@ class EditSchoolAdminForm(forms.ModelForm):
     custom_id = forms.CharField(required=False)
     info = forms.CharField(required=False)
     theme = forms.CharField(required=False)
+    listening_desk = forms.CharField(required=False)
 
     class Meta:
         model = School
         fields = (
-            'name', 'custom_id', 'info', 'theme'
+            'name', 'custom_id', 'info', 'theme', 'listening_desk'
         )
 
 

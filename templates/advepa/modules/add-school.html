@@ -57,6 +57,14 @@
                                         {{ form.theme.errors }}
                                     </div>
                                 </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Sportello d'ascolto {% if form.listening_desk.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.listening_desk|attr:"type:text"|attr:"class:form-control"|attr:"placeholder:Sportello di ascolto" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.listening_desk.errors }}
+                                    </div>
+                                </div>
 
                                 {% if request.user.role != "admin" %}
                                     <div class="col-sm-6  d-flex align-items-center mb-0">
@@ -66,7 +74,6 @@
                                                 Ingresso</label>
                                         </div>
                                     </div>
-
                                     <div class="col-sm-6  d-flex align-items-center mb-0">
                                         <div class="form-check custom-checkbox mb-0 checkbox-primary">
                                             {{ form.modulo_comunicazione_multipla|attr:"class:form-check-input"|attr:"type:checkbox" }}

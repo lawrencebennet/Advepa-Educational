@@ -40,6 +40,7 @@ class School(models.Model):
     modulo_spazio_docenti = models.BooleanField(default=False)
     modulo_classi_innovative = models.BooleanField(default=False)
     planimetry_image = models.FileField(null=True, blank=True, upload_to=school_directory_path)
+    listening_desk = models.CharField(null=True, blank=True, default="Non impostato", max_length=100)
 
     def get_teachers_number(self):
         return CustomUser.objects.filter(school=self, role='teacher').count()
