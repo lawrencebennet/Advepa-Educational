@@ -38,6 +38,7 @@ class UserLoginView(APIView):
                                     "id_scuola": school.custom_id,
                                     "name_scuola": school.name,
                                     "tema": school.theme,
+                                    "link_sportello": school.listening_desk,
                                     "modulo_ingresso": school.modulo_ingresso,
                                     "modulo_comunicazione_multipla": school.modulo_comunicazione_multipla,
                                     "modulo_personalizzato_apprendimento": school.modulo_personalizzato_apprendimento,

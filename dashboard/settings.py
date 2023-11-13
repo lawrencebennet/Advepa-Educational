@@ -42,7 +42,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 # CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
-    'https://analytics.advepa.eu',
+    'https://analytics.advepa.eu', 'https://advepaeducational.xyz',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
