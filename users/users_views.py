@@ -394,7 +394,7 @@ def add_notice(request, notice_type=None):
         else:
             type_title = "Elemento in bacheca"
         notice_count = Notice.objects.filter(school=request.user.school, type=notice_type).count()
-        if notice_type == 'meet' and length >= 1:
+        if notice_type == 'meet' and notice_count >= 1:
             messages.warning(request, f"Impossibile creare! Esiste già 1 appuntamento meet in bacheca!")
             return redirect('advepa:school-dashboard')
         elif notice_count >= 10:
