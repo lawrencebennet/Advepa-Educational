@@ -169,7 +169,7 @@ class NoticesView(APIView):
                         school_id = request.query_params.get('school_id')
                         notices = Notice.objects.filter(school__custom_id=school_id).order_by('type')
                         if notices:
-                            notices_list = []  # Inizializza la lista principale fuori dal ciclo
+                            notices_dict = {}  # Inizializza la lista principale fuori dal ciclo
                             for type, notice_group in groupby(notices, key=lambda notice: notice.type):
                                 notice_list = list(notice_group)  # Lista di Notices per l'area corrente
                                 if notice_list:
@@ -189,10 +189,9 @@ class NoticesView(APIView):
                                             })
                                         elif type == 'meet':
                                             notices_final_list.append(notice.meet_link)
-                                    notices_list.append({
-                                        TYPE_CHOICES[type]: notices_final_list
-                                    })
-                            return Response(notices_list[0])
+                                    notices_dict[TYPE_CHOICES[type]] = notices_final_list
+
+                            return Response(notices_dict)
                     return Response({"No notices!"})
                 else:
                     return Response({"Wrong authentication"})
