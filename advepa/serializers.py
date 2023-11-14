@@ -192,7 +192,7 @@ class NoticesView(APIView):
                                     notices_list.append({
                                         TYPE_CHOICES[type]: notices_final_list
                                     })
-                            return Response({'bacheca': notices_list})
+                            return Response(notices_list[0])
                     return Response({"No notices!"})
                 else:
                     return Response({"Wrong authentication"})
