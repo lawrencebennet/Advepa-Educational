@@ -188,9 +188,8 @@ class NoticesView(APIView):
                                                 'link': notice.media_file.file.path,
                                             })
                                         elif type == 'meet':
-                                            notices_final_list.append(notice.meet_link)
+                                            notices_final_list = notice.meet_link
                                     notices_dict[TYPE_CHOICES[type]] = notices_final_list
-
                             return Response(notices_dict)
                     return Response({"No notices!"})
                 else:
