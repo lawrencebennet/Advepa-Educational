@@ -52,6 +52,7 @@ urlpatterns = [
     path('add-faq/', users_views.add_faq, name="add-faq"),
     path('edit-faq/<int:id>/', users_views.edit_faq, name="edit-faq"),
     path('delete-faq/<int:id>/', users_views.delete_faq, name="delete-faq"),
+    path('edit-faq-section/<int:id>/', users_views.edit_faq_section, name="edit-faq-section"),
 
     # BACHECA
     path('add-notice/<str:notice_type>/', users_views.add_notice, name="add-notice"),

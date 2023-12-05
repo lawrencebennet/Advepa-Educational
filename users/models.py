@@ -9,7 +9,7 @@ import string
 import os
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-
+from django.db.models.signals import post_save, pre_delete
 
 def user_directory_path(instance, filename):
     return f'{instance.teacher.username}/{filename}'
@@ -186,6 +186,19 @@ class FaqSection(models.Model):
     @property
     def faqs(self):
         return self.faq_set.all()
+
+
+# Segnale per creare FaqSection quando una School viene creata
+@receiver(post_save, sender=School)
+def create_default_faq_sections(sender, instance, created, **kwargs):
+    if created:
+        for area_choice in FaqSection.AREA_CHOICES:
+            FaqSection.objects.create(area_id=area_choice[0], school=instance)
+
+# Segnale per eliminare FaqSection quando una School viene eliminata
+@receiver(pre_delete, sender=School)
+def delete_related_faq_sections(sender, instance, **kwargs):
+    FaqSection.objects.filter(school=instance).delete()
 
 
 class Faq(models.Model):

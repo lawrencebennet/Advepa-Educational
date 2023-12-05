@@ -475,6 +475,24 @@ def delete_faq(request, id):
 
 
 @login_required(login_url='advepa:login')
+def edit_faq_section(request, id):
+    if not is_admin_or_superadmin(request.user):
+        return redirect('advepa:page-error-403')
+    faq_section_obj = get_object_or_404(FaqSection, id=id)
+    if request.method == 'POST':
+        form = EditFaqSectionForm(request.POST, instance=faq_section_obj)
+        if form.is_valid():
+            faq_section_obj = form.save()
+            messages.success(request, f'{faq_section_obj.area_id} modificata con successo!')
+            return redirect('advepa:school-dashboard')
+    else:
+        form = EditFaqSectionForm(instance=faq_section_obj)
+    status = "Modifica"
+    return render(request, 'advepa/modules/add-faq-section.html',
+                  {'form': form, 'status': status, "page_title": "Modifica Sezione Faq"})
+
+
+@login_required(login_url='advepa:login')
 @permission_required({'users.view_school'}, raise_exception=True)
 def schools(request):
     school_list = School.objects.filter().order_by('name')

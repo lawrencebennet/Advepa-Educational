@@ -270,6 +270,22 @@ class EditSchoolForm(forms.ModelForm):
         )
 
 
+class EditFaqSectionForm(forms.ModelForm):
+    AREA_CHOICES = (
+        ('1', 'Sezione 1'),
+        ('2', 'Sezione 2'),
+        ('3', 'Sezione 3')
+    )
+    url_avatar = forms.CharField(required=True)
+    area_id = forms.ChoiceField(choices=AREA_CHOICES)
+
+    class Meta:
+        model = FaqSection
+        fields = (
+            'url_avatar', 'school', 'area_id'
+        )
+
+
 class EditSchoolAdminForm(forms.ModelForm):
     name = forms.CharField(required=True)
     custom_id = forms.CharField(required=False)

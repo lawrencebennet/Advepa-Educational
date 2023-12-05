@@ -54,10 +54,8 @@
                                         </a>
                                         <a href="{% url 'advepa:add-user' %}">
                                             <li class="dropdown-item">
-
                                                 <i class="fa fa-users text-primary me-2"></i> Crea
                                                 credenziali utenti
-
                                             </li>
                                         </a>
                                         <li class="dropdown-item"><i class="fa fa-clipboard text-primary me-2"></i>
@@ -499,106 +497,132 @@
                                         <a href="#section2" class="nav-link" data-bs-toggle="tab"
                                            aria-expanded="false"><span
                                                 class="badge light badge-primary">{{ faq_section_2.faqs|length }}</span>Sezione
-                                            2</a>
+                                            2 </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a href="#section3" class="nav-link" data-bs-toggle="tab"
                                            aria-expanded="true"><span
                                                 class="badge light badge-primary">{{ faq_section_3.faqs|length }}</span>Sezione
-                                            3</a>
+                                            3 </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <a class="btn btn-primary rounded" href="{% url 'advepa:add-faq' %}">
-                            + Aggiungi FAQ
-                        </a>
+                        <div>
+                            <a class="btn btn-primary rounded" href="{% url 'advepa:add-faq' %}">
+                                + Aggiungi FAQ
+                            </a>
+                                <a href="#"
+                                   class="btn btn-primary sharp"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="true">
+                                    <i class="fa fa-pencil text-white me-2"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <a href="{% url 'advepa:edit-faq-section' id=faq_section_1.id %}">
+                                        <li class="dropdown-item">
+                                            Modifica Sezione 1
+                                        </li>
+                                    </a>
+                                    <a href="{% url 'advepa:edit-faq-section' id=faq_section_2.id %}">
+                                        <li class="dropdown-item">
+                                            Modifica Sezione 2
+                                        </li>
+                                    </a>
+                                    <a href="{% url 'advepa:edit-faq-section' id=faq_section_3.id %}">
+                                        <li class="dropdown-item">
+                                            Modifica Sezione 3
+                                        </li>
+                                    </a>
+                                </ul>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="section1" role="tabpanel">
                                 {% for faq in faq_section_1.faqs %}
                                     <div class="media mb-4">
-                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
-                                            <div class="me-sm-3 me-0">
-                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a><a
+                                        <div class="media-body">
+                                            <div class="d-flex mb-sm-2 mb-0">
+                                                <h6 class="text-black mb-0 font-w600 fs-16"><a
+                                                        class="text-black">{{ faq.question }}</a></h6>
+                                                <span class="ms-auto fs-14"><a
                                                         href="{% url 'advepa:edit-faq' id=faq.id %}"
                                                         class="btn btn-primary shadow btn-xs sharp me-1"><i
                                                         class="fa fa-pencil -align-right"></i></a>
-                                                    <a
-                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
-                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash -align-right"></i></a>
-                                                </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
-                                                {% if faq.link %}
-                                                    <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
-                                                {% endif %}
-                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
+                                                <a
+                                                        href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a></span>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                {% endfor %}
-                            </div>
-                            <div class="tab-pane fade" id="section2" role="tabpanel">
-                                {% for faq in faq_section_2.faqs %}
-                                    <div class="media mb-4">
-                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
-                                            <div class="me-sm-3 me-0">
-                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a><a
-                                                        href="{% url 'advepa:edit-faq' id=faq.id %}"
-                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil -align-right"></i></a>
-                                                    <a
-                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
-                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash -align-right"></i></a>
-                                                </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
+                                            <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>
+                                            {% if faq.link %}
                                                 <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
                                             {% endif %}
-                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
-                                            </div>
+                                            <span class="fs-14">{{ faq.last_modify_date }}</span>
                                         </div>
                                     </div>
-
-                                    <hr/>
-                                {% endfor %}
-                            </div>
-                            <div class="tab-pane fade" id="section3" role="tabpanel">
-                                {% for faq in faq_section_3.faqs %}
-                                    <div class="media mb-4">
-                                        <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
-
-                                            <div class="me-sm-3 me-0">
-                                                <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
-                                                        class="text-black">{{ faq.question }}</a><a
-                                                        href="{% url 'advepa:edit-faq' id=faq.id %}"
-                                                        class="btn btn-primary shadow btn-xs sharp me-1"><i
-                                                        class="fa fa-pencil -align-right"></i></a>
-                                                    <a
-                                                            href="{% url 'advepa:delete-faq' id=faq.id %}"
-                                                            class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
-                                                            class="fa fa-trash -align-right"></i></a>
-                                                </h6>
-                                                <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
-                                                <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
-                                            {% endif %}
-                                                <span class="fs-14">{{ faq.last_modify_date }}</span>
-                                            </div>
-                                        </div>
                                     </div>
                                     <hr/>
                                 {% endfor %}
-                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="section2" role="tabpanel">
+                            {% for faq in faq_section_2.faqs %}
+                                <div class="media mb-4">
+                                    <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+                                        <div class="me-sm-3 me-0">
+                                            <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                    class="text-black">{{ faq.question }}</a><a
+                                                    href="{% url 'advepa:edit-faq' id=faq.id %}"
+                                                    class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                    class="fa fa-pencil -align-right"></i></a>
+                                                <a
+                                                        href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a>
+                                            </h6>
+                                            <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
+                                            <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
+                                        {% endif %}
+                                            <span class="fs-14">{{ faq.last_modify_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-pane fade" id="section3" role="tabpanel">
+                            {% for faq in faq_section_3.faqs %}
+                                <div class="media mb-4">
+                                    <div class="media-body d-sm-flex justify-content-between d-block align-items-center">
+
+                                        <div class="me-sm-3 me-0">
+                                            <h6 class="fs-16 font-w600 mb-sm-2 mb-0"><a
+                                                    class="text-black">{{ faq.question }}</a><a
+                                                    href="{% url 'advepa:edit-faq' id=faq.id %}"
+                                                    class="btn btn-primary shadow btn-xs sharp me-1"><i
+                                                    class="fa fa-pencil -align-right"></i></a>
+                                                <a
+                                                        href="{% url 'advepa:delete-faq' id=faq.id %}"
+                                                        class="btn btn-danger shadow btn-xs sharp sweet-success-cancel"><i
+                                                        class="fa fa-trash -align-right"></i></a>
+                                            </h6>
+                                            <p class="text-black mb-sm-3 mb-1">{{ faq.answer }}</p>{% if faq.link %}
+                                            <p class="text-sm-left text-blue">Link: {{ faq.link }}</p>
+                                        {% endif %}
+                                            <span class="fs-14">{{ faq.last_modify_date }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 

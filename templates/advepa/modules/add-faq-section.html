@@ -1,0 +1,59 @@
+{% extends 'advepa/elements/layouts/admin.html' %}
+{% load static widget_tweaks %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+{% block message %}
+    {% include 'advepa/elements/alert.html' %}
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" novalidate autocomplete="off">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card  card-bx m-b30">
+                    <div class="card-header">
+                        <h6 class="title">Sezione FAQ</h6>
+                    </div>
+                    <div class="profile-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Numero Sezione {% if form.area_id.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.area_id|attr:"type:text"|attr:"class:form-control" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.area_id.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Url Avatar {% if form.url_avatar.field.required %}
+                                        <span class="text-danger">*</span> {% endif %}</label>
+                                    {{ form.url_avatar|attr:"type:text"|attr:"class:form-control" }}
+                                    <div class="text-danger w-100 d-block mt-1">
+                                        {{ form.url_avatar.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Salva</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+
+{% block additional_js %}
+{% endblock %}
+
+

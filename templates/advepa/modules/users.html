@@ -79,11 +79,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{% url 'advepa:user-details' id=user.id %}">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="w-space-no">{{ user.username }}</span>
-                                                </div>
-                                            </a>
+                                            <div class="d-flex align-items-center">
+                                                <span class="w-space-no">{{ user.username }}</span>
+                                            </div>
                                         </td>
                                         <td>{{ user.get_role_display }}</td>
                                         <td>{{ user.school }}</td>
